@@ -1,1 +1,8 @@
+# Dueños por defecto
 * @recm0708
+
+# SQL scripts
+/db_scripts/* @recm0708
+
+# CI / GitHub config
+/.github/* @recm0708
