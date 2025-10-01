@@ -1,6 +1,6 @@
 ﻿# SuiteMDI-EduSQL ✨
 [![Build](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml/badge.svg)](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **ES** · Aplicación educativa **C# WinForms (.NET Framework 4.8)** con interfaz **MDI** y backend **SQL Server 2022** (prioridad **Docker**). Proyecto **100% por código (sin diseñador)**, arquitectura por capas, **CI en GitHub Actions** y **scripts SQL idempotentes (01–11)**.  
 **EN** · Educational **C# WinForms (.NET Framework 4.8)** app with **MDI** and **SQL Server 2022** (Docker-first). **Pure code UI** (no designer), layered architecture, **GitHub Actions CI**, and **idempotent SQL scripts (01–11)**.
