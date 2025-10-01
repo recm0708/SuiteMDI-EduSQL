@@ -1,0 +1,11 @@
+docs:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.md","docs/**"]
+
+db:
+  - changed-files:
+      - any-glob-to-any-file: ["db_scripts/**"]
+
+infra:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**",".editorconfig",".gitattributes",".gitignore"]
