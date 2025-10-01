@@ -230,7 +230,6 @@ Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/c
 **MIT** — ver [`LICENSE`](./LICENSE).
 
 ---
----
 
 ## 🇺🇸 English
 
