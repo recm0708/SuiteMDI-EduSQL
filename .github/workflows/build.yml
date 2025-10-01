@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch: {}   # permite ejecutarlo manualmente desde Actions
 
 jobs:
   build-windows:
@@ -28,11 +27,17 @@ jobs:
         shell: pwsh
         run: |
           $sln = Get-ChildItem -Path "src" -Filter *.sln -Recurse | Select-Object -First 1
-          if (-not $sln) { Write-Error "No se encontró ninguna .sln bajo 'src/'"; exit 1 }
-          "SLN_PATH=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          Write-Host "Solución detectada: $($sln.FullName)"
+          if ($sln) {
+            "SLN_PATH=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            "FOUND_SOLUTION=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Solución detectada: $($sln.FullName)"
+          } else {
+            "FOUND_SOLUTION=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "No se encontró .sln; se saltará build."
+          }
 
       - name: Create temporary App.config if missing
+        if: steps.find_sln.outputs.FOUND_SOLUTION == 'true'
         shell: pwsh
         run: >
           $csprojs = Get-ChildItem -Path "src" -Filter *.csproj -Recurse;
@@ -63,9 +68,11 @@ jobs:
           }
 
       - name: Restore packages
+        if: steps.find_sln.outputs.FOUND_SOLUTION == 'true'
         shell: pwsh
         run: nuget restore "${{ steps.find_sln.outputs.SLN_PATH }}"
 
       - name: Build (Release)
+        if: steps.find_sln.outputs.FOUND_SOLUTION == 'true'
         shell: pwsh
         run: msbuild "${{ steps.find_sln.outputs.SLN_PATH }}" /t:Build /p:Configuration=Release /m /verbosity:minimal

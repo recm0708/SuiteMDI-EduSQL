@@ -1,10 +1,36 @@
 ﻿# VS / .NET
-bin/
-obj/
 .vs/
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+TestResults/
 *.user
 *.suo
-# App.config real (no versionar)
+*.userprefs
+*.ncrunch*
+_ReSharper*/
+*.DotSettings.user
+
+# Paquetes / caches
+packages/
+.nuget/
+*.nupkg
+*.snupkg
+
+# Sistema
+Thumbs.db
+.DS_Store
+
+# App config (secretos locales)
 src/**/App.config
-# Carpeta oculta que no quieres subir
-src/_gsdata_/
+
+# Carpeta oculta frecuente
+src/**/_gsdata_/
+
+# Logs
+*.log
+
+# Otros
+*.bak
+*.tmp

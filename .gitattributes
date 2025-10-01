@@ -1,7 +1,15 @@
-﻿* text=auto eol=lf
+﻿# Normalizar fin de línea
+* text=auto eol=lf
+
+# Mantener CRLF en soluciones de VS
 *.sln text eol=crlf
-*.cs text eol=crlf
-*.csproj text eol=crlf
-*.resx text eol=crlf
+
+# Tratar imágenes como binario
 *.png binary
+*.jpg binary
+*.jpeg binary
 *.ico binary
+
+# Mejoras de diff
+*.cs diff=csharp
+*.md text

@@ -1,0 +1,19 @@
+name: "🧩 Task"
+description: Tarea técnica
+labels: ["task"]
+body:
+  - type: input
+    id: titulo
+    attributes:
+      label: Título
+      placeholder: "Ej. Integrar SP prInsertarUsuario"
+    validations:
+      required: true
+  - type: textarea
+    id: detalles
+    attributes:
+      label: Detalles
+  - type: input
+    id: relacion
+    attributes:
+      label: Relacionado a (Issue/PR)

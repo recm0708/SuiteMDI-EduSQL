@@ -1,0 +1,19 @@
+name: "✨ Feature request"
+description: Solicitar mejora/función
+labels: ["enhancement"]
+body:
+  - type: input
+    id: titulo
+    attributes:
+      label: Título corto
+    validations:
+      required: true
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: ¿Qué y para qué?
+  - type: textarea
+    id: criterio
+    attributes:
+      label: Criterios de aceptación
