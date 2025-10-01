@@ -1,0 +1,10 @@
+﻿# VS / .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+# App.config real (no versionar)
+src/**/App.config
+# Carpeta oculta que no quieres subir
+src/_gsdata_/
