@@ -17,7 +17,7 @@ Soportamos la **última minor** por rama activa (ej.: `v0.3.x`).
 **Do NOT open public issues for security problems.**  
 **NO** abras issues públicos por problemas de seguridad.
 
-1. Email (private): **security@suite-mdiesql.local** *(placeholder; replace when ready)*  
+1. Email (private): **ruben_sten0708@outlook.com**
 2. Provide:
    - Affected version / commit hash
    - Environment (OS, VS version, Docker, SQL)
