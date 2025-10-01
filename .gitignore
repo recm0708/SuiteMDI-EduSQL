@@ -22,14 +22,22 @@ packages/
 Thumbs.db
 .DS_Store
 
-# App config (secretos locales)
+# App config real (solo plantilla se versiona)
 src/**/App.config
 
-# Carpeta oculta frecuente
+# Carpeta oculta de backups locales
 src/**/_gsdata_/
+**/_gsdata_/
 
-# Logs
+# Paquetes temporales
+*.user
+*.suo
+*.cache
 *.log
+
+# NuGet
+packages/
+*.nupkg
 
 # Otros
 *.bak
