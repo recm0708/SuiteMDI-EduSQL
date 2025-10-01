@@ -1,46 +1,70 @@
 ﻿# SuiteMDI-EduSQL ✨
 [![Build](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml/badge.svg)](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml)
-[![License: MIT](./LICENSE)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-**ES — Descripción corta:**  
-Aplicación educativa **C# WinForms (.NET Framework 4.8)** con interfaz **MDI** y backend **SQL Server 2022** (Docker primero). Proyecto 100% por **código** (sin diseñador), arquitectura por capas, CI en GitHub Actions y scripts SQL idempotentes (01–11).
-
-**EN — Short description:**  
-Educational **C# WinForms (.NET Framework 4.8)** app with **MDI** and **SQL Server 2022** (Docker-first). Pure **code** UI (no designer), layered architecture, GitHub Actions CI, and idempotent SQL scripts (01–11).
+**ES** · Aplicación educativa **C# WinForms (.NET Framework 4.8)** con interfaz **MDI** y backend **SQL Server 2022** (prioridad **Docker**). Proyecto **100% por código (sin diseñador)**, arquitectura por capas, **CI en GitHub Actions** y **scripts SQL idempotentes (01–11)**.  
+**EN** · Educational **C# WinForms (.NET Framework 4.8)** app with **MDI** and **SQL Server 2022** (Docker-first). **Pure code UI** (no designer), layered architecture, **GitHub Actions CI**, and **idempotent SQL scripts (01–11)**.
 
 ---
 
-## 📚 Contents / Contenidos
-- [Structure / Estructura](#-structure--estructura)
-- [Requirements / Requisitos](#-requirements--requisitos)
-- [Setup / Configuración](#-setup--configuración)
-- [Database / Base de Datos](#-database--base-de-datos)
-- [Security / Seguridad](#-security--seguridad)
-- [Run & Test / Ejecutar y Probar](#-run--test--ejecutar-y-probar)
-- [Workflow / Flujo de trabajo](#-workflow--flujo-de-trabajo)
-- [Roadmap & Releases](#-roadmap--releases)
-- [License / Licencia](#-license--licencia)
+## 🧭 Table of Contents / Índice
+- 🇪🇸 Español
+  - [Descripción](#es-descripcion)
+  - [Estructura](#es-estructura)
+  - [Requisitos](#es-requisitos)
+  - [Configuración](#es-configuracion)
+  - [Base de Datos](#es-bd)
+  - [Seguridad](#es-seguridad)
+  - [Ejecución y Pruebas](#es-ejecucion)
+  - [Flujo de Trabajo](#es-flujo)
+  - [Convenciones y Calidad](#es-convenciones)
+  - [Problemas Comunes](#es-problemas)
+  - [Roadmap y Releases](#es-roadmap)
+  - [Licencia](#es-licencia)
+- 🇺🇸 English
+  - [Overview](#en-overview)
+  - [Structure](#en-structure)
+  - [Requirements](#en-requirements)
+  - [Setup](#en-setup)
+  - [Database](#en-database)
+  - [Security](#en-security)
+  - [Run & Test](#en-run)
+  - [Workflow](#en-workflow)
+  - [Conventions & Quality](#en-conventions)
+  - [Troubleshooting](#en-troubleshooting)
+  - [Roadmap & Releases](#en-roadmap)
+  - [License](#en-license)
 
 ---
 
-## 📁 Structure / Estructura
+## 🇪🇸 Español
+
+<a id="es-descripcion"></a>
+### 📌 Descripción
+
+SuiteMDI-EduSQL es una app WinForms educativa con MDI, login validado por SP y CRUD sobre SQL Server. Se prioriza Docker, se versiona código limpio (sin diseñador), y se integran buenas prácticas: scripts idempotentes, CI estable, seguridad de configuración y flujo de trabajo con Issues/PR/Releases.
+
+<a id="es-estructura"></a>
+### 📁 Estructura
+
 ```
 SuiteMDI-EduSQL/
 │
-├── .github/                              # Configuración de GitHub (CI, plantillas, dueños de código)
-│   ├── ISSUE_TEMPLATE/                   # Plantillas para crear Issues
-│   │   ├── bug_report                    # Reporte de errores (plantilla)
-│   │   └── feature_request               # Solicitud de mejoras (plantilla)
+├── .github/                              # Configuración de GitHub (CI, plantillas, revisiones)
+│   ├── ISSUE_TEMPLATE/                   # Plantillas para Issues (bug, feature, task)
+│   │   ├── bug_report.yml
+│   │   ├── feature_request.yml
+│   │   └── task.yml
 │   ├── workflows/
-│   │   └── build                         # GitHub Actions: build en Windows
-│   ├── CODEOWNERS                        # Responsables por defecto de revisiones (PRs)
+│   │   └── build.yml                     # GitHub Actions: build en Windows (detecta .sln y compila)
+│   ├── CODEOWNERS                        # Responsables por defecto para PRs / revisiones
 │   └── PULL_REQUEST_TEMPLATE             # Plantilla de Pull Requests
 │
-├── assets/                               # Logos, íconos e imágenes (para UI y README)
+├── assets/                               # Logos, íconos e imágenes (UI y README)
 │   ├── logo.png
 │   └── icons/
 │
-├── db_scripts/                           # Scripts SQL (01 … 09) con comentarios y pruebas
+├── db_scripts/                           # Scripts SQL (idempotentes, con pruebas comentadas)
 │   ├── 01_CrearBD_y_Tablas-mejorado.sql
 │   ├── 02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
 │   ├── 03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql
@@ -48,31 +72,34 @@ SuiteMDI-EduSQL/
 │   ├── 05_CrearProcedimiento_de_Eliminación_de_Usuario-mejorado.sql
 │   ├── 06_CrearProcedimiento_de_Modificar_de_Usuario-mejorado.sql
 │   ├── 07_CrearProcedimiento_de_Modificar_PassWord_Sin_Encripcion-mejorado.sql
-│   ├── 08_TablasDelAplicativo-mejorado.sql (pendiente)
-│   └── 09_ProcedimientosAplicativo-mejorado.sql (pendiente)
+│   ├── 08_TablasDelAplicativo-mejorado.sql
+│   ├── 09_ProcedimientosAplicativo-mejorado.sql
+│   ├── 10_Mantenimiento_Reseed_Perfiles.sql
+│   └── 11_Clientes_CRUD-mejorado.sql
 │
 ├── docs/                                 # Documentación, capturas y diagramas
 │   ├── capturas/
 │   │   ├── frmAcceso.png
-│   │   └── frmMDI.png
+│   │   ├── frmMDI.png
+│   │   └── ...
 │   └── diagramas/
+│       └── ...
 │
 ├── src/                                  # Solución y proyecto de Visual Studio (WinForms .NET 4.8)
-│   ├── Assets/                           # Recursos internos del proyecto (iconos, imágenes, etc.)
+│   └── App/                              
+│   ├── Assets                            # Recursos internos del proyecto (íconos, imágenes)
 │   ├── Datos/                            # ClsConexion y acceso a datos (SqlClient, SPs)
-│   ├── Negocio/                          # Clases de procesos/servicios (CRUD, lógica)
-│   ├── Presentacion/                     # Formularios (MDI, Acceso, Usuarios, etc.)
-│   ├── Properties/                       # AssemblyInfo y recursos de WinForms
+│   ├── Negocio/                          # Servicios/Procesos (CRUD, lógica)
+│   ├── Presentacion/                     # Formularios (MDI, Acceso, Usuarios, Clientes, etc.)
+│   ├── Properties/                       # AssemblyInfo, Recursos
 │   ├── Soporte/                          # Globales, ThemeHelper y utilidades
-│   ├── App.config.template.config        # Plantilla (NO versionar App.config real)
-│   ├── bd_A7_RubenCanizares.csproj       # Proyecto WinForms
-│   ├── bd_A7_RubenCanizares.sln          # Solución principal
-│   └── Program.cs                        # Punto de entrada de la app
+│   ├── Program.cs                        # Punto de entrada (arranca MDI y Acceso)
+│   └── App.config.template.config        # Plantilla (NO versionar App.config real)
 │
-├── tools/                                # Utilidades (opcional)
+├── tools/                                # Utilidades (scripts auxiliares)
 │
 ├── .gitattributes                        # Normaliza fin de línea y tipos de archivo
-├── .gitignore                            # Ignora src/_gsdata_/ y src/**/App.config, entre otros
+├── .gitignore                            # Ignora src/**/App.config, bin/ obj/, etc.
 ├── CHANGELOG.md                          # Historial de cambios
 ├── CONTRIBUTING.md                       # Guía para contribuir (issues, PRs, estilo)
 ├── LICENSE                               # MIT (bilingüe)
@@ -80,56 +107,197 @@ SuiteMDI-EduSQL/
 └── SECURITY.md                           # Política de seguridad y manejo de secretos
 ```
 
+> 🔒 **No se versiona** ningún `App.config` real; solo `App.config.template.config` (con placeholders).
 
----
+<a id="es-requisitos"></a>
+### ✅ Requisitos
 
-## ✅ Requirements / Requisitos
-- Windows + **Visual Studio 2022** (Spanish UI ok)
+- Windows + **Visual Studio 2022** (Español ok)
 - **.NET Framework 4.8**
-- **Docker** + SQL Server 2022 (host: `127.0.0.1,2333`)
+- **Docker** + SQL Server 2022 (host `127.0.0.1,2333`)
 - **SSMS** (SQL Server Management Studio)
-- **GitHub Desktop** (sincronizar entre PCs)
+- **GitHub Desktop** (flujo entre PCs)
+- **SSH** configurado para commits/tags *Verified*
 
----
+<a id="es-configuracion"></a>
+### 🛠️ Configuración
 
-## 🛠️ Setup / Configuración
-1) Clonar el repo con **SSH** usando GitHub Desktop.  
-2) (Próximo paso) Crear solución WinForms 4.8 en `src/App/` (100% por código).  
-3) Configurar `App.config` desde `App.config.template.config` (no se versiona el real).  
+1. **Clonar con SSH** en GitHub Desktop:  
+   `git@github.com/<tu-usuario>/SuiteMDI-EduSQL.git` → `C:\GitHub Repositories\SuiteMDI-EduSQL\`
+2. (Cuando exista el proyecto) Copia `src/App/App.config.template.config` → **`App.config`**  
+   y coloca tu **contraseña real** de SQL (Docker/Local).
+3. Asegúrate que el contenedor **SQL Server 2022** está arriba (puerto `2333`).
 
----
+<a id="es-bd"></a>
+### 🧩 Base de Datos (SQL)
 
-## 🧩 Database / Base de Datos
-- Carpeta **/db_scripts**: scripts **01 → 11** (mejorados, idempotentes).
-- Ejecutar en **orden** con SSMS sobre `Ejemplo_SIN_Encripcion`.
+Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido).  
+**Orden recomendado:**
+1) `01_CrearBD_y_Tablas-mejorado.sql`  
+2) `02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql`  
+3) `03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql`  
+4) `04_CrearProcedimiento_de_Consulta_de_Usuario-mejorado.sql`  
+5) `05_CrearProcedimiento_de_Eliminación_de_Usuario-mejorado.sql`  
+6) `06_CrearProcedimiento_de_Modificar_de_Usuario-modificado.sql`  
+7) `07_CrearProcedimiento_de_Modificar_PassWord_Sin_Encripcion-mejorado.sql`  
+8) `08_TablasDelAplicativo-mejorado.sql`  
+9) `09_ProcedimientosAplicativo-mejorado.sql`  
+10) `10_Mantenimiento_Reseed_Perfiles.sql` *(DEV opcional)*  
+11) `11_Clientes_CRUD-mejorado.sql`  
 
----
+> Cada script incluye **pruebas comentadas** (descoméntalas para validar en tu entorno).
 
-## 🔐 Security / Seguridad
-- No se sube `App.config` real (solo plantilla).
-- Commits y tags **firmados por SSH** → *Verified* en GitHub.
+<a id="es-seguridad"></a>
+### 🔐 Seguridad
 
----
+- ❌ No subir `App.config` real (está bloqueado por `.gitignore`).
+- ✅ Firmar **commits y tags con SSH** → *Verified* en GitHub.
+- 🏭 Producción: usuarios distintos de `sa`, mínimos permisos, secretos **fuera** del repo.
 
-## ▶️ Run & Test / Ejecutar y Probar
-- En CI, el workflow **detecta** si existe `.sln`.  
-  Si aún no hay solución, **no falla** (salta build).
+<a id="es-ejecucion"></a>
+## ▶️ Ejecutar y Probar
 
----
+- **CI (Actions)**: el workflow **detecta** la `.sln` en `src/`.  
+  - Si no existe aún, **no falla** (salta build).  
+  - Si existe, crea un **App.config temporal** en el runner y compila **Release**.
+- **Local**: en VS 2022 (Español)  
+  - Compilar: `Compilar → Compilar solución`  
+  - Ejecutar: `Depurar → Iniciar sin depuración (Ctrl+F5)`
 
-## 🔄 Workflow / Flujo de trabajo
-- Commits en español, vinculando issues (`Closes #N`).
-- PRs hacia `main` (cuando activemos protección).
+<a id="es-flujo"></a>
+## 🔄 Flujo de Trabajo
 
----
+- Commits en español, atómicos, con **mensajes claros**.
+- Vincular issues en commits/PRs: `Closes #N`.
+- (Cuando se active) PRs a `main` con checklist y build verde.
 
+<a id="es-convenciones"></a>
+## 🧭 Convenciones y Calidad
+
+- **Capas**: `Presentacion`, `Negocio`, `Datos`, `Soporte`.
+- **UI sin diseñador**: formularios construidos por **código**.
+- **DataGridView** con **columnas manuales** (`DataPropertyName` exacto a los SP).
+- **SPs** delgados, idempotentes, con `RETURN @@ROWCOUNT` cuando aplica.
+- **Errores**: mensajes con código y descripción (SQL/Negocio/UI).
+- **Docs**: comentarios en SQL y C# donde haya decisiones no triviales.
+
+<a id="es-problemas"></a>
+## 🧰 Problemas Comunes
+
+- ⏱️ **Timeout / no conecta**: verifica contenedor Docker (puerto `2333` mapeado).  
+- 🔑 **Login failed for user 'sa' (18456)**: credenciales o políticas de contraseña.  
+- ❓ **SP no encontrado**: ejecuta scripts **en orden** y revisa `USE`/`OBJECT_ID`.  
+- 🧩 **Diseñador WinForms**: no se usa; todo es **por código**.  
+- 🔒 **Commit sin Verified**: asegúrate de que `ssh-agent` cargó tu clave (`ssh-add C:\Keys\id_ed25519`) y tienes `gpg.format ssh` configurado.
+
+<a id="es-roadmap"></a>
 ## 🗺️ Roadmap & Releases
-- v0.1.0 — Base de repo + Parte A mínima (Acceso + MDI)  
-- v0.2.0 — Usuarios CRUD  
-- v0.3.x — Password + Clientes  
-- v0.4.0 — Solicitudes (maestro-detalle)
+
+> El número de releases dependerá del avance real (iterativo).
+
+- **v0.1.x** — Base de repo + Parte A mínima (Acceso + MDI + SELECT 1)  
+- **v0.2.x** — Usuarios CRUD (SP 03–06)  
+- **v0.3.x** — Password (07) + Clientes (08–11 relacionados)  
+- **v0.4.x** — Solicitudes (maestro–detalle) + consultas avanzadas  
+
+Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/capturas`.
+
+<a id="es-licencia"></a>
+## 📄 License / Licencia
+
+**MIT** — ver [`LICENSE`](./LICENSE).
 
 ---
 
-## 📄 License / Licencia
-MIT — ver [`LICENSE`](./LICENSE).
+## 🇺🇸 English
+
+<a id="en-overview"></a>
+### 📌 Overview
+
+SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-procedure-backed login, and CRUD over SQL Server. Docker-first, clean code (no designer), strong repo hygiene: idempotent SQL scripts, stable CI, secured configuration and a pragmatic Issues/PR/Releases flow.
+
+<a id="en-structure"></a>
+### 📁 Structure
+
+> See the tree above for full layout and comments.
+> 🔒 **No actual** `App.config` is versioned; only `App.config.template.config` (with placeholders).
+
+<a id="en-requirements"></a>
+### ✅ Requirements
+
+- Windows + **Visual Studio 2022**
+- **.NET Framework 4.8**
+- **Docker** + SQL Server 2022 (`127.0.0.1,2333`)
+- **SSMS**
+- **GitHub Desktop**
+- **SSH** configured for *Verified* commits/tags
+
+<a id="en-setup"></a>
+### 🛠️ Setup
+
+1. Clone via SSH in GitHub Desktop:  
+   `git@github.com/<your-user>/SuiteMDI-EduSQL.git` → `C:\GitHub Repositories\SuiteMDI-EduSQL\`
+2. (Once the project exists) Copy `src/App/App.config.template.config` → **`App.config`** and set your **real** password.
+3. Ensure **SQL Server 2022 (Docker)** is running (port `2333`).
+
+<a id="en-database"></a>
+### 🧩 Database
+
+Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).  
+**Order:** 01 → 11 (see Spanish section). Each script includes **commented tests**.
+
+<a id="en-security"></a>
+### 🔐 Security
+
+- Never commit a real `App.config` (template only).
+- Sign **commits/tags with SSH** → GitHub **Verified**.
+- For production: avoid `sa`, least-privilege accounts, secrets **outside** the repo.
+
+<a id="en-run"></a>
+### ▶️ Run & Test
+
+- **CI** auto-detects `*.sln` under `src/`.  
+  - No solution? It **skips** build (green).  
+  - Found a solution? Creates a **temporary App.config** and builds **Release**.
+- **Local** (VS 2022):
+  - Build: `Build → Build solution`
+  - Run: `Debug → Start Without Debugging (Ctrl+F5)`
+
+<a id="en-workflow"></a>
+### 🔄 Workflow
+
+- Spanish, atomic, clear commit messages.
+- Link issues in commits/PRs: `Closes #N`.
+- PRs to `main` once branch protection is enabled.
+
+<a id="en-conventions"></a>
+### 🧭 Conventions & Quality
+
+- Layers: Presentation, Business, Data, Support.
+- UI **built in code** (no designer).
+- DataGridView with **manual columns** (`DataPropertyName` matches SP fields).
+- SPs are idempotent and return `@@ROWCOUNT` when appropriate.
+- Errors surface SQL codes and messages.
+
+<a id="en-troubleshooting"></a>
+### 🧰 Troubleshooting
+
+- Timeout / no connection → check Docker mapping and port.
+- Login failed for user 'sa' → credentials/policy.
+- Missing SPs → run scripts in order; verify `USE`/`OBJECT_ID`.
+- Commit not Verified → ensure `ssh-agent` has your key (`ssh-add C:\Keys\id_ed25519`) and `gpg.format ssh` is set.
+
+<a id="en-roadmap"></a>
+### 🗺️ Roadmap & Releases
+
+- **v0.1.x** — Repo base + Part A (Login shell + SELECT 1)  
+- **v0.2.x** — Users CRUD (SP 03–06)  
+- **v0.3.x** — Password (07) + Clients (08–11)  
+- **v0.4.x** — Requests (master–detail) & advanced queries  
+
+Each release updates **CHANGELOG**, captures in `/docs/capturas`, and CI status.
+
+<a id="en-license"></a>
+### 📄 License
+
+**MIT** — see [`LICENSE`](./LICENSE).
