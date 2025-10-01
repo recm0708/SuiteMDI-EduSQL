@@ -1,0 +1,19 @@
+name-template: "v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+categories:
+  - title: "✨ Features"
+    labels: ["enhancement", "feature"]
+  - title: "🐞 Fixes"
+    labels: ["bug", "fix"]
+  - title: "🧰 Chores"
+    labels: ["chore", "infra", "task"]
+  - title: "📝 Docs"
+    labels: ["docs"]
+change-template: "- $TITLE (#$NUMBER)"
+exclude-labels: ["skip-changelog"]
+template: |
+  ## Cambios
+  $CHANGES
+
+  ## Notas
+  - CI: $CONTRIBUTORS
