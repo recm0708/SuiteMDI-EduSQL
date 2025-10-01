@@ -44,6 +44,8 @@
 
 SuiteMDI-EduSQL es una app WinForms educativa con MDI, login validado por SP y CRUD sobre SQL Server. Se prioriza Docker, se versiona código limpio (sin diseñador), y se integran buenas prácticas: scripts idempotentes, CI estable, seguridad de configuración y flujo de trabajo con Issues/PR/Releases.
 
+---
+
 <a id="es-estructura"></a>
 ### 📁 Estructura
 
@@ -109,6 +111,8 @@ SuiteMDI-EduSQL/
 
 > 🔒 **No se versiona** ningún `App.config` real; solo `App.config.template.config` (con placeholders).
 
+---
+
 <a id="es-requisitos"></a>
 ### ✅ Requisitos
 
@@ -119,6 +123,8 @@ SuiteMDI-EduSQL/
 - **GitHub Desktop** (flujo entre PCs)
 - **SSH** configurado para commits/tags *Verified*
 
+---
+
 <a id="es-configuracion"></a>
 ### 🛠️ Configuración
 
@@ -127,6 +133,8 @@ SuiteMDI-EduSQL/
 2. (Cuando exista el proyecto) Copia `src/App/App.config.template.config` → **`App.config`**  
    y coloca tu **contraseña real** de SQL (Docker/Local).
 3. Asegúrate que el contenedor **SQL Server 2022** está arriba (puerto `2333`).
+
+---
 
 <a id="es-bd"></a>
 ### 🧩 Base de Datos (SQL)
@@ -147,6 +155,8 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 
 > Cada script incluye **pruebas comentadas** (descoméntalas para validar en tu entorno).
 
+---
+
 <a id="es-seguridad"></a>
 ### 🔐 Seguridad
 
@@ -154,8 +164,10 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 - ✅ Firmar **commits y tags con SSH** → *Verified* en GitHub.
 - 🏭 Producción: usuarios distintos de `sa`, mínimos permisos, secretos **fuera** del repo.
 
+---
+
 <a id="es-ejecucion"></a>
-## ▶️ Ejecutar y Probar
+### ▶️ Ejecutar y Probar
 
 - **CI (Actions)**: el workflow **detecta** la `.sln` en `src/`.  
   - Si no existe aún, **no falla** (salta build).  
@@ -164,15 +176,19 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
   - Compilar: `Compilar → Compilar solución`  
   - Ejecutar: `Depurar → Iniciar sin depuración (Ctrl+F5)`
 
+---
+
 <a id="es-flujo"></a>
-## 🔄 Flujo de Trabajo
+### 🔄 Flujo de Trabajo
 
 - Commits en español, atómicos, con **mensajes claros**.
 - Vincular issues en commits/PRs: `Closes #N`.
 - (Cuando se active) PRs a `main` con checklist y build verde.
 
+---
+
 <a id="es-convenciones"></a>
-## 🧭 Convenciones y Calidad
+### 🧭 Convenciones y Calidad
 
 - **Capas**: `Presentacion`, `Negocio`, `Datos`, `Soporte`.
 - **UI sin diseñador**: formularios construidos por **código**.
@@ -181,8 +197,10 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 - **Errores**: mensajes con código y descripción (SQL/Negocio/UI).
 - **Docs**: comentarios en SQL y C# donde haya decisiones no triviales.
 
+---
+
 <a id="es-problemas"></a>
-## 🧰 Problemas Comunes
+### 🧰 Problemas Comunes
 
 - ⏱️ **Timeout / no conecta**: verifica contenedor Docker (puerto `2333` mapeado).  
 - 🔑 **Login failed for user 'sa' (18456)**: credenciales o políticas de contraseña.  
@@ -190,8 +208,10 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 - 🧩 **Diseñador WinForms**: no se usa; todo es **por código**.  
 - 🔒 **Commit sin Verified**: asegúrate de que `ssh-agent` cargó tu clave (`ssh-add C:\Keys\id_ed25519`) y tienes `gpg.format ssh` configurado.
 
+---
+
 <a id="es-roadmap"></a>
-## 🗺️ Roadmap & Releases
+### 🗺️ Roadmap & Releases
 
 > El número de releases dependerá del avance real (iterativo).
 
@@ -202,8 +222,10 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 
 Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/capturas`.
 
+---
+
 <a id="es-licencia"></a>
-## 📄 License / Licencia
+### 📄 License / Licencia
 
 **MIT** — ver [`LICENSE`](./LICENSE).
 
@@ -216,11 +238,15 @@ Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/c
 
 SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-procedure-backed login, and CRUD over SQL Server. Docker-first, clean code (no designer), strong repo hygiene: idempotent SQL scripts, stable CI, secured configuration and a pragmatic Issues/PR/Releases flow.
 
+---
+
 <a id="en-structure"></a>
 ### 📁 Structure
 
 > See the tree above for full layout and comments.
 > 🔒 **No actual** `App.config` is versioned; only `App.config.template.config` (with placeholders).
+
+---
 
 <a id="en-requirements"></a>
 ### ✅ Requirements
@@ -232,6 +258,8 @@ SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-pr
 - **GitHub Desktop**
 - **SSH** configured for *Verified* commits/tags
 
+---
+
 <a id="en-setup"></a>
 ### 🛠️ Setup
 
@@ -240,11 +268,15 @@ SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-pr
 2. (Once the project exists) Copy `src/App/App.config.template.config` → **`App.config`** and set your **real** password.
 3. Ensure **SQL Server 2022 (Docker)** is running (port `2333`).
 
+---
+
 <a id="en-database"></a>
 ### 🧩 Database
 
 Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).  
 **Order:** 01 → 11 (see Spanish section). Each script includes **commented tests**.
+
+---
 
 <a id="en-security"></a>
 ### 🔐 Security
@@ -252,6 +284,8 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - Never commit a real `App.config` (template only).
 - Sign **commits/tags with SSH** → GitHub **Verified**.
 - For production: avoid `sa`, least-privilege accounts, secrets **outside** the repo.
+
+---
 
 <a id="en-run"></a>
 ### ▶️ Run & Test
@@ -263,12 +297,16 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
   - Build: `Build → Build solution`
   - Run: `Debug → Start Without Debugging (Ctrl+F5)`
 
+---
+
 <a id="en-workflow"></a>
 ### 🔄 Workflow
 
 - Spanish, atomic, clear commit messages.
 - Link issues in commits/PRs: `Closes #N`.
 - PRs to `main` once branch protection is enabled.
+
+---
 
 <a id="en-conventions"></a>
 ### 🧭 Conventions & Quality
@@ -279,6 +317,8 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - SPs are idempotent and return `@@ROWCOUNT` when appropriate.
 - Errors surface SQL codes and messages.
 
+---
+
 <a id="en-troubleshooting"></a>
 ### 🧰 Troubleshooting
 
@@ -286,6 +326,8 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - Login failed for user 'sa' → credentials/policy.
 - Missing SPs → run scripts in order; verify `USE`/`OBJECT_ID`.
 - Commit not Verified → ensure `ssh-agent` has your key (`ssh-add C:\Keys\id_ed25519`) and `gpg.format ssh` is set.
+
+---
 
 <a id="en-roadmap"></a>
 ### 🗺️ Roadmap & Releases
@@ -296,6 +338,8 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - **v0.4.x** — Requests (master–detail) & advanced queries  
 
 Each release updates **CHANGELOG**, captures in `/docs/capturas`, and CI status.
+
+---
 
 <a id="en-license"></a>
 ### 📄 License
