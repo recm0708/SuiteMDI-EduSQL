@@ -225,10 +225,11 @@ Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/c
 ---
 
 <a id="es-licencia"></a>
-### 📄 License / Licencia
+### 📄 Licencia
 
 **MIT** — ver [`LICENSE`](./LICENSE).
 
+---
 ---
 
 ## 🇺🇸 English
