@@ -1,19 +1,21 @@
 name: "✨ Feature request"
-description: Solicitar mejora/función
+description: Propón una mejora o nueva función
 labels: ["enhancement"]
 body:
-  - type: input
-    id: titulo
+  - type: textarea
+    id: desc
     attributes:
-      label: Título corto
+      label: Descripción
+      placeholder: "¿Qué problema resuelve? ¿Qué aporta?"
     validations:
       required: true
   - type: textarea
-    id: descripcion
+    id: scope
     attributes:
-      label: Descripción
-      description: ¿Qué y para qué?
+      label: Alcance
+      placeholder: "Qué incluye / qué no incluye"
   - type: textarea
-    id: criterio
+    id: acceptance
     attributes:
       label: Criterios de aceptación
+      placeholder: "Dado ... Cuando ... Entonces ..."

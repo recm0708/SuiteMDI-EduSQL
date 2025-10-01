@@ -1,19 +1,16 @@
 name: "🧩 Task"
-description: Tarea técnica
+description: Tarea técnica o documentación
 labels: ["task"]
 body:
-  - type: input
-    id: titulo
+  - type: textarea
+    id: goal
     attributes:
-      label: Título
-      placeholder: "Ej. Integrar SP prInsertarUsuario"
+      label: Objetivo
+      placeholder: "Qué se hará y por qué"
     validations:
       required: true
   - type: textarea
-    id: detalles
+    id: checklist
     attributes:
-      label: Detalles
-  - type: input
-    id: relacion
-    attributes:
-      label: Relacionado a (Issue/PR)
+      label: Checklist
+      placeholder: "- [ ] Paso 1\n- [ ] Paso 2"
