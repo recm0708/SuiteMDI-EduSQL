@@ -191,4 +191,9 @@
 
 ---
 
+## Quick links / Vínculos rápidos
+- Roadmap (Project): https://github.com/recm0708/SuiteMDI-EduSQL/projects
+- Milestones: https://github.com/recm0708/SuiteMDI-EduSQL/milestones
+- Labels: https://github.com/recm0708/SuiteMDI-EduSQL/labels
+
 Gracias por contribuir a **SuiteMDI-EduSQL** 🙌 / Thanks for contributing!
