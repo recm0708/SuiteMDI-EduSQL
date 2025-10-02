@@ -45,8 +45,6 @@
 
 SuiteMDI-EduSQL es una app WinForms educativa con MDI, login validado por SP y CRUD sobre SQL Server. Se prioriza Docker, se versiona código limpio (sin diseñador), y se integran buenas prácticas: scripts idempotentes, CI estable, seguridad de configuración y flujo de trabajo con Issues/PR/Releases.
 
----
-
 <a id="es-estructura"></a>
 ### 📁 Estructura
 
@@ -59,14 +57,14 @@ SuiteMDI-EduSQL/
 │   │   ├── feature_request.yml
 │   │   └── task.yml
 │   │
-│   │── workflows/                        # Workflows de Actions
-│   │   ├── build.yml                     # GitHub Actions: build en Windows (detecta .sln, crea App.config temporal y compila)
-│   │   ├── labeler.yml                   # Auto-etiquetado de PRs/archivos 
-│   │   └── release-drafter.yml           # Borradores automáticos de Releases 
+│   │── workflows/                        # GitHub Actions (CI y automatizaciones)
+│   │   ├── build.yml                     # Build en Windows; detecta .sln y crea App.config temporal
+│   │   ├── labeler.yml                   # Etiquetado automático de PRs
+│   │   └── release-drafter.yml           # Borradores de releases a partir de PRs
 │   │
-│   ├── CODEOWNERS                        # Responsables por defecto para PRs / revisiones
-│   ├── dependabot.md                     # Actualización de dependencias (Actions, etc.) 
-│   ├── labeler.md                        # Reglas de etiquetado (si usas labeler a nivel repo) 
+│   ├── CODEOWNERS                        # Responsables por defecto para PRs/revisiones
+│   ├── dependabot.md                     # Actualización automática de dependencias (si aplica)
+│   ├── labeler.md                        # Reglas de etiquetado (si usas labeler a nivel repo)
 │   ├── PULL_REQUEST_TEMPLATE.md          # Plantilla de Pull Requests
 │   └── release-drafter.md                # Configuración del Release Drafter (si no va en workflows/) 
 │
@@ -108,7 +106,7 @@ SuiteMDI-EduSQL/
 │
 ├── tools/                                # Utilidades (scripts auxiliares)
 │
-├── .editorconfig                         # Reglas de formato/estilo del editor 
+├── .editorconfig                         # Estilo y convenciones (C#, espacios, EOL)
 ├── .gitattributes                        # Normaliza fin de línea y tipos de archivo
 ├── .gitignore                            # Ignora src/**/App.config, bin/ obj/, etc.
 ├── CHANGELOG.md                          # Historial de cambios
@@ -118,8 +116,6 @@ SuiteMDI-EduSQL/
 └── SECURITY.md                           # Política de seguridad y manejo de secretos
 ```
 > 🔒 **No se versiona** ningún `App.config` real; solo `App.config.template.config` (con placeholders).
-
----
 
 <a id="es-requisitos"></a>
 ### ✅ Requisitos
@@ -131,8 +127,6 @@ SuiteMDI-EduSQL/
 - **GitHub Desktop** (flujo entre PCs)
 - **SSH** configurado para commits/tags *Verified*
 
----
-
 <a id="es-configuracion"></a>
 ### 🛠️ Configuración
 
@@ -141,8 +135,6 @@ SuiteMDI-EduSQL/
 2. Copia `src/App/App.config.template.config` → **`App.config`**  
    y coloca tu **contraseña real** de SQL (Docker/Local).
 3. Asegúrate que el contenedor **SQL Server 2022** está arriba (puerto `2333`).
-
----
 
 <a id="es-bd"></a>
 ### 🧩 Base de Datos (SQL)
@@ -163,16 +155,12 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 
 > Cada script incluye **pruebas comentadas** (descoméntalas para validar en tu entorno).
 
----
-
 <a id="es-seguridad"></a>
 ### 🔐 Seguridad
 
 - ❌ No subir `App.config` real (está bloqueado por `.gitignore`).
 - ✅ Firmar **commits y tags con SSH** → *Verified* en GitHub.
 - 🏭 Producción: usuarios distintos de `sa`, mínimos permisos, secretos **fuera** del repo.
-
----
 
 <a id="es-ejecucion"></a>
 ### ▶️ Ejecutar y Probar
@@ -184,16 +172,12 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
   - Compilar: `Compilar → Compilar solución`  
   - Ejecutar: `Depurar → Iniciar sin depuración (Ctrl+F5)`
 
----
-
 <a id="es-flujo"></a>
 ### 🔄 Flujo de Trabajo
 
 - Commits en español, atómicos, con **mensajes claros**.
 - Vincular issues en commits/PRs: `Closes #N`.
 - (Cuando se active) PRs a `main` con checklist y build verde.
-
----
 
 <a id="es-convenciones"></a>
 ### 🧭 Convenciones y Calidad
@@ -206,8 +190,6 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 - **Docs**: comentarios en SQL y C# donde haya decisiones no triviales.
 - **Mensajería de errores**: en C# propaga `CodigoError`/`MensajeError` desde Negocio a la UI para mensajes consistentes.
 
----
-
 <a id="es-problemas"></a>
 ### 🧰 Problemas Comunes
 
@@ -216,8 +198,6 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 - ❓ **SP no encontrado**: ejecuta scripts **en orden** y revisa `USE`/`OBJECT_ID`.  
 - 🧩 **Diseñador WinForms**: no se usa; todo es **por código**.  
 - 🔒 **Commit sin Verified**: asegúrate de que `ssh-agent` cargó tu clave (`ssh-add C:\Keys\id_ed25519`) y tienes `gpg.format ssh` configurado.
-
----
 
 <a id="es-roadmap"></a>
 ### 🗺️ Roadmap & Releases
@@ -230,8 +210,6 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 - **v0.4.x** — Solicitudes (maestro–detalle) + consultas avanzadas  
 
 Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/capturas`.
-
----
 
 <a id="es-licencia"></a>
 ### 📄 Licencia
@@ -247,27 +225,25 @@ Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/c
 
 SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-procedure-backed login, and CRUD over SQL Server. Docker-first, clean code (no designer), strong repo hygiene: idempotent SQL scripts, stable CI, secured configuration and a pragmatic Issues/PR/Releases flow.
 
----
-
 <a id="en-structure"></a>
 ### 📁 Structure
 
 ```
 SuiteMDI-EduSQL/
 │
-├── .github/                              # GitHub setup (CI, templates, reviews)
+├── .github/                              # GitHub configuration (CI, templates, reviewers)
 │   ├── ISSUE_TEMPLATE/                   # Issue templates (bug, feature, task)
 │   │   ├── bug_report.yml
 │   │   ├── feature_request.yml
 │   │   └── task.yml
 │   │
 │   │── workflows/                        # Actions workflows
-│   │   ├── build.yml                     # Windows build (detects .sln, creates temp App.config, builds)
-│   │   ├── labeler.yml                   # Auto-labeling for PRs/files
-│   │   └── release-drafter.yml           # Automatic release drafts
+│   │   ├── build.yml                     # Windows build; detects .sln and creates temp App.config
+│   │   ├── labeler.yml                   # Auto-label PRs
+│   │   └── release-drafter.yml           # Draft releases from merged PRs
 │   │
-│   ├── CODEOWNERS                        # Default reviewers/owners for PRs
-│   ├── dependabot.md                     # Dependency updates (Actions, etc.)
+│   ├── CODEOWNERS                        # Default reviewers
+│   ├── dependabot.md                     # Dependency updates (if enable)
 │   ├── labeler.md                        # Label rules (if used at repo level)
 │   ├── PULL_REQUEST_TEMPLATE.md          # Pull Request template
 │   └── release-drafter.md                # Release Drafter config (if not under workflows/)
@@ -276,7 +252,7 @@ SuiteMDI-EduSQL/
 │   ├── logo.png
 │   └── icons/
 │
-├── db_scripts/                           # SQL scripts (idempotent, with commented tests)
+├── db_scripts/                           # Idempotent SQL scripts (with commented tests)
 │   ├── 01_CrearBD_y_Tablas-mejorado.sql
 │   ├── 02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
 │   ├── 03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql
@@ -298,7 +274,7 @@ SuiteMDI-EduSQL/
 │       └── ...
 │
 ├── src/                                  # Visual Studio solution (WinForms .NET 4.8)
-│   └── App/                              # Main project (pure code, no designer)
+│   └── App/                              # Main project (code-only UI, no designer)
 │       ├── Assets                        # Internal resources (icons, images)
 │       ├── Datos/                        # ClsConexion and data access (SqlClient, SPs)
 │       ├── Negocio/                      # Services/Processes (CRUD, logic)
@@ -319,9 +295,7 @@ SuiteMDI-EduSQL/
 ├── README.md                             # This file
 └── SECURITY.md                           # Security policy and secrets handling
 ```
-> 🔒 Do **not** version a real `App.config`; only `App.config.template.config` (with placeholders).
-
----
+> 🔒 **No real** `App.config` is versioned; only `App.config.template.config` (with placeholders).
 
 <a id="en-requirements"></a>
 ### ✅ Requirements
@@ -333,8 +307,6 @@ SuiteMDI-EduSQL/
 - **GitHub Desktop**
 - **SSH** configured for *Verified* commits/tags
 
----
-
 <a id="en-setup"></a>
 ### 🛠️ Setup
 
@@ -343,15 +315,11 @@ SuiteMDI-EduSQL/
 2. Copy `src/App/App.config.template.config` → **`App.config`** and set your **real** password.
 3. Ensure **SQL Server 2022 (Docker)** is running (port `2333`).
 
----
-
 <a id="en-database"></a>
 ### 🧩 Database
 
 Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).  
 **Order:** 01 → 11 (see Spanish section). Each script includes **commented tests**.
-
----
 
 <a id="en-security"></a>
 ### 🔐 Security
@@ -359,8 +327,6 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - Never commit a real `App.config` (template only).
 - Sign **commits/tags with SSH** → GitHub **Verified**.
 - For production: avoid `sa`, least-privilege accounts, secrets **outside** the repo.
-
----
 
 <a id="en-run"></a>
 ### ▶️ Run & Test
@@ -372,16 +338,12 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
   - Build: `Build → Build solution`
   - Run: `Debug → Start Without Debugging (Ctrl+F5)`
 
----
-
 <a id="en-workflow"></a>
 ### 🔄 Workflow
 
 - Spanish, atomic, clear commit messages.
 - Link issues in commits/PRs: `Closes #N`.
 - PRs to `main` once branch protection is enabled.
-
----
 
 <a id="en-conventions"></a>
 ### 🧭 Conventions & Quality
@@ -391,8 +353,7 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - DataGridView with **manual columns** (`DataPropertyName` matches SP fields).
 - SPs are idempotent and return `@@ROWCOUNT` when appropriate.
 - Errors surface SQL codes and messages.
-
----
+- Error messaging: bubble up **CodigoError/MensajeError** from Business to UI for consistent user feedback.
 
 <a id="en-troubleshooting"></a>
 ### 🧰 Troubleshooting
@@ -401,8 +362,6 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - Login failed for user 'sa' → credentials/policy.
 - Missing SPs → run scripts in order; verify `USE`/`OBJECT_ID`.
 - Commit not Verified → ensure `ssh-agent` has your key (`ssh-add C:\Keys\id_ed25519`) and `gpg.format ssh` is set.
-
----
 
 <a id="en-roadmap"></a>
 ### 🗺️ Roadmap & Releases
@@ -413,8 +372,6 @@ Run the scripts in **/db_scripts** with **SSMS** (host `127.0.0.1,2333`).
 - **v0.4.x** — Requests (master–detail) & advanced queries  
 
 Each release updates **CHANGELOG**, captures in `/docs/capturas`, and CI status.
-
----
 
 <a id="en-license"></a>
 ### 📄 License
