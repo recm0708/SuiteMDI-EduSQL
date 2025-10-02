@@ -27,17 +27,11 @@ jobs:
         shell: pwsh
         run: |
           $sln = Get-ChildItem -Path "src" -Filter *.sln -Recurse | Select-Object -First 1
-          if ($sln) {
-            "SLN_PATH=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-            "FOUND_SOLUTION=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-            Write-Host "Solución detectada: $($sln.FullName)"
-          } else {
-            "FOUND_SOLUTION=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-            Write-Host "No se encontró .sln; se saltará build."
-          }
+          if (-not $sln) { Write-Error "No se encontró ninguna .sln bajo 'src/'"; exit 1 }
+          "SLN_PATH=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Solución detectada: $($sln.FullName)"
 
       - name: Create temporary App.config if missing
-        if: steps.find_sln.outputs.FOUND_SOLUTION == 'true'
         shell: pwsh
         run: >
           $csprojs = Get-ChildItem -Path "src" -Filter *.csproj -Recurse;
@@ -58,7 +52,7 @@ jobs:
                 '  </appSettings>',
                 '  <connectionStrings>',
                 '    <add name="SqlDocker"',
-                '         connectionString="Server=127.0.0.1,2333;Database=Ejemplo_SIN_Encripcion;User ID=sa;Password=DummyPassword!;TrustServerCertificate=True;MultipleActiveResultSets=True;"',
+                '         connectionString="Server=127.0.0.1,2333;Database=master;User ID=sa;Password=DummyPassword!;TrustServerCertificate=True;MultipleActiveResultSets=True;"',
                 '         providerName="System.Data.SqlClient" />',
                 '  </connectionStrings>',
                 '</configuration>'
@@ -68,11 +62,9 @@ jobs:
           }
 
       - name: Restore packages
-        if: steps.find_sln.outputs.FOUND_SOLUTION == 'true'
         shell: pwsh
         run: nuget restore "${{ steps.find_sln.outputs.SLN_PATH }}"
 
       - name: Build (Release)
-        if: steps.find_sln.outputs.FOUND_SOLUTION == 'true'
         shell: pwsh
         run: msbuild "${{ steps.find_sln.outputs.SLN_PATH }}" /t:Build /p:Configuration=Release /m /verbosity:minimal
