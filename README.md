@@ -53,20 +53,20 @@ SuiteMDI-EduSQL/
 │
 ├── .github/                              # Configuración de GitHub (CI, plantillas, revisiones)
 │   ├── ISSUE_TEMPLATE/                   # Plantillas para Issues (bug, feature, task)
-│   │   ├── bug_report.yml
-│   │   ├── feature_request.yml
-│   │   └── task.yml
+│   │   ├── bug_report.yml                # Reporte de errores
+│   │   ├── feature_request.yml           # Solicitud de mejora/feature
+│   │   └── task.yml                      # Tarea técnica/mantenimiento
 │   │
 │   │── workflows/                        # GitHub Actions (CI y automatizaciones)
-│   │   ├── build.yml                     # Build en Windows; detecta .sln y crea App.config temporal
-│   │   ├── labeler.yml                   # Etiquetado automático de PRs
-│   │   └── release-drafter.yml           # Borradores de releases a partir de PRs
+│   │   ├── build.yml                     # CI: build Windows (detecta .sln, App.config temporal y compila)
+│   │   ├── labeler.yml                   # Autoetiquetado de PRs según rutas
+│   │   └── release-drafter.yml           # Borradores automáticos de Releases
 │   │
-│   ├── CODEOWNERS                        # Responsables por defecto para PRs/revisiones
-│   ├── dependabot.md                     # Actualización automática de dependencias (si aplica)
-│   ├── labeler.md                        # Reglas de etiquetado (si usas labeler a nivel repo)
+│   ├── CODEOWNERS                        # Responsables por defecto en PRs
+│   ├── dependabot.yml                    # Actualizaciones automáticas (Actions/NuGet)
+│   ├── labeler.yml                       # Reglas de etiquetado (referencia del árbol, ya listado arriba)
 │   ├── PULL_REQUEST_TEMPLATE.md          # Plantilla de Pull Requests
-│   └── release-drafter.md                # Configuración del Release Drafter (si no va en workflows/) 
+│   └── release-drafter.yml               # Config de Release Drafter (referencia del árbol, ya listado arriba)
 │
 ├── assets/                               # Logos, íconos e imágenes (UI y README)
 │   ├── logo.png
@@ -231,28 +231,28 @@ SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-pr
 ```
 SuiteMDI-EduSQL/
 │
-├── .github/                              # GitHub configuration (CI, templates, reviewers)
-│   ├── ISSUE_TEMPLATE/                   # Issue templates (bug, feature, task)
-│   │   ├── bug_report.yml
-│   │   ├── feature_request.yml
-│   │   └── task.yml
+├── .github/                              # GitHub configuration (CI, templates, reviews)
+│   ├── ISSUE_TEMPLATE/                   # Templates for Issues (bug, feature, task)
+│   │   ├── bug_report.yml                # Error report
+│   │   ├── feature_request.yml           # Improvement/feature request
+│   │   └── task.yml                      # Technical task/maintenance
 │   │
-│   │── workflows/                        # Actions workflows
-│   │   ├── build.yml                     # Windows build; detects .sln and creates temp App.config
-│   │   ├── labeler.yml                   # Auto-label PRs
-│   │   └── release-drafter.yml           # Draft releases from merged PRs
+│   │── workflows/                        # GitHub Actions (CI and automations)
+│   │   ├── build.yml                     # CI: build Windows (detect .sln, temporary App.config, and compile)
+│   │   ├── labeler.yml                   # Auto-labeling of PRs according to paths
+│   │   └── release-drafter.yml           # Automatic drafts of Releases
 │   │
-│   ├── CODEOWNERS                        # Default reviewers
-│   ├── dependabot.md                     # Dependency updates (if enable)
-│   ├── labeler.md                        # Label rules (if used at repo level)
-│   ├── PULL_REQUEST_TEMPLATE.md          # Pull Request template
-│   └── release-drafter.md                # Release Drafter config (if not under workflows/)
+│   ├── CODEOWNERS                        # Default responsible parties for PRs
+│   ├── dependabot.md                     # Automatic updates (Actions/NuGet)
+│   ├── labeler.md                        # Labeling rules (tree reference, already listed above)
+│   ├── PULL_REQUEST_TEMPLATE.md          # Pull Request Template
+│   └── release-drafter.md                # Release Drafter Config (tree reference, already listed above)
 │
 ├── assets/                               # Logos, icons and images (UI and README)
 │   ├── logo.png
 │   └── icons/
 │
-├── db_scripts/                           # Idempotent SQL scripts (with commented tests)
+├── db_scripts/                           # SQL scripts (idempotent, with commented tests)
 │   ├── 01_CrearBD_y_Tablas-mejorado.sql
 │   ├── 02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
 │   ├── 03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql
@@ -265,7 +265,7 @@ SuiteMDI-EduSQL/
 │   ├── 10_Mantenimiento_Reseed_Perfiles.sql
 │   └── 11_Clientes_CRUD-mejorado.sql
 │
-├── docs/                                 # Documentation, screenshots and diagrams
+├── docs/                                 # Documentation, screenshots, and diagrams
 │   ├── capturas/
 │   │   ├── frmAcceso.png
 │   │   ├── frmMDI.png
@@ -273,29 +273,29 @@ SuiteMDI-EduSQL/
 │   └── diagramas/
 │       └── ...
 │
-├── src/                                  # Visual Studio solution (WinForms .NET 4.8)
-│   └── App/                              # Main project (code-only UI, no designer)
-│       ├── Assets                        # Internal resources (icons, images)
+├── src/                                  # Visual Studio solution and project (WinForms .NET 4.8)
+│   └── App/                              # Main project (all code, no designer)
+│       ├── Assets                        # Internal project resources (icons, images)
 │       ├── Datos/                        # ClsConexion and data access (SqlClient, SPs)
 │       ├── Negocio/                      # Services/Processes (CRUD, logic)
 │       ├── Presentacion/                 # Forms (MDI, Login, Users, Clients, etc.)
 │       ├── Properties/                   # AssemblyInfo, Resources
-│       ├── Soporte/                      # Globals, ThemeHelper, utilities
-│       ├── Program.cs                    # Entry point (starts MDI + Login)
+│       ├── Soporte/                      # Globals, ThemeHelper, and utilities
+│       ├── Program.cs                    # Entry point (starts MDI and Login)
 │       └── App.config.template.config    # Template (NEVER commit real App.config)
 │
-├── tools/                                # Utilities (helper scripts)
+├── tools/                                # Entry point (starts MDI and Access)
 │
-├── .editorconfig                         # Editor/formatting rules
-├── .gitattributes                        # Normalize line endings and file types
-├── .gitignore                            # Ignore src/**/App.config, bin/ obj/, etc.
-├── CHANGELOG.md                          # Changelog
-├── CONTRIBUTING.md                       # Contribution guidelines (issues, PRs, style)
+├── .editorconfig                         # Style and conventions (C#, spaces, EOL)
+├── .gitattributes                        # Normalizes end of line and file types
+├── .gitignore                            # Ignores src/**/App.config, bin/ obj/, etc.
+├── CHANGELOG.md                          # Change history
+├── CONTRIBUTING.md                       # Guide for contributing (issues, PRs, style)
 ├── LICENSE                               # MIT (bilingual)
 ├── README.md                             # This file
-└── SECURITY.md                           # Security policy and secrets handling
+└── SECURITY.md                           # Security policy and handling of secrets
 ```
-> 🔒 **No real** `App.config` is versioned; only `App.config.template.config` (with placeholders).
+> 🔒 No actual `App.config` is versioned; only `App.config.template.config` (placeholders).
 
 <a id="en-requirements"></a>
 ### ✅ Requirements
