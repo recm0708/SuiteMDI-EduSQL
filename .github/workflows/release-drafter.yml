@@ -3,10 +3,7 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    types: [opened, reopened, synchronize, closed]
-permissions:
-  contents: write
-  pull-requests: read
+    types: [opened, reopened, synchronize, edited, closed]
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
