@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Seguridad / Security reports
+    url: https://github.com/recm0708/SuiteMDI-EduSQL/security/policy
+    about: No publiques secretos. Revisa la política de seguridad.
