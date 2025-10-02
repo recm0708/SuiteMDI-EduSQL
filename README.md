@@ -2,7 +2,8 @@
 [![Build](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml/badge.svg)](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**ES** · Aplicación educativa **C# WinForms (.NET Framework 4.8)** con interfaz **MDI** y backend **SQL Server 2022** (prioridad **Docker**). Proyecto **100% por código (sin diseñador)**, arquitectura por capas, **CI en GitHub Actions** y **scripts SQL idempotentes (01–11)**.  
+**ES** · Aplicación Educativa **C# WinForms (.NET Framework 4.8)** con interfaz **MDI** y backend **SQL Server 2022** (prioridad **Docker**). Proyecto **100% por código (sin diseñador)**, arquitectura por capas, **CI en GitHub Actions** y **scripts SQL idempotentes (01–11)**.  
+
 **EN** · Educational **C# WinForms (.NET Framework 4.8)** app with **MDI** and **SQL Server 2022** (Docker-first). **Pure code UI** (no designer), layered architecture, **GitHub Actions CI**, and **idempotent SQL scripts (01–11)**.
 
 ---
@@ -57,10 +58,17 @@ SuiteMDI-EduSQL/
 │   │   ├── bug_report.yml
 │   │   ├── feature_request.yml
 │   │   └── task.yml
-│   ├── workflows/
-│   │   └── build.yml                     # GitHub Actions: build en Windows (detecta .sln y compila)
+│   │
+│   │── workflows/                        # Workflows de Actions
+│   │   ├── build.yml                     # GitHub Actions: build en Windows (detecta .sln, crea App.config temporal y compila)
+│   │   ├── labeler.yml                   # Auto-etiquetado de PRs/archivos 
+│   │   └── release-drafter.yml           # Borradores automáticos de Releases 
+│   │
 │   ├── CODEOWNERS                        # Responsables por defecto para PRs / revisiones
-│   └── PULL_REQUEST_TEMPLATE             # Plantilla de Pull Requests
+│   ├── dependabot.md                     # Actualización de dependencias (Actions, etc.) 
+│   ├── labeler.md                        # Reglas de etiquetado (si usas labeler a nivel repo) 
+│   ├── PULL_REQUEST_TEMPLATE.md          # Plantilla de Pull Requests
+│   └── release-drafter.md                # Configuración del Release Drafter (si no va en workflows/) 
 │
 ├── assets/                               # Logos, íconos e imágenes (UI y README)
 │   ├── logo.png
@@ -88,18 +96,19 @@ SuiteMDI-EduSQL/
 │       └── ...
 │
 ├── src/                                  # Solución y proyecto de Visual Studio (WinForms .NET 4.8)
-│   └── App/                              
-│   ├── Assets                            # Recursos internos del proyecto (íconos, imágenes)
-│   ├── Datos/                            # ClsConexion y acceso a datos (SqlClient, SPs)
-│   ├── Negocio/                          # Servicios/Procesos (CRUD, lógica)
-│   ├── Presentacion/                     # Formularios (MDI, Acceso, Usuarios, Clientes, etc.)
-│   ├── Properties/                       # AssemblyInfo, Recursos
-│   ├── Soporte/                          # Globales, ThemeHelper y utilidades
-│   ├── Program.cs                        # Punto de entrada (arranca MDI y Acceso)
-│   └── App.config.template.config        # Plantilla (NO versionar App.config real)
+│   └── App/                              # Proyecto principal (todo por código, sin diseñador)
+│       ├── Assets                        # Recursos internos del proyecto (íconos, imágenes)
+│       ├── Datos/                        # ClsConexion y acceso a datos (SqlClient, SPs)
+│       ├── Negocio/                      # Servicios/Procesos (CRUD, lógica)
+│       ├── Presentacion/                 # Formularios (MDI, Acceso, Usuarios, Clientes, etc.)
+│       ├── Properties/                   # AssemblyInfo, Recursos
+│       ├── Soporte/                      # Globales, ThemeHelper y utilidades
+│       ├── Program.cs                    # Punto de entrada (arranca MDI y Acceso)
+│       └── App.config.template.config    # Plantilla (NO versionar App.config real)
 │
 ├── tools/                                # Utilidades (scripts auxiliares)
 │
+├── .editorconfig                         # Reglas de formato/estilo del editor 
 ├── .gitattributes                        # Normaliza fin de línea y tipos de archivo
 ├── .gitignore                            # Ignora src/**/App.config, bin/ obj/, etc.
 ├── CHANGELOG.md                          # Historial de cambios
@@ -108,7 +117,6 @@ SuiteMDI-EduSQL/
 ├── README.md                             # Este archivo
 └── SECURITY.md                           # Política de seguridad y manejo de secretos
 ```
-
 > 🔒 **No se versiona** ningún `App.config` real; solo `App.config.template.config` (con placeholders).
 
 ---
@@ -130,7 +138,7 @@ SuiteMDI-EduSQL/
 
 1. **Clonar con SSH** en GitHub Desktop:  
    `git@github.com/<tu-usuario>/SuiteMDI-EduSQL.git` → `C:\GitHub Repositories\SuiteMDI-EduSQL\`
-2. (Cuando exista el proyecto) Copia `src/App/App.config.template.config` → **`App.config`**  
+2. Copia `src/App/App.config.template.config` → **`App.config`**  
    y coloca tu **contraseña real** de SQL (Docker/Local).
 3. Asegúrate que el contenedor **SQL Server 2022** está arriba (puerto `2333`).
 
@@ -196,6 +204,7 @@ Ejecuta en **SSMS** conectando a `127.0.0.1,2333` con tu `sa` (o usuario elegido
 - **SPs** delgados, idempotentes, con `RETURN @@ROWCOUNT` cuando aplica.
 - **Errores**: mensajes con código y descripción (SQL/Negocio/UI).
 - **Docs**: comentarios en SQL y C# donde haya decisiones no triviales.
+- **Mensajería de errores**: en C# propaga `CodigoError`/`MensajeError` desde Negocio a la UI para mensajes consistentes.
 
 ---
 
@@ -243,8 +252,74 @@ SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-pr
 <a id="en-structure"></a>
 ### 📁 Structure
 
-> See the tree above for full layout and comments.
-> 🔒 **No actual** `App.config` is versioned; only `App.config.template.config` (with placeholders).
+```
+SuiteMDI-EduSQL/
+│
+├── .github/                              # GitHub setup (CI, templates, reviews)
+│   ├── ISSUE_TEMPLATE/                   # Issue templates (bug, feature, task)
+│   │   ├── bug_report.yml
+│   │   ├── feature_request.yml
+│   │   └── task.yml
+│   │
+│   │── workflows/                        # Actions workflows
+│   │   ├── build.yml                     # Windows build (detects .sln, creates temp App.config, builds)
+│   │   ├── labeler.yml                   # Auto-labeling for PRs/files
+│   │   └── release-drafter.yml           # Automatic release drafts
+│   │
+│   ├── CODEOWNERS                        # Default reviewers/owners for PRs
+│   ├── dependabot.md                     # Dependency updates (Actions, etc.)
+│   ├── labeler.md                        # Label rules (if used at repo level)
+│   ├── PULL_REQUEST_TEMPLATE.md          # Pull Request template
+│   └── release-drafter.md                # Release Drafter config (if not under workflows/)
+│
+├── assets/                               # Logos, icons and images (UI and README)
+│   ├── logo.png
+│   └── icons/
+│
+├── db_scripts/                           # SQL scripts (idempotent, with commented tests)
+│   ├── 01_CrearBD_y_Tablas-mejorado.sql
+│   ├── 02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
+│   ├── 03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql
+│   ├── 04_CrearProcedimiento_de_Consulta_de_Usuario-mejorado.sql
+│   ├── 05_CrearProcedimiento_de_Eliminación_de_Usuario-mejorado.sql
+│   ├── 06_CrearProcedimiento_de_Modificar_de_Usuario-mejorado.sql
+│   ├── 07_CrearProcedimiento_de_Modificar_PassWord_Sin_Encripcion-mejorado.sql
+│   ├── 08_TablasDelAplicativo-mejorado.sql
+│   ├── 09_ProcedimientosAplicativo-mejorado.sql
+│   ├── 10_Mantenimiento_Reseed_Perfiles.sql
+│   └── 11_Clientes_CRUD-mejorado.sql
+│
+├── docs/                                 # Documentation, screenshots and diagrams
+│   ├── capturas/
+│   │   ├── frmAcceso.png
+│   │   ├── frmMDI.png
+│   │   └── ...
+│   └── diagramas/
+│       └── ...
+│
+├── src/                                  # Visual Studio solution (WinForms .NET 4.8)
+│   └── App/                              # Main project (pure code, no designer)
+│       ├── Assets                        # Internal resources (icons, images)
+│       ├── Datos/                        # ClsConexion and data access (SqlClient, SPs)
+│       ├── Negocio/                      # Services/Processes (CRUD, logic)
+│       ├── Presentacion/                 # Forms (MDI, Login, Users, Clients, etc.)
+│       ├── Properties/                   # AssemblyInfo, Resources
+│       ├── Soporte/                      # Globals, ThemeHelper, utilities
+│       ├── Program.cs                    # Entry point (starts MDI + Login)
+│       └── App.config.template.config    # Template (NEVER commit real App.config)
+│
+├── tools/                                # Utilities (helper scripts)
+│
+├── .editorconfig                         # Editor/formatting rules
+├── .gitattributes                        # Normalize line endings and file types
+├── .gitignore                            # Ignore src/**/App.config, bin/ obj/, etc.
+├── CHANGELOG.md                          # Changelog
+├── CONTRIBUTING.md                       # Contribution guidelines (issues, PRs, style)
+├── LICENSE                               # MIT (bilingual)
+├── README.md                             # This file
+└── SECURITY.md                           # Security policy and secrets handling
+```
+> 🔒 Do **not** version a real `App.config`; only `App.config.template.config` (with placeholders).
 
 ---
 
@@ -265,7 +340,7 @@ SuiteMDI-EduSQL is an educational WinForms app featuring an MDI shell, stored-pr
 
 1. Clone via SSH in GitHub Desktop:  
    `git@github.com/<your-user>/SuiteMDI-EduSQL.git` → `C:\GitHub Repositories\SuiteMDI-EduSQL\`
-2. (Once the project exists) Copy `src/App/App.config.template.config` → **`App.config`** and set your **real** password.
+2. Copy `src/App/App.config.template.config` → **`App.config`** and set your **real** password.
 3. Ensure **SQL Server 2022 (Docker)** is running (port `2333`).
 
 ---
