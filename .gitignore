@@ -1,21 +1,69 @@
-﻿# VS / .NET
+﻿# ===========================
+# Visual Studio / .NET (ES/EN)
+# ===========================
 .vs/
-bin/
-obj/
-TestResults/
-*.user
 *.suo
-
-# App secrets
-src/**/App.config
-src/**/appsettings*.json
-
-# Local-only
-src/_gsdata_/
-*.local.*
-*.DS_Store
-Thumbs.db
+*.user
+*.userosscache
+*.sln.docstates
 
 # Build outputs
+[Bb]in/
+[Oo]bj/
+TestResults/
 artifacts/
 publish/
+*.cache/
+*.log
+
+# NuGet
+packages/
+*.nupkg
+!packages/build/
+!packages/repositories.config
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# ===========================
+# App secrets & local config
+# ===========================
+# Nunca versionar configuraciones con credenciales reales
+src/**/App.config
+src/**/appsettings*.json
+src/**/Properties/PublishProfiles/
+src/**/Settings.settings
+src/**/Settings.Designer.cs
+
+# Solo-local (no compartir entre equipos)
+src/_gsdata_/
+*.local.*
+*.env
+.env
+
+# ===========================
+# OS junk
+# ===========================
+.DS_Store
+Thumbs.db
+
+# ===========================
+# SQL Server local files
+# ===========================
+*.mdf
+*.ldf
+
+# ===========================
+# Keys / certs (no públicas)
+# ===========================
+*.pfx
+*.snk
+
+# ===========================
+# Merge / editor temp files
+# ===========================
+*.orig
+*.rej
+*.swp
+*.tmp
