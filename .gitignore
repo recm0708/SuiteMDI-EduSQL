@@ -1,44 +1,21 @@
 ﻿# VS / .NET
 .vs/
-**/bin/
-**/obj/
-**/Debug/
-**/Release/
+bin/
+obj/
 TestResults/
 *.user
 *.suo
-*.userprefs
-*.ncrunch*
-_ReSharper*/
-*.DotSettings.user
 
-# Paquetes / caches
-packages/
-.nuget/
-*.nupkg
-*.snupkg
-
-# Sistema
-Thumbs.db
-.DS_Store
-
-# App config real (solo plantilla se versiona)
+# App secrets
 src/**/App.config
+src/**/appsettings*.json
 
-# Carpeta oculta de backups locales
-src/**/_gsdata_/
-**/_gsdata_/
+# Local-only
+src/_gsdata_/
+*.local.*
+*.DS_Store
+Thumbs.db
 
-# Paquetes temporales
-*.user
-*.suo
-*.cache
-*.log
-
-# NuGet
-packages/
-*.nupkg
-
-# Otros
-*.bak
-*.tmp
+# Build outputs
+artifacts/
+publish/
