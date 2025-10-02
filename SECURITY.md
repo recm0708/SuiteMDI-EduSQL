@@ -1,3 +1,5 @@
+**Report via GitHub**: https://github.com/recm0708/SuiteMDI-EduSQL/security/advisories/new
+
 # Security Policy / Política de Seguridad
 
 > Bilingual file / Archivo bilingüe (ES/EN)
