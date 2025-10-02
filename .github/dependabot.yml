@@ -23,10 +23,10 @@ updates:
           - "patch"
 
   # 2) NuGet (escanea recursivo debajo de /src)
-  - package-ecosystem: nuget
-    directory: "/src"
+  - package-ecosystem: "nuget"
+    directory: "/src/App"
     schedule:
-      interval: monthly
+      interval: "monthly"
       day: monday
       time: "04:30"
       timezone: "America/Panama"
