@@ -1,10 +1,52 @@
 version: 2
+
 updates:
-  - package-ecosystem: "github-actions"
+  # 1) GitHub Actions
+  - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: "monthly"
-  - package-ecosystem: "nuget"
+      interval: monthly
+      day: monday
+      time: "04:00"
+      timezone: "America/Panama"
+    target-branch: "main"
+    labels: ["ci", "infra", "dependencies"]
+    open-pull-requests-limit: 5
+    rebase-strategy: auto
+    groups:
+      gh-actions-minor:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # 2) NuGet (escanea recursivo debajo de /src)
+  - package-ecosystem: nuget
     directory: "/src"
     schedule:
-      interval: "monthly"
+      interval: monthly
+      day: monday
+      time: "04:30"
+      timezone: "America/Panama"
+    target-branch: "main"
+    labels: ["backend", "dependencies"]
+    open-pull-requests-limit: 10
+    rebase-strategy: auto
+    versioning-strategy: increase
+    # Agrupa actualizaciones menores/patch para reducir ruido
+    groups:
+      nuget-minor:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Ejemplos de ignores (quítalos si no los necesitas)
+    ignore:
+      - dependency-name: "Microsoft.NET.Test.Sdk"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Moq"
+        versions: [">=5.a"]  # ignora pre-releases o líneas mayores
