@@ -2,16 +2,115 @@ name: "✨ Feature request"
 description: Solicitar una mejora o nueva funcionalidad
 labels: ["enhancement"]
 body:
+  - type: input
+    id: title
+    attributes:
+      label: Título breve
+      placeholder: "Agregar formulario 'frmClientes' con alta rápida"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema / oportunidad
+      description: ¿Qué necesidad cubre? ¿Qué duele hoy?
+      placeholder: "Usuarios deben dar de alta clientes desde SQL; falta una UI sencilla…"
+    validations:
+      required: true
+
   - type: textarea
     id: value
     attributes:
       label: Valor de la mejora
-      placeholder: "¿Qué aporta? ¿A quién beneficia?"
-      description: Describe el problema a resolver o la oportunidad
+      description: ¿Qué aporta? ¿A quién beneficia?
+      placeholder: "Reduce tiempo de alta ~60%, estandariza datos y evita errores manuales…"
     validations:
       required: true
+
   - type: textarea
     id: scope
     attributes:
-      label: Alcance propuesto
-      placeholder: "Incluye/No incluye…"
+      label: Alcance propuesto (Incluye / No incluye)
+      placeholder: |
+        Incluye:
+        - Form 'frmClientes' (listar, búsqueda)
+        - Alta rápida (diálogo modal)
+        No incluye:
+        - Reportes
+        - Exportar a Excel
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      description: Definición de "listo" (Given/When/Then o lista)
+      placeholder: |
+        - Dado un cliente válido, cuando guardo, entonces aparece en la grilla.
+        - Validaciones: Email válido, Cédula única (si aplica).
+        - Errores muestran mensaje claro y no cierran la app.
+    validations:
+      required: true
+
+  - type: textarea
+    id: design
+    attributes:
+      label: Diseño / referencias
+      description: Wireframes, mockups, enlaces o capturas
+      placeholder: "Adjunta imagen o enlace a doc…"
+
+  - type: textarea
+    id: tech-notes
+    attributes:
+      label: Notas técnicas
+      description: Cambios en capas, SPs, clases, migraciones
+      placeholder: "Nuevo SP prInsertarCliente; clase ClsProcesosClientes.Insertar…"
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impacto
+      options:
+        - label: Requiere cambios en SQL (scripts)
+        - label: Requiere cambios en C# (código)
+        - label: Cambios en UI (WinForms)
+        - label: Cambios en CI/CD (Actions)
+        - label: Cambios en documentación
+
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: ¿Cambio rompiente?
+      options:
+        - No
+        - Sí (requiere plan de migración)
+      default: 0
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencias / bloqueadores
+      placeholder: "Depende de #12 (CRUD Usuarios) y del script 11_Clientes…"
+
+  - type: textarea
+    id: rollout
+    attributes:
+      label: Despliegue / rollback
+      placeholder: "Agregar SPs, compilar, backup de BD; rollback: revert PR, script de undo…"
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Seguridad / Privacidad
+      options:
+        - label: No se exponen secretos ni credenciales
+          required: true
+        - label: Datos personales se validan/formatean correctamente
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Métricas de éxito (opcional)
+      placeholder: "Tiempo de alta < 30s, 0 errores por formato, N usuarios activos…"
