@@ -2,21 +2,112 @@ name: "🐞 Bug report"
 description: Reportar un error
 labels: ["bug"]
 body:
+  - type: input
+    id: title
+    attributes:
+      label: Título breve
+      placeholder: "Crash al abrir frmClientes cuando no hay conexión"
+    validations:
+      required: true
+
   - type: textarea
     id: what-happened
     attributes:
       label: ¿Qué pasó?
-      description: Describe el bug y lo esperado
-      placeholder: "Sucede X, pero debería suceder Y…"
+      description: Describe el comportamiento actual.
+      placeholder: "Se cierra la app al hacer clic en 'Refrescar'…"
     validations:
       required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ¿Qué esperabas que pasara?
+      placeholder: "Debería mostrar un mensaje de error y continuar ejecutando…"
+    validations:
+      required: true
+
   - type: textarea
     id: steps
     attributes:
       label: Pasos para reproducir
-      placeholder: "1) … 2) …"
-  - type: input
+      description: Lista numerada, por favor.
+      placeholder: |
+        1) Abrir frmClientes
+        2) Pulsar 'Refrescar' sin conexión a SQL
+        3) Observar cierre inesperado
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severidad
+      options:
+        - S1 - Bloqueante (no permite usar la app)
+        - S2 - Mayor (impacto alto, hay workaround)
+        - S3 - Menor (impacto bajo)
+        - S4 - Cosmético
+      default: 1
+
+  - type: checkboxes
+    id: reproducibility
+    attributes:
+      label: Reproducibilidad
+      options:
+        - label: Ocurre siempre
+        - label: Ocurre a veces
+        - label: Ocurrió una vez
+
+  - type: textarea
     id: env
     attributes:
       label: Entorno
-      placeholder: "VS 2022 ES, Docker SQL 2022, Windows 10/11…"
+      description: Versiones y contexto donde ocurre.
+      placeholder: |
+        Windows 11 / VS 2022 (17.xx) ES
+        Docker SQL Server 2022 (puerto 2333)
+        Branch: main  ·  Commit: abc1234  ·  Versión app: v0.3.1
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected
+    attributes:
+      label: Áreas/archivos afectados
+      description: Carpeta(s) o archivos (si aplica).
+      placeholder: "src/App/Presentacion/frmClientes.cs, db_scripts/11_Clientes_CRUD-mejorado.sql"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Mensajes de error
+      description: Pega stack traces, mensajes SQL (códigos), etc.
+      render: shell
+      placeholder: |
+        System.Data.SqlClient.SqlException (0x80131904): Login failed for user 'sa'. (18456)…
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Capturas / Adjuntos
+      description: Arrastra imágenes o GIFs aquí.
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Alcance
+      options:
+        - label: Afecta a SQL (scripts)
+        - label: Afecta a C# (código)
+        - label: Afecta a UI (WinForms)
+        - label: Afecta a CI/CD (Actions)
+        - label: Afecta a documentación
+
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Seguridad
+      options:
+        - label: Confirmo que no adjunto secretos/credenciales reales.
+          required: true
