@@ -2,13 +2,88 @@ name: "🧩 Task"
 description: Tarea técnica o de mantenimiento
 labels: ["task"]
 body:
+  - type: input
+    id: title
+    attributes:
+      label: Título breve
+      placeholder: "Refactor ClsConexion para soportar Connection Timeout"
+    validations:
+      required: true
+
   - type: textarea
-    id: todo
+    id: context
+    attributes:
+      label: Contexto / objetivo
+      description: ¿Por qué se hace esta tarea? ¿Qué problema resuelve?
+      placeholder: "Evitar timeouts intermitentes en Docker al iniciar la app…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Alcance (Incluye / No incluye)
+      placeholder: |
+        Incluye:
+        - Ajustar cadena de conexión (Timeout=30)
+        - Manejo de error en ClsConexion
+        No incluye:
+        - Cambios en UI
+        - Nuevos SPs
+    validations:
+      required: true
+
+  - type: textarea
+    id: checklist
     attributes:
       label: Checklist
-      placeholder: "- [ ] Subtarea 1\n- [ ] Subtarea 2"
+      description: Desglosa subtareas en formato markdown
+      placeholder: |
+        - [ ] Actualizar App.config.template.config
+        - [ ] Manejar SqlException 0/53/18456
+        - [ ] Pruebas con contenedor detenido/arriba
+    validations:
+      required: true
+
   - type: textarea
     id: acceptance
     attributes:
       label: Criterios de aceptación
-      placeholder: "Se considera done cuando…"
+      description: Definición de "listo"
+      placeholder: |
+        - Con contenedor detenido, la app muestra mensaje claro y no se cae.
+        - Con contenedor activo, la app conecta < 2s en 3 intentos.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impacto
+      options:
+        - label: Cambios en SQL (scripts)
+        - label: Cambios en C# (código)
+        - label: Cambios en UI (WinForms)
+        - label: Cambios en CI/CD (Actions)
+        - label: Cambios en documentación
+
+  - type: textarea
+    id: tech-notes
+    attributes:
+      label: Notas técnicas
+      description: Decisiones, riesgos, archivos afectados
+      placeholder: "Editar ClsConexion.cs; probar SELECT 1; actualizar README en sección de ejecución…"
+
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Seguridad / Privacidad
+      options:
+        - label: No se exponen secretos ni credenciales
+          required: true
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: Pruebas / rollback
+      placeholder: "Pruebas manuales A/B, cómo revertir si rompe (git revert #PR)…"
