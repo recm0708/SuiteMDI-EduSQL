@@ -1,4 +1,38 @@
-db_scripts/**: [ "sql" ]
-src/**: [ "backend" ]
-docs/**: [ "docs" ]
-.github/**: [ "infra" ]
+# Usa formato v5 (github/labeler) con changed-files
+# Referencia: https://github.com/actions/labeler
+
+- label: sql
+  changed-files:
+    - any-glob-to-any-file: ['db_scripts/**']
+
+- label: backend
+  changed-files:
+    - any-glob-to-any-file: ['src/**']
+
+- label: ui
+  changed-files:
+    - any-glob-to-any-file: ['src/**/Presentacion/**', 'assets/**']
+
+- label: docs
+  changed-files:
+    - any-glob-to-any-file: ['docs/**', 'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md']
+
+- label: infra
+  changed-files:
+    - any-glob-to-any-file: ['.github/**', 'tools/**']
+
+- label: config
+  changed-files:
+    - any-glob-to-any-file: ['.editorconfig', '.gitattributes', '.gitignore']
+
+- label: license
+  changed-files:
+    - any-glob-to-any-file: ['LICENSE']
+
+- label: ci
+  changed-files:
+    - any-glob-to-any-file: ['.github/workflows/**']
+
+- label: chore
+  changed-files:
+    - any-glob-to-any-file: ['**/*.md', '**/*.yml', '**/*.yaml']
