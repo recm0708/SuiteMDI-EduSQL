@@ -1,18 +1,41 @@
-## Resumen
-<!-- Breve descripción del cambio -->
+## Resumen / Summary
+<!-- ES: Breve descripción del cambio. EN: Brief description of the change. -->
 
-## Tipo de cambio
+## Tipo de cambio / Type of change
 - [ ] Bugfix
-- [ ] Feature
+- [ ] Feature / Enhancement
 - [ ] Refactor
 - [ ] Docs
-- [ ] Infra/CI
+- [ ] Infra / CI
+- [ ] Chore
+- [ ] Breaking change ⚠️
+
+## Contexto / Context
+<!-- ES: ¿Qué problema resuelve? Link a Issue. EN: What problem does this solve? Link Issue. -->
+Closes #<número>  <!-- or -->  Related to #<número>
+
+## Screenshots / Evidencia (si aplica)
+<!-- Inserta imágenes o gif breves de la UI. -->
+
+## SQL / Migraciones (si aplica)
+- [ ] Nuevos SP/tablas/índices documentados en `db_scripts/`
+- [ ] Pruebas comentadas incluidas en el script
+- [ ] Orden de ejecución actualizado en README
+
+## Seguridad / Security (si aplica)
+- [ ] No se expone ningún secreto (App.config real, contraseñas, etc.)
+- [ ] Revisa `SECURITY.md` si afecta a secretos/credenciales
 
 ## Checklist
-- [ ] Cambios probados localmente
-- [ ] CI en verde
-- [ ] Actualizado README/CHANGELOG si aplica
-- [ ] Closes #<número> (si corresponde)
+- [ ] Probado localmente (build OK)
+- [ ] CI verde (Actions)
+- [ ] README / CHANGELOG actualizados si aplica
+- [ ] Cumple estilo (`.editorconfig`) y convenciones
+- [ ] Nombres de columnas/propiedades (`DataPropertyName`) coherentes con SPs
+- [ ] Sin archivos generados ni `App.config` real en el diff
 
-## Notas
-<!-- Consideraciones, riesgos, rollback -->
+## Riesgos / Rollback
+<!-- ES: Riesgos conocidos y plan de reversión. EN: Known risks and rollback plan. -->
+
+## Notas adicionales
+<!-- Cualquier consideración extra para reviewers / release. -->
