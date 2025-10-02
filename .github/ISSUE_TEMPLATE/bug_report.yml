@@ -1,29 +1,22 @@
 name: "🐞 Bug report"
-description: Reporta un error reproducible
+description: Reportar un error
 labels: ["bug"]
 body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: ¿Qué pasó?
+      description: Describe el bug y lo esperado
+      placeholder: "Sucede X, pero debería suceder Y…"
+    validations:
+      required: true
   - type: textarea
     id: steps
     attributes:
       label: Pasos para reproducir
-      description: Lista numerada de pasos
-      placeholder: "1) ...\n2) ...\n3) ..."
-    validations:
-      required: true
-  - type: textarea
-    id: expected
-    attributes:
-      label: Resultado esperado
-    validations:
-      required: true
-  - type: textarea
-    id: actual
-    attributes:
-      label: Resultado actual
-    validations:
-      required: true
+      placeholder: "1) … 2) …"
   - type: input
     id: env
     attributes:
       label: Entorno
-      placeholder: "VS2022, Docker SQL 2022, Windows 11..."
+      placeholder: "VS 2022 ES, Docker SQL 2022, Windows 10/11…"

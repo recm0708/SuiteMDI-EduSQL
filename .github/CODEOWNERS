@@ -1,8 +1,5 @@
-# Dueños por defecto
+# Propietario por defecto de cambios (ajusta con tu usuario)
 * @recm0708
-
-# SQL scripts
-/db_scripts/* @recm0708
-
-# CI / GitHub config
-/.github/* @recm0708
+/db_scripts/ @recm0708
+/src/ @recm0708
+/docs/ @recm0708

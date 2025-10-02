@@ -1,16 +1,14 @@
 name: "🧩 Task"
-description: Tarea técnica o documentación
+description: Tarea técnica o de mantenimiento
 labels: ["task"]
 body:
   - type: textarea
-    id: goal
-    attributes:
-      label: Objetivo
-      placeholder: "Qué se hará y por qué"
-    validations:
-      required: true
-  - type: textarea
-    id: checklist
+    id: todo
     attributes:
       label: Checklist
-      placeholder: "- [ ] Paso 1\n- [ ] Paso 2"
+      placeholder: "- [ ] Subtarea 1\n- [ ] Subtarea 2"
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      placeholder: "Se considera done cuando…"

@@ -1,14 +1,18 @@
 ## Resumen
-Describe el cambio (qué/por qué/cómo).
+<!-- Breve descripción del cambio -->
 
 ## Tipo de cambio
+- [ ] Bugfix
 - [ ] Feature
-- [ ] Fix
+- [ ] Refactor
 - [ ] Docs
-- [ ] Chore/Infra
+- [ ] Infra/CI
 
 ## Checklist
-- [ ] Pruebas locales ok (build/SQL/flujo impactado)
-- [ ] Actualicé docs/CHANGELOG si aplica
-- [ ] Referencié issue(s) (ej. Closes #N)
-- [ ] Commits *Verified* (SSH)
+- [ ] Cambios probados localmente
+- [ ] CI en verde
+- [ ] Actualizado README/CHANGELOG si aplica
+- [ ] Closes #<número> (si corresponde)
+
+## Notas
+<!-- Consideraciones, riesgos, rollback -->
