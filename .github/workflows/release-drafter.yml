@@ -1,13 +1,33 @@
 name: Release Drafter
+
 on:
   push:
     branches: [ "main" ]
   pull_request:
-    types: [opened, reopened, synchronize, edited, closed]
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+      - labeled
+      - unlabeled
+      - closed
+
+permissions:
+  contents: write       # necesario para crear/actualizar el draft de release
+  pull-requests: read   # leer PRs para generar notas
+
+concurrency:
+  group: release-drafter-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
     steps:
-      - uses: release-drafter/release-drafter@v6
+      - name: Update release draft
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: .github/release-drafter.yml   # explícito (por claridad futura)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
