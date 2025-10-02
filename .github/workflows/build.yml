@@ -26,13 +26,12 @@ jobs:
         shell: pwsh
         run: |
           $sln = Get-ChildItem -Path "src" -Filter *.sln -Recurse | Select-Object -First 1
-          if ($sln) {
-            "SLN_PATH=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-            "FOUND=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-            Write-Host "Solución detectada: $($sln.FullName)"
-          } else {
-            "FOUND=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          if (-not $sln) {
             Write-Warning "No se encontró ninguna .sln bajo 'src/'. Se omitirá el build."
+            "SKIP_BUILD=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } else {
+            "SLN_PATH=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            Write-Host "Solución detectada: $($sln.FullName)"
           }
 
       - name: Setup MSBuild (VS 2022)
@@ -88,11 +87,11 @@ jobs:
           }
 
       - name: Restore packages
-        if: steps.find_sln.outputs.FOUND == 'true'
+        if: steps.find_sln.outputs.SKIP_BUILD != 'true'
         shell: pwsh
         run: nuget restore "${{ steps.find_sln.outputs.SLN_PATH }}"
 
       - name: Build (Release)
-        if: steps.find_sln.outputs.FOUND == 'true'
+        if: steps.find_sln.outputs.SKIP_BUILD != 'true'
         shell: pwsh
         run: msbuild "${{ steps.find_sln.outputs.SLN_PATH }}" /t:Build /p:Configuration=Release /m /verbosity:minimal
