@@ -1,27 +1,73 @@
 root = true
 
+# ===========================
+# Defaults
+# ===========================
 [*]
 charset = utf-8
-end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.{yml,yaml,json,md}]
+# ===========================
+# End of line policy
+# ===========================
+# Por defecto, usa LF (coincide con yml/md/sql/json). VS respetará .gitattributes para CRLF donde aplica.
+[*]
+end_of_line = lf
+
+# Archivos típicos de Windows/VS con CRLF
+[*.{sln,csproj,vcxproj,props,targets,config,resx,ps1,bat,cmd}]
+end_of_line = crlf
+
+# Cross-platform (LF, indent 2)
+[*.{yml,yaml,json,md,sh,sql}]
+end_of_line = lf
 indent_size = 2
 
+# ===========================
+# Visual Studio solution
+# ===========================
 [*.sln]
 indent_style = tab
 
+# ===========================
+# C# code style
+# ===========================
 [*.cs]
+# system using first
 dotnet_sort_system_directives_first = true
+
+# this. calificador
 dotnet_style_qualification_for_field = false
 dotnet_style_qualification_for_property = false
 dotnet_style_qualification_for_method = false
 dotnet_style_qualification_for_event = false
+
+# new lines / braces
 csharp_new_line_before_open_brace = all
+csharp_new_line_between_query_expression_clauses = true
+
+# indentación y switches
 csharp_indent_case_contents = true
+csharp_indent_labels = one_less_than_current
+csharp_indent_switch_labels = true
+
+# var preferences
 csharp_style_var_for_built_in_types = true:suggestion
 csharp_style_var_when_type_is_apparent = true:suggestion
 csharp_style_var_elsewhere = true:suggestion
+
+# expresión de cuerpo (expresión-bodied)
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = when_on_single_line:suggestion
+csharp_style_expression_bodied_accessors = when_on_single_line:suggestion
+
+# using directives
+csharp_using_directive_placement = outside_namespace:suggestion
+
+# pattern matching / nullables
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
+dotnet_style_prefer_conditional_expression_over_return = true:suggestion
