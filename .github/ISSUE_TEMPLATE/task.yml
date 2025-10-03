@@ -1,21 +1,27 @@
 name: "🧩 Task"
 description: Tarea técnica o de mantenimiento
 labels: ["task"]
+assignees:
+  - recm0708
 body:
-  - type: input
-    id: title
-    attributes:
-      label: Título breve
-      placeholder: "Refactor ClsConexion para soportar Connection Timeout"
-    validations:
-      required: true
-
   - type: textarea
     id: context
     attributes:
       label: Contexto / objetivo
       description: ¿Por qué se hace esta tarea? ¿Qué problema resuelve?
       placeholder: "Evitar timeouts intermitentes en Docker al iniciar la app…"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad
+      options:
+        - P0 (Crítica)
+        - P1 (Alta)
+        - P2 (Media)
+        - P3 (Baja)
     validations:
       required: true
 
@@ -66,6 +72,12 @@ body:
         - label: Cambios en UI (WinForms)
         - label: Cambios en CI/CD (Actions)
         - label: Cambios en documentación
+
+  - type: input
+    id: due
+    attributes:
+      label: Fecha objetivo
+      placeholder: "YYYY-MM-DD"
 
   - type: textarea
     id: tech-notes
