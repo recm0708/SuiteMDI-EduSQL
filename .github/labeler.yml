@@ -41,6 +41,6 @@
   changed-files:
     - any-glob-to-any-file: ['.github/workflows/**']
 
-- label: sql-tests
+- label: sql
   changed-files:
-    - any-glob-to-any-file: ['db_tests/**']
+    - any-glob-to-any-file: ['db_scripts/**', 'db_test/**']
