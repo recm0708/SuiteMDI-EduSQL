@@ -51,6 +51,14 @@ body:
       default: 1
 
   - type: checkboxes
+    id: regression
+    attributes:
+      label: ¿Es regresión?
+      options:
+        - label: Ocurre en una versión que antes funcionaba
+        - label: No es regresión / Desconocido
+
+  - type: checkboxes
     id: reproducibility
     attributes:
       label: Reproducibilidad
@@ -82,8 +90,7 @@ body:
     id: logs
     attributes:
       label: Logs / Mensajes de error
-      description: Pega stack traces, mensajes SQL (códigos), etc.
-      render: shell
+      description: Pega stack traces, códigos SQL, etc.
       placeholder: |
         System.Data.SqlClient.SqlException (0x80131904): Login failed for user 'sa'. (18456)…
 
