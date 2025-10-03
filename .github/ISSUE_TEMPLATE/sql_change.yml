@@ -1,0 +1,77 @@
+name: "🧱 SQL Change"
+description: Cambio en SQL (SPs, tablas, índices, data-fix)
+labels: ["sql"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Título breve
+      placeholder: "Agregar prInsertarCliente y constraints únicos"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Motivo
+      description: ¿Qué problema resuelve / mejora?
+      placeholder: "Evitar duplicados de cédula; alta de clientes desde la app…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Alcance (Incluye / No incluye)
+      placeholder: |
+        Incluye:
+        - Nuevo SP prInsertarCliente
+        - Índice único UX_Clientes_Cedula
+        No incluye:
+        - Reportes
+        - Cambios en UI
+    validations:
+      required: true
+
+  - type: textarea
+    id: script
+    attributes:
+      label: Scripts involucrados
+      description: Archivos en /db_scripts y orden de ejecución
+      placeholder: |
+        - 11_Clientes_CRUD-mejorado.sql (nuevo)
+        - 08_TablasDelAplicativo-mejorado.sql (ajuste índice)
+        Orden: 08 → 11
+    validations:
+      required: true
+
+  - type: textarea
+    id: tests
+    attributes:
+      label: Pruebas SQL (comentadas en el script)
+      placeholder: "Ejemplos de INSERT/UPDATE/SELECT/ROLLBACK…"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: compat
+    attributes:
+      label: Compatibilidad
+      options:
+        - label: Backward-compatible (no rompe clientes existentes)
+        - label: Requiere data-migration
+        - label: Requiere cambios en C#
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Rollback
+      placeholder: "Cómo revertir: script de undo o revert PR…"
+
+  - type: checkboxes
+    id: docs
+    attributes:
+      label: Documentación
+      options:
+        - label: README / CHANGELOG actualizados si aplica
+        - label: Comentarios añadidos en el script (cabecera, pruebas)
