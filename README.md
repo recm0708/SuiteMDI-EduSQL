@@ -194,7 +194,7 @@ Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
 
 Las pruebas se ejecutan aparte de los scripts de producción.
 
-**Carpetas**
+**Carpetas:**
 - `db_test/00_basicas/` → smoke tests (existencia de objetos, SELECT mínimos).
 - `db_test/10_datos_semilla/` → datos de prueba (opcional).
 - `db_test/20_unitarias/` → pruebas por objeto (SP, tabla, índices).
