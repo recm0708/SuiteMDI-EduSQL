@@ -242,4 +242,5 @@ Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/c
 <a id="licencia"></a>
 ## 📄 Licencia
 
-**MIT** — ver [`LICENSE`](./LICENSE).
+**MIT** — ver [`LICENSE`](./LICENSE).  
+Nota: la licencia válida es la versión en **inglés**; la versión en español es una traducción **no oficial** para conveniencia.
