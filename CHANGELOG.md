@@ -35,7 +35,7 @@ Todas las modificaciones relevantes de este proyecto se documentan aquí.
 ### Añadido
 - Arranque del repositorio: estructura base, plantillas de Issues/PR, CODEOWNERS.
 - CI de build (Windows) con creación de `App.config` temporal en el runner.
-- Primeras versiones de [`SECURITY`](./SECURITY), [`CONTRIBUTING`](./CONTRIBUTING) y [`README`](./README).
+- Primeras versiones de [`SECURITY`](./SECURITY.md), [`CONTRIBUTING`](./CONTRIBUTING.md) y [`README`](./README.md).
 
 ---
 

@@ -74,7 +74,7 @@ Ejemplos:
 - **CI** debe estar en **verde**.
 
 > **Breaking change ⚠️**  
-> - Añade nota explícita en [`CHANGELOG`](./CHANGELOG) y label `breaking-change` o `major`.  
+> - Añade nota explícita en [`CHANGELOG`](./CHANGELOG.md) y label `breaking-change` o `major`.  
 > - Incluir instrucciones de migración si aplica.
 
 ---
@@ -91,7 +91,7 @@ Ejemplos:
 
 - Actualizar `README`, `CHANGELOG` y capturas en `/docs/capturas` cuando cambie UX/flujo.
 - Añadir comentarios en SQL/C# cuando haya decisiones importantes.
-- Consulta también [`CODE_OF_CONDUCT`](./CODE_OF_CONDUCT)  y [`SUPPORT`](./SUPPORT) para convivencia y canales de ayuda.
+- Consulta también [`CODE OF CONDUCT`](./CODE_OF_CONDUCT.md)  y [`SUPPORT`](./SUPPORT.md) para convivencia y canales de ayuda.
 
 ---
 
@@ -107,7 +107,7 @@ Ejemplos:
 
 - No subir `App.config` reales; usar la **plantilla** con placeholders.
 - No compartir credenciales en Issues/PRs.
-- Revisar [`SECURITY`](./SECURITY) para reporte de vulnerabilidades y hardening.
+- Revisar [`SECURITY`](./SECURITY.md) para reporte de vulnerabilidades y hardening.
 
 ---
 

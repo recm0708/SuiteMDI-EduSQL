@@ -19,7 +19,7 @@ Este proyecto busca un ambiente **seguro, respetuoso y colaborativo**. Al partic
 
 ## Reportar Incidentes
 - Para reportes de conducta, abre un **Issue** con etiqueta `question` o contacta a los CODEOWNERS.
-- Para **vulnerabilidades de seguridad**, NO uses Issues públicos. Revisa [`SECURITY`](./SECURITY).
+- Para **vulnerabilidades de seguridad**, NO uses Issues públicos. Revisa [`SECURITY`](./SECURITY.md).
 
 ## Consecuencias
 - Advertencias, cierre de Issues/PRs, bloqueo temporal o permanente, según la severidad.

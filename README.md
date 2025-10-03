@@ -174,7 +174,7 @@ Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
 - ❌ No subir `App.config` real (está bloqueado por `.gitignore`).
 - ✅ Firmar **commits y tags con SSH** → *Verified* en GitHub.
 - 🏭 Producción: usuarios distintos de `sa`, mínimos permisos, secretos **fuera** del repo.
-- Consulta la **Política de Seguridad** (archivo en español): [`SECURITY`](./SECURITY).
+- Consulta la **Política de Seguridad** (archivo en español): [`SECURITY`](./SECURITY.md).
 
 ---
 
@@ -246,5 +246,5 @@ Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/c
 Nota: la licencia válida es la versión en **inglés**; la versión en español es una traducción **no oficial** para conveniencia.
 
 ---
-**Conducta:** ver [`CODE_OF_CONDUCT`](./CODE_OF_CONDUCT)  
-**Soporte:** ver [`SUPPORT`](./SUPPORT)
+**Conducta:** ver [`CODE OF CONDUCT`](./CODE_OF_CONDUCT.md)  
+**Soporte:** ver [`SUPPORT`](./SUPPORT.md)
