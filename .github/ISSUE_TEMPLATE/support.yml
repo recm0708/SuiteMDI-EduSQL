@@ -1,0 +1,31 @@
+name: "💬 Soporte / Consulta"
+description: Duda de uso o soporte (no es bug ni feature)
+labels: ["question"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Título breve
+      placeholder: "¿Cómo configuro ActiveDb en App.config?"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto
+      description: ¿Qué intentas hacer? ¿Qué has probado?
+      placeholder: "Quiero apuntar a SQL local; probé cambiar ActiveDb=Local…"
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Detalles / Capturas (si aplica)
+      placeholder: "Logs, screenshots, mensajes de error…"
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Alcance
+      options:
+        - label: Solo documentación
+        - label: Requiere cambios en código/SQL
