@@ -1,7 +1,7 @@
 name-template: "SuiteMDI-EduSQL v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 
-# Determina bump SemVer según labels
+# Decide SemVer bump based on labels
 version-resolver:
   major:
     labels:
@@ -20,12 +20,12 @@ version-resolver:
       - infra
       - task
 
-# Excluir PRs con estos labels (no aparecen en el release)
+# Exclude PRs with these labels from the notes
 exclude-labels:
   - skip-changelog
   - wip
 
-# Categorías del changelog
+# Group PRs by category
 categories:
   - title: "🚀 Features"
     labels: ["enhancement", "feature"]
@@ -36,10 +36,10 @@ categories:
   - title: "🧰 Chores / Infra"
     labels: ["infra", "task"]
 
-# Cómo se muestra cada PR
+# How each PR entry is rendered
 change-template: "- $TITLE (#$NUMBER) by @$AUTHOR"
 
-# Orden y presentación
+# Sorting and presentation
 sort-by: "merged_at"
 sort-direction: "descending"
 categorize-prs: true
@@ -47,15 +47,12 @@ categorize-prs: true
 template: |
   ## 📦 Release: SuiteMDI-EduSQL v$RESOLVED_VERSION
 
-  **Comparación:** $PREVIOUS_TAG → $NEXT_TAG
+  **Compare:** $PREVIOUS_TAG → $NEXT_TAG
 
-  ### 🇪🇸 Cambios
-  $CHANGES
-
-  ### 🇺🇸 Changes
+  ### Changes
   $CHANGES
 
   ---
-  **Notas / Notes**
-  - Revisa / See **README** y **CHANGELOG** para instrucciones de instalación y uso.
-  - PRs con `skip-changelog` o `wip` se excluyen automáticamente.
+  **Notes**
+  - See **README** and **CHANGELOG** for setup and usage.
+  - PRs labeled `skip-changelog` or `wip` are excluded automatically.
