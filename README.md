@@ -246,6 +246,5 @@ Cada release incluye **CHANGELOG**, assets si aplica, y **capturas** en `/docs/c
 Nota: la licencia válida es la versión en **inglés**; la versión en español es una traducción **no oficial** para conveniencia.
 
 ---
-
 **Conducta:** ver [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)  
 **Soporte:** ver [SUPPORT.md](./SUPPORT.md)

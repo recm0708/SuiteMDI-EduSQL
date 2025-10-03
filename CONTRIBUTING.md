@@ -91,7 +91,7 @@ Ejemplos:
 
 - Actualizar `README.md`, `CHANGELOG.md` y capturas en `/docs/capturas` cuando cambie UX/flujo.
 - Añadir comentarios en SQL/C# cuando haya decisiones importantes.
-- Consulta [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) y [SUPPORT.md](./SUPPORT.md) para dudas de uso y convivencia.
+- Consulta también `CODE_OF_CONDUCT.md` y `SUPPORT.md` para convivencia y canales de ayuda.
 
 ---
 
