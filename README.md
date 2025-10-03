@@ -8,43 +8,44 @@ Aplicación educativa en **C# WinForms (.NET Framework 4.8)** con interfaz **MDI
 
 ## 🧭 Tabla de Contenido
 
-- [Descripción](#descripcion)
-- [Estructura](#estructura)
-- [Requisitos](#requisitos)
-- [Configuración](#configuracion)
-- [Base de Datos](#bd)
-- [Seguridad](#seguridad)
-- [Ejecución y Pruebas](#ejecucion)
-- [Flujo de Trabajo](#flujo)
-- [Convenciones y Calidad](#convenciones)
-- [Problemas Comunes](#problemas)
-- [Roadmap y Releases](#roadmap)
-- [Licencia](#licencia)
+- [📌 Descripción](#descripcion)
+- [📁 Estructura](#estructura)
+- [✅ Requisitos](#requisitos)
+- [🛠️ Configuración](#configuracion)
+- [🧩 Base de Datos (SQL)](#bd)
+- [🔐 Seguridad](#seguridad)
+- [▶️ Ejecución y Pruebas](#ejecucion)
+- [🔄 Flujo de Trabajo](#flujo)
+- [🧭 Convenciones y Calidad](#convenciones)
+- [🧰 Problemas Comunes](#problemas)
+- [🗺️ Roadmap y Releases](#roadmap)
+- [📄 Licencia](#licencia)
 
 ---
 
 <a id="descripcion"></a>
 ## 📌 Descripción
 
-**SuiteMDI-EduSQL** es una aplicación WinForms con **MDI** que implementa inicio de sesión y **CRUD** respaldados por **Stored Procedures** en SQL Server. El enfoque es **Docker-first** (con fallback a Local), **UI generada por código** (sin diseñador) y una organización de repositorio pensada para aprender buenas prácticas de ingeniería de software en .NET:
+SuiteMDI-EduSQL es una aplicación educativa en WinForms que demuestra un ciclo completo “empresa-lite”: **inicio de sesión por SP**, **CRUD con capas** y **automatización de build**. El objetivo es **aprender buenas prácticas aplicadas** con una base técnica sólida, pero manteniendo el código accesible.
 
-- **Arquitectura por capas**: `Presentacion`, `Negocio`, `Datos`, `Soporte`.
-- **Acceso a datos** con `System.Data.SqlClient` y **SPs idempotentes** (scripts 01–11).
-- **Configuración segura**: se versiona solo `App.config.template.config`; el `App.config` real queda fuera del control de versiones.
-- **CI estable**: GitHub Actions (Windows/VS 2022) que detecta la `.sln`, crea un `App.config` **temporal** en el runner y compila en **Release**.
-- **Experiencia educativa completa**: guía para **Issues**, **PRs**, **Milestones**, **Releases** y **Roadmap**, con documentación incremental.
+**Principios del proyecto**
+- **100% por código (sin diseñador)**: formularios creados en C# para entender la UI a bajo nivel.
+- **Docker-first**: SQL Server 2022 en contenedor (`127.0.0.1,2333`) y opción Local como respaldo.
+- **SQL idempotente**: scripts 01–11 re‐ejecutables, con *pruebas comentadas*.
+- **Capas claras**: Presentación / Negocio / Datos / Soporte.
+- **CI estable**: GitHub Actions compila en Windows y genera `App.config` temporal en el runner.
 
-### 🎯 Objetivos
-- Mostrar una **base sólida** para proyectos WinForms con lógica real de negocio.
-- Practicar **scripts SQL** con orden de ejecución, pruebas comentadas y mantenimiento (reseed opcional).
-- Aplicar **patrones de trabajo** en GitHub (plantillas de issues/PR, etiquetas, changelog y releases).
+**Qué incluye (alcance actual)**
+- **Acceso/Login** validado con `dbo.prValidarUsuario` (Script 02).
+- **Usuarios**: insertar, consultar, modificar y eliminar (Scripts 03–06).
+- **Cambio de contraseña**: modo normal y *reset* (Script 07).
+- **Clientes**: esquema y SPs base (Scripts 08–11).
+- **Repositorio profesional**: plantillas de Issues/PR, labeler, Release Drafter, Dependabot, políticas básicas.
 
-### 🧱 Alcance (primeras iteraciones)
-- **Parte A**: Shell MDI + Acceso básico y prueba de conexión.
-- **Parte B**: Validación real de usuario + CRUD Usuarios (SP 03–07).
-- **Parte C**: Catálogo **Clientes** y **Solicitudes** (maestro–detalle) con consultas avanzadas (SP 08–11).
-
-> El proyecto prioriza **claridad** y **mantenibilidad** sobre efectos visuales; más adelante se incorporarán mejoras de UI (temas, íconos, branding) sin comprometer la estructura.
+**Qué no incluye (por ahora)**
+- Cifrado real de contraseñas (se usa `VARBINARY` simple).
+- Despliegue MSI/ClickOnce.
+- Protección de rama `main` (se activará más adelante).
 
 ---
 
@@ -125,49 +126,30 @@ SuiteMDI-EduSQL/
 <a id="requisitos"></a>
 ## ✅ Requisitos
 
-- **Windows 10/11** + **Visual Studio 2022** (Español ok)
-- **.NET Framework 4.8 Developer Pack**
-- **Docker Desktop** con **SQL Server 2022 Linux container**
+- Windows + **Visual Studio 2022** (Español ok)
+- **.NET Framework 4.8**
+- **Docker** + SQL Server 2022 (host 127.0.0.1,2333)
 - **SSMS** (SQL Server Management Studio)
-- **Git** + **GitHub Desktop** (opcional)
+- **GitHub Desktop** (flujo entre PCs)
 - **SSH** configurado para commits/tags *Verified*
-
-> 💡 **Contenedor SQL 2022 (puerto 2333)**  
-> Ejecuta en PowerShell/Terminal (ajusta `<TU_PASSWORD_SA>`):
-> ```bash
-> docker pull mcr.microsoft.com/mssql/server:2022-latest
-> docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<TU_PASSWORD_SA>" ^
->   -p 2333:1433 --name mssql2022 -d mcr.microsoft.com/mssql/server:2022-latest
-> ```
-> Conexión: `Server=127.0.0.1,2333; User ID=sa; Password=<TU_PASSWORD_SA>;`
 
 ---
 
 <a id="configuracion"></a>
 ## 🛠️ Configuración
 
-1) **Clona por SSH** en GitHub Desktop:  
-   `git@github.com/<tu-usuario>/SuiteMDI-EduSQL.git` → `C:\GitHub Repositories\SuiteMDI-EduSQL\`
-
-2) **Crea tu App.config local (no se versiona)**  
-   Copia `src/App/App.config.template.config` → **`src/App/App.config`** y ajusta:
-   - `appSettings:ActiveDb` = `Docker` o `Local`
-   - `connectionStrings:SqlDocker` / `SqlLocal` con tus credenciales
-   > Guía detallada en **`docs/config/guia-app-config.md`**.
-
-3) **Arranca SQL Server en Docker (puerto 2333)**  
-   Ver pasos en **`docs/config/guia-docker-sql.md`**.
-
-4) **Verifica conexión desde SSMS**  
-   Servidor: `127.0.0.1,2333` · Usuario: `sa` · Password: la tuya.
+1. **Clonar con SSH** en GitHub Desktop: git@github.com/<tu-usuario>/SuiteMDI-EduSQL.git → C:\GitHub Repositories\SuiteMDI-EduSQL\
+2. Copia src/App/App.config.template.config → **App.config** y coloca tu **contraseña real** de SQL (Docker/Local).
+3. Asegúrate que el contenedor **SQL Server 2022** está arriba (puerto 2333).
 
 ---
 
 <a id="bd"></a>
 ## 🧩 Base de Datos (SQL)
 
-Ejecuta los scripts de **`/db_scripts`** en **este orden** (con SSMS conectado a `127.0.0.1,2333`):
+Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
 
+**Orden recomendado:**
 1) `01_CrearBD_y_Tablas-mejorado.sql`  
 2) `02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql`  
 3) `03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql`  
@@ -180,9 +162,7 @@ Ejecuta los scripts de **`/db_scripts`** en **este orden** (con SSMS conectado a
 10) `10_Mantenimiento_Reseed_Perfiles.sql` *(DEV opcional)*  
 11) `11_Clientes_CRUD-mejorado.sql`
 
-> ✅ **Pruebas rápidas**: usa **`db_scripts/utils/00_smoke_test.sql`** para validar objetos clave tras la ejecución.
->
-> 📘 Detalles de cada script y pruebas comentadas: **`db_scripts/README.md`**.
+> Cada script incluye **pruebas comentadas** (descoméntalas para validar en tu entorno).
 
 ---
 
@@ -198,27 +178,14 @@ Ejecuta los scripts de **`/db_scripts`** en **este orden** (con SSMS conectado a
 <a id="ejecucion"></a>
 ## ▶️ Ejecutar y Probar
 
-### A) CI (GitHub Actions)
-- El workflow detecta la solución en `src/`.  
-- Si no existe, **omite** el build (no falla).  
-- Si existe, genera **App.config temporal** en el runner y compila **Release**.
+- **CI (Actions)**: el workflow **detecta** la .sln en src/.
+   - Si no existe aún, **no falla** (salta build).
+   - Si existe, crea un **App.config temporal** en el runner y compila **Release**.
+- **Local**: en VS 2022 (Español)
+   - Compilar: Compilar → Compilar solución
+   - Ejecutar: Depurar → Iniciar sin depuración (Ctrl+F5)
 
-### B) Local (Visual Studio 2022)
-1. Abre la solución (cuando esté creada) en `src/App/`.
-2. **Compilar**: `Compilar → Compilar solución`.
-3. **Ejecutar**: `Depurar → Iniciar sin depuración (Ctrl+F5)`.
-
-### C) Comprobaciones funcionales
-- **Login** con usuario de prueba insertado por SP (ver `db_scripts/README.md`).
-- **Usuarios/Clientes**: refrescar, buscar, editar/guardar y eliminar según estén habilitados.
-
-> 🔎 **Checklist de verificación** paso a paso: **`docs/run/quick-checks.md`**.
-
-### 💡 Tips Docker/SSMS (resumen)
-- Reiniciar contenedor: `docker restart mssql2022`
-- Ver logs: `docker logs mssql2022`
-- Restablecer contraseña `sa`: parar/eliminar y recrear el contenedor (ver `docs/config/guia-docker-sql.md`).
-- Backup/Restore: usa SSMS (Tasks → Back Up / Restore) con ruta de contenedor mapeada (ver guía).
+> Nota: el **login real** usa `dbo.prValidarUsuario` (Script 02) contra la BD `Ejemplo_SIN_Encripcion`.
 
 ---
 
