@@ -3,8 +3,8 @@
 Bienvenido/a. Antes de abrir un Issue de soporte, por favor:
 
 ## Checklist previa
-- [ ] Revisé el `README.md` (requisitos, configuración, orden de scripts).
-- [ ] Revisé `SECURITY.md` (no compartir secretos).
+- [ ] Revisé el [`README`](./README) (requisitos, configuración, orden de scripts).
+- [ ] Revisé [`SECURITY`](./SECURITY) (no compartir secretos).
 - [ ] Verifiqué que Docker SQL está arriba (`127.0.0.1,2333`).
 - [ ] Corrí los scripts en **orden** (01 → 11) en SSMS sin errores.
 - [ ] Mi `App.config` local se creó desde la **plantilla** y no está versionado.
@@ -14,7 +14,7 @@ Bienvenido/a. Antes de abrir un Issue de soporte, por favor:
 - **Bug:** usa **🐞 Bug report** con pasos reproducibles.
 - **Mejora/feature:** usa **✨ Feature request**.
 - **Seguridad (no vulnerabilidad):** usa **🔐 Security question**.
-- **Vulnerabilidad:** usa **Security advisories** (ver `SECURITY.md`).
+- **Vulnerabilidad:** usa **Security advisories** (ver [`SECURITY`](./SECURITY)).
 
 ## Información útil que incluir
 - Versión de Windows, VS 2022 y Docker SQL (puerto 2333).
