@@ -34,6 +34,7 @@ Closes #<número>  <!-- o -->  Related to #<número>
 - [ ] `DataPropertyName` consistente con resultados de SPs (si hay grillas)
 - [ ] Sin archivos generados ni `App.config` real en el diff
 - [ ] Labels y milestone asignados
+- [ ] Nuevos SP/tablas/índices documentados en `db_scripts/` y **pruebas** en `db_test/`
 
 ## Riesgos / Rollback
 <!-- Riesgos conocidos y plan de reversión. -->
