@@ -1,32 +1,31 @@
-# CODEOWNERS — Define quién revisa por defecto cada cambio.
-# ES: Ajusta los usuarios/equipos según tu organización.
-# EN: Tweak users/teams as needed for your org.
+# CODEOWNERS — Default reviewers / Revisores por defecto
+# Edit to match your org / Ajusta según tu organización
 
-# 1) Fallback (todo el repo)
-*                     @recm0708
+# 1) Fallback (whole repo) / Todo el repositorio
+*                       @recm0708
 
-# 2) Infra de GitHub (workflows, plantillas, configs)
-.github/              @recm0708
-.github/workflows/    @recm0708
-.github/ISSUE_TEMPLATE/ @recm0708
+# 2) GitHub infra (workflows, templates, configs)
+# .github/ ya cubre subcarpetas como workflows/ e ISSUE_TEMPLATE/
+.github/                 @recm0708
 
-# 3) Código de aplicación
-/src/                 @recm0708
-/src/App/             @recm0708
+# 3) App code / Código de aplicación
+# /src/ ya cubre /src/App/, no hace falta repetir
+/src/                    @recm0708
 
-# 4) SQL
-/db_scripts/          @recm0708
+# 4) SQL scripts
+/db_scripts/             @recm0708
 
-# 5) Documentación y assets
-/docs/                @recm0708
-/assets/              @recm0708
+# 5) Docs & assets
+/docs/                   @recm0708
+/assets/                 @recm0708
+/tools/                  @recm0708
 
-# 6) Archivos raíz clave
-/README.md            @recm0708
-/CHANGELOG.md         @recm0708
-/CONTRIBUTING.md      @recm0708
-/SECURITY.md          @recm0708
-/LICENSE              @recm0708
-/.editorconfig        @recm0708
-/.gitattributes       @recm0708
-/.gitignore           @recm0708
+# 6) Root key files / Archivos raíz clave
+/README.md               @recm0708
+/CHANGELOG.md            @recm0708
+/CONTRIBUTING.md         @recm0708
+/SECURITY.md             @recm0708
+/LICENSE                 @recm0708
+/.editorconfig           @recm0708
+/.gitattributes          @recm0708
+/.gitignore              @recm0708
