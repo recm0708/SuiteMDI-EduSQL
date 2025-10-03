@@ -8,6 +8,7 @@
 
 -- 00) Básicas
 :r $(RootPath)\00_basicas\T-01-smoke-objetos-principales.sql
+:r $(RootPath)\20_unitarias\T-02-identity-perfiles-inicia-1000.sql
 
 -- 20) Unitarias (ejemplos)
 :r $(RootPath)\20_unitarias\T-03-insertar-usuario.sql
