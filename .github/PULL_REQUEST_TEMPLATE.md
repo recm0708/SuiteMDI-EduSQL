@@ -1,41 +1,42 @@
-## Resumen / Summary
-<!-- ES: Breve descripción del cambio. EN: Brief description of the change. -->
+## Resumen
+<!-- Breve descripción del cambio. Qué hace y por qué. -->
 
-## Tipo de cambio / Type of change
+## Tipo de cambio
 - [ ] Bugfix
-- [ ] Feature / Enhancement
+- [ ] Feature / Mejora
 - [ ] Refactor
 - [ ] Docs
 - [ ] Infra / CI
-- [ ] Chore
-- [ ] Breaking change ⚠️
+- [ ] Chore / Mantenimiento
+- [ ] Breaking change ⚠️ (requiere nota en CHANGELOG)
 
-## Contexto / Context
-<!-- ES: ¿Qué problema resuelve? Link a Issue. EN: What problem does this solve? Link Issue. -->
-Closes #<número>  <!-- or -->  Related to #<número>
+## Contexto
+<!-- ¿Qué problema resuelve? Referencia al Issue. -->
+Closes #<número>  <!-- o -->  Related to #<número>
 
-## Screenshots / Evidencia (si aplica)
-<!-- Inserta imágenes o gif breves de la UI. -->
+## Evidencia (si aplica)
+<!-- Capturas o GIFs breves de la UI. -->
 
 ## SQL / Migraciones (si aplica)
 - [ ] Nuevos SP/tablas/índices documentados en `db_scripts/`
 - [ ] Pruebas comentadas incluidas en el script
 - [ ] Orden de ejecución actualizado en README
 
-## Seguridad / Security (si aplica)
-- [ ] No se expone ningún secreto (App.config real, contraseñas, etc.)
-- [ ] Revisa `SECURITY.md` si afecta a secretos/credenciales
+## Seguridad (si aplica)
+- [ ] No se exponen secretos (sin `App.config` real, contraseñas, etc.)
+- [ ] Revisado `SECURITY.md` si afecta a credenciales/secretos
 
 ## Checklist
 - [ ] Probado localmente (build OK)
 - [ ] CI verde (Actions)
 - [ ] README / CHANGELOG actualizados si aplica
 - [ ] Cumple estilo (`.editorconfig`) y convenciones
-- [ ] Nombres de columnas/propiedades (`DataPropertyName`) coherentes con SPs
+- [ ] `DataPropertyName` consistente con resultados de SPs (si hay grillas)
 - [ ] Sin archivos generados ni `App.config` real en el diff
+- [ ] Labels y milestone asignados
 
 ## Riesgos / Rollback
-<!-- ES: Riesgos conocidos y plan de reversión. EN: Known risks and rollback plan. -->
+<!-- Riesgos conocidos y plan de reversión. -->
 
 ## Notas adicionales
-<!-- Cualquier consideración extra para reviewers / release. -->
+<!-- Consideraciones extra para reviewers / release. -->
