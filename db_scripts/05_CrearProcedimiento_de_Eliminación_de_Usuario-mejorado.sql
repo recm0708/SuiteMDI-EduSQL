@@ -1,8 +1,6 @@
-USE [Ejemplo_SIN_Encripcion];
-GO
 /* ============================================================================
-   Script: 05_CrearProcedimiento_de_Eliminación_de_Usuario-mejorado.sql
-   Proyecto: SuiteMDI-Educativa-SQLServer
+   Script: 05_CrearProcedimiento_de_Eliminacion_de_Usuario-mejorado.sql
+   Proyecto: SuiteMDI-EduSQL
    Objetivo:
      - Crear SP dbo.prEliminarUsuario que elimine por @CodigoUsuario.
    Notas:
@@ -11,10 +9,14 @@ GO
      - No falla si el código no existe (retorna 0).
    ============================================================================ */
 
+USE [Ejemplo_SIN_Encripcion];
+GO
+
 SET ANSI_NULLS ON;
 SET QUOTED_IDENTIFIER ON;
 GO
 
+-- Idempotencia: borrar si existe
 IF OBJECT_ID(N'dbo.prEliminarUsuario', N'P') IS NOT NULL
     DROP PROCEDURE dbo.prEliminarUsuario;
 GO
@@ -34,18 +36,3 @@ BEGIN
     RETURN @@ROWCOUNT;   -- 1 si eliminó, 0 si no existía
 END
 GO
-
-/* =======================
-   PRUEBAS (SSMS) - OPCIONALES (Descomentar para usar)
-   Ejecutamos por bloques seleccionando y presionando F5
-   ======================= */
--- 1) Ver estado antes
--- SELECT * FROM dbo.Perfiles WHERE CodigoUsuario = 1000;
-
--- 2) Eliminar (ajusta el código a uno existente)
--- DECLARE @rc INT;
--- EXEC @rc = dbo.prEliminarUsuario @CodigoUsuario = 1000;
--- SELECT Resultado = @rc;  -- 1 = eliminado, 0 = no existía
-
--- 3) Ver estado después
--- SELECT * FROM dbo.Perfiles WHERE CodigoUsuario = 1000;
