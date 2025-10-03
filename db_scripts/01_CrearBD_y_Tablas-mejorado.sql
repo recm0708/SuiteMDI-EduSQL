@@ -1,46 +1,45 @@
 /* =============================================================================
-   Script: 01_CrearBD_y_Tablas-mejorado.sql
-   Proyecto: SuiteMDI-Educativa-SQLServer
+   Script:   01_CrearBD_y_Tablas-mejorado.sql
+   Proyecto: SuiteMDI-EduSQL
    Objetivo:
-     - (Opcional) Eliminar y crear la BD Ejemplo_SIN_Encripcion
-     - Crear tabla dbo.Perfiles (IDENTITY desde 1000)
-     - Crear LOGIN/USER UsrProcesa y asignarlo como db_owner para DEV
+     - (Opcional) Eliminar y crear la BD Ejemplo_SIN_Encripcion (solo DEV)
+     - Crear tabla dbo.Perfiles (IDENTITY desde 1000) con PK
+     - Crear LOGIN/USER [UsrProcesa] y (DEV) agregar a db_owner
    Notas:
-     - Mantengo VARCHAR como el código original. Si se requiere soporte pleno de tildes,
-       cambia VARCHAR por NVARCHAR (y N'...' en literales).
-     - El campo Pass queda VARBINARY(128) porque así viene en las indicaciones originales
-       (luego los SP definirán cómo se usa según "Sin_Encripcion").
+     - Se mantiene VARCHAR (compatibilidad con scripts originales). Para soporte
+       completo de tildes, usar NVARCHAR y literales N'...'.
+     - El campo Pass queda VARBINARY(128) según especificación “Sin_Encripcion”.
+     - Las PRUEBAS se movieron a /db_tests (ver README).
    ============================================================================= */
 
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 
 /* ---------------------------------------------------------------------------
-   0) Parámetros (Reutilizaremos el nombre de la BD)
+   0) Parámetros (ajusta para tu entorno)
 --------------------------------------------------------------------------- */
-DECLARE @DbName SYSNAME = N'Ejemplo_SIN_Encripcion';
-DECLARE @LoginName SYSNAME = N'UsrProcesa';
-DECLARE @LoginPassword NVARCHAR(128) = N'Panama-utp@2025';  -- DEV: cambiar en producción
+DECLARE @DbName        SYSNAME        = N'Ejemplo_SIN_Encripcion';
+DECLARE @LoginName     SYSNAME        = N'UsrProcesa';
+DECLARE @LoginPassword NVARCHAR(128)  = N'Panama-utp@2025'; -- DEV: cambia en PRODUCCIÓN
 
 /* ---------------------------------------------------------------------------
-   1) (OPCIONAL) Elimina la BD si existe
-       - Solo si realmente queremos recrearla. Si no se desea borrarla, comentamos
-         todo este bloque.
+   1) (OPCIONAL DEV) Eliminar BD si existe
+   - Comenta este bloque si NO quieres recrear la base en cada ejecución.
 --------------------------------------------------------------------------- */
 IF DB_ID(@DbName) IS NOT NULL
 BEGIN
-    -- Forzamos SINGLE_USER para evitar bloqueos por conexiones activas
+    -- Forzamos a SINGLE_USER para evitar bloqueos por conexiones activas
     DECLARE @sql NVARCHAR(MAX) =
-        N'ALTER DATABASE [' + @DbName + N'] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;';
+        N'ALTER DATABASE ' + QUOTENAME(@DbName) + N' SET SINGLE_USER WITH ROLLBACK IMMEDIATE;';
     EXEC (@sql);
 
-    SET @sql = N'DROP DATABASE [' + @DbName + N'];';
+    SET @sql = N'DROP DATABASE ' + QUOTENAME(@DbName) + N';';
     EXEC (@sql);
 END
 GO
 
 /* ---------------------------------------------------------------------------
-   2) Crea la BD (si no existe)
+   2) Crear BD si no existe
 --------------------------------------------------------------------------- */
 IF DB_ID(N'Ejemplo_SIN_Encripcion') IS NULL
 BEGIN
@@ -49,7 +48,7 @@ END
 GO
 
 /* ---------------------------------------------------------------------------
-   3) Crea la(s) tabla(s) del aplicativo
+   3) Tablas del aplicativo
 --------------------------------------------------------------------------- */
 USE [Ejemplo_SIN_Encripcion];
 GO
@@ -59,14 +58,14 @@ IF OBJECT_ID(N'dbo.Perfiles', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.Perfiles
     (
-        CodigoUsuario INT IDENTITY(1000, 1) NOT NULL,  -- inicia en 1000
-        NombreUsuario     VARCHAR(50)     NULL,
-        SegundoNombre     VARCHAR(50)     NULL,
-        ApellidoUsuario   VARCHAR(50)     NULL,
-        SegundoApellido   VARCHAR(50)     NULL,
-        ApellidoCasada    VARCHAR(50)     NULL,
-        Email             VARCHAR(100)    NULL,
-        Pass              VARBINARY(128)  NULL  -- reservado para almacenamiento binario (p.ej. hash/encripción)
+        CodigoUsuario    INT            IDENTITY(1000, 1) NOT NULL,  -- inicia en 1000
+        NombreUsuario    VARCHAR(50)    NULL,
+        SegundoNombre    VARCHAR(50)    NULL,
+        ApellidoUsuario  VARCHAR(50)    NULL,
+        SegundoApellido  VARCHAR(50)    NULL,
+        ApellidoCasada   VARCHAR(50)    NULL,
+        Email            VARCHAR(100)   NULL,
+        Pass             VARBINARY(128) NULL   -- reservado para almacenamiento binario (p.ej. hash/encripción)
     );
 
     ALTER TABLE dbo.Perfiles
@@ -75,45 +74,54 @@ END
 GO
 
 /* ---------------------------------------------------------------------------
-   4) Crear LOGIN a nivel servidor y USER en la BD (para DEV)
-       - Si ya existe el LOGIN, lo recreamos (opcional). En DEV suele ser útil.
-       - En PROD no usar db_owner, otorgar permisos mínimos necesarios.
+   4) Seguridad DEV: LOGIN a nivel servidor y USER en la BD
+   - En PROD: NO usar db_owner; dar permisos mínimos.
 --------------------------------------------------------------------------- */
 USE [master];
 GO
 
--- Opción A: recrear el login en cada corrida (limpio para DEV)
-IF SUSER_ID(N'UsrProcesa') IS NOT NULL
+-- Recrea el LOGIN (opcional en DEV)
+IF SUSER_ID(@LoginName) IS NOT NULL
 BEGIN
-    DROP LOGIN [UsrProcesa];
+    DECLARE @drop NVARCHAR(MAX) = N'DROP LOGIN ' + QUOTENAME(@LoginName) + N';';
+    EXEC (@drop);
 END
 GO
 
-CREATE LOGIN [UsrProcesa]
-WITH PASSWORD = N'Panama-utp@2025',
-     CHECK_POLICY = ON,            -- DEV: sin política (se puede desactivar si no se requiere)
-     CHECK_EXPIRATION = OFF,
-     DEFAULT_DATABASE = [Ejemplo_SIN_Encripcion];
+DECLARE @create NVARCHAR(MAX) =
+N'CREATE LOGIN ' + QUOTENAME(N'UsrProcesa') + N'
+   WITH PASSWORD = N''' + REPLACE(N'Panama-utp@2025', '''', '''''') + N''',
+        CHECK_POLICY = ON,
+        CHECK_EXPIRATION = OFF,
+        DEFAULT_DATABASE = ' + QUOTENAME(N'Ejemplo_SIN_Encripcion') + N';';
+EXEC (@create);
 GO
 
--- Crea el USER enlazado al LOGIN dentro de la BD
 USE [Ejemplo_SIN_Encripcion];
 GO
 
-IF USER_ID(N'UsrProcesa') IS NULL
+IF USER_ID(@LoginName) IS NULL
 BEGIN
-    CREATE USER [UsrProcesa] FOR LOGIN [UsrProcesa] WITH DEFAULT_SCHEMA = [dbo];
+    DECLARE @createUser NVARCHAR(MAX) =
+        N'CREATE USER ' + QUOTENAME(@LoginName) + N' FOR LOGIN ' + QUOTENAME(@LoginName) + N' WITH DEFAULT_SCHEMA = [dbo];';
+    EXEC (@createUser);
 END
 GO
 
--- Asigna rol db_owner al usuario (DEV). En PROD se restringen permisos.
-ALTER ROLE [db_owner] ADD MEMBER [UsrProcesa];
+-- Agregar a db_owner SOLO si no es miembro (DEV)
+IF NOT EXISTS (
+    SELECT 1
+    FROM sys.database_role_members rm
+    JOIN sys.database_principals r ON r.principal_id = rm.role_principal_id AND r.name = N'db_owner'
+    JOIN sys.database_principals m ON m.principal_id = rm.member_principal_id AND m.name = @LoginName
+)
+BEGIN
+    ALTER ROLE [db_owner] ADD MEMBER [UsrProcesa];
+END
 GO
 
 /* ---------------------------------------------------------------------------
-   5) (Opcional) Regla de negocio para que los IDs sean > 999
-       - No es necesaria porque IDENTITY(1000,1) lo garantiza,
-         pero si se quiere una verificación adicional. (Descomentar si se desea utilizar)
+   5) (Opcional) Regla para IDs > 999 (IDENTITY ya lo cumple)
 --------------------------------------------------------------------------- */
 /*
 ALTER TABLE dbo.Perfiles
@@ -122,25 +130,8 @@ GO
 */
 
 /* ---------------------------------------------------------------------------
-   6) PRUEBAS RÁPIDAS (para validar)
+   6) Ajuste del IDENTITY (útil en DEV tras borrados manuales)
 --------------------------------------------------------------------------- */
--- ¿Existe la BD?
-SELECT name AS BaseDeDatos FROM sys.databases WHERE name = 'Ejemplo_SIN_Encripcion';
-
--- ¿Existe la tabla y la PK?
-SELECT OBJECT_ID(N'dbo.Perfiles', N'U') AS ObjId_Perfiles;
-
--- ¿Existe el login/usuario?
-SELECT name AS LoginName FROM sys.server_principals WHERE name = 'UsrProcesa';
-SELECT name AS DbUserName FROM sys.database_principals WHERE name = 'UsrProcesa';
-
--- ¿Empieza el IDENTITY en 1000? (inserción de prueba, si se desea)
--- BEGIN TRAN;
--- INSERT INTO dbo.Perfiles (NombreUsuario,ApellidoUsuario,Email) VALUES ('Test','Uno','test@ejemplo.com');
--- SELECT TOP 1 CodigoUsuario, NombreUsuario, ApellidoUsuario, Email FROM dbo.Perfiles ORDER BY CodigoUsuario DESC;
--- ROLLBACK TRAN; -- o COMMIT TRAN si quieres dejar el registro
-
-/* ==== OPCIONAL (DEV): normalizar contador IDENTITY de Perfiles ==== */
 DECLARE @mx INT = (SELECT ISNULL(MAX(CodigoUsuario), 999) FROM dbo.Perfiles);
--- Siguiente insert será @mx + 1. Si no hay filas, queda en 999 -> próximo = 1000
 DBCC CHECKIDENT ('dbo.Perfiles', RESEED, @mx);
+GO
