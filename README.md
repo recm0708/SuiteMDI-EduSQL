@@ -6,7 +6,7 @@ Aplicación educativa en **C# WinForms (.NET Framework 4.8)** con interfaz **MDI
 
 ---
 
-## 🧭 Tabla de Contenido
+## 🧭 Tabla de Contenidos
 
 - [📌 Descripción](#descripcion)
 - [📁 Estructura](#estructura)
@@ -61,16 +61,16 @@ SuiteMDI-EduSQL/
 │   │   ├── feature_request.yml           # Solicitud de mejora/feature
 │   │   └── task.yml                      # Tarea técnica/mantenimiento
 │   │
-│   │── workflows/                        # GitHub Actions (CI y automatizaciones)
-│   │   ├── build.yml                     # CI: build Windows (detecta .sln, App.config temporal y compila)
-│   │   ├── labeler.yml                   # Autoetiquetado de PRs según rutas
-│   │   └── release-drafter.yml           # Borradores automáticos de Releases
+│   ├── workflows/                        # GitHub Actions (CI y automatizaciones)
+│   │   ├── build.yml                     # CI: compila en Windows (detecta .sln y crea App.config temporal)
+│   │   ├── labeler.yml                   # Workflow que aplica labels en PRs
+│   │   └── release-drafter.yml           # Workflow que actualiza el borrador de Releases
 │   │
 │   ├── CODEOWNERS                        # Responsables por defecto en PRs
-│   ├── dependabot.yml                    # Actualizaciones automáticas (Actions/NuGet)
-│   ├── labeler.yml                       # Reglas de etiquetado (referencia del árbol, ya listado arriba)
+│   ├── dependabot.yml                    # Actualizaciones automáticas (Actions y NuGet)
+│   ├── labeler.yml                       # Mapeo de rutas → labels (usado por el workflow)
 │   ├── PULL_REQUEST_TEMPLATE.md          # Plantilla de Pull Requests
-│   └── release-drafter.yml               # Config de Release Drafter (referencia del árbol, ya listado arriba)
+│   └── release-drafter.yml               # Plantilla/categorías del Release Drafter
 │
 ├── assets/                               # Logos, íconos e imágenes (UI y README)
 │   ├── logo.png
@@ -138,7 +138,8 @@ SuiteMDI-EduSQL/
 <a id="configuracion"></a>
 ## 🛠️ Configuración
 
-1. **Clonar con SSH** en GitHub Desktop: git@github.com/<tu-usuario>/SuiteMDI-EduSQL.git → C:\GitHub Repositories\SuiteMDI-EduSQL\
+1. **Clonar con SSH** en GitHub Desktop:  
+   `git@github.com/<tu-usuario>/SuiteMDI-EduSQL.git` → `C:\GitHub Repositories\SuiteMDI-EduSQL\`
 2. Copia src/App/App.config.template.config → **App.config** y coloca tu **contraseña real** de SQL (Docker/Local).
 3. Asegúrate que el contenedor **SQL Server 2022** está arriba (puerto 2333).
 
@@ -148,6 +149,7 @@ SuiteMDI-EduSQL/
 ## 🧩 Base de Datos (SQL)
 
 Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
+> Usa la base de datos **Ejemplo_SIN_Encripcion** (creada por el Script 01).
 
 **Orden recomendado:**
 1) `01_CrearBD_y_Tablas-mejorado.sql`  
@@ -172,6 +174,7 @@ Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
 - ❌ No subir `App.config` real (está bloqueado por `.gitignore`).
 - ✅ Firmar **commits y tags con SSH** → *Verified* en GitHub.
 - 🏭 Producción: usuarios distintos de `sa`, mínimos permisos, secretos **fuera** del repo.
+- Consulta la **Política de Seguridad** (archivo en español): [`SECURITY.md`](./SECURITY.md).
 
 ---
 
