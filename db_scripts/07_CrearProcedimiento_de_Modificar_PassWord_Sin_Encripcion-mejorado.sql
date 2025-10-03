@@ -1,17 +1,19 @@
-USE [Ejemplo_SIN_Encripcion];
-GO
 /* ============================================================================
    Script: 07_CrearProcedimiento_de_Modificar_PassWord_Sin_Encripcion-mejorado.sql
-   Proyecto: SuiteMDI-Educativa-SQLServer
+   Proyecto: SuiteMDI-EduSQL
    Objetivo:
-     - Cambia la contraseña de un usuario.
+     - Cambiar la contraseña de un usuario (modo normal o reset administrativo).
    Notas:
      - Idempotente (DROP/CREATE).
      - Retorna @@ROWCOUNT:
          1 = se actualizó
          0 = no coincide Pass anterior o no existe el usuario
      - @Resetear = 1 ignora @PassAnterior (reseteo administrativo).
+     - Comparación VARBINARY = VARBINARY (evita problemas de encoding/colación).
    ============================================================================ */
+
+USE [Ejemplo_SIN_Encripcion];
+GO
 
 SET ANSI_NULLS ON;
 SET QUOTED_IDENTIFIER ON;
@@ -32,6 +34,11 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    /* Validaciones opcionales
+    IF (@PassNuevo IS NULL OR LTRIM(RTRIM(@PassNuevo)) = '')
+        RETURN 0; -- o THROW 50010, 'PassNuevo obligatorio.', 1;
+    */
+
     IF (@Resetear = 1)
     BEGIN
         UPDATE p
@@ -43,36 +50,14 @@ BEGIN
     END
     ELSE
     BEGIN
-        -- Actualiza solo si coincide el Pass actual
+        -- Modo normal: solo si coincide el Pass actual (binario contra binario)
         UPDATE p
            SET p.Pass = CONVERT(VARBINARY(128), @PassNuevo)
           FROM dbo.Perfiles AS p
          WHERE p.CodigoUsuario = @CodigoUsuario
-           AND CONVERT(VARCHAR(500), p.Pass) = @PassAnterior;
+           AND p.Pass = CONVERT(VARBINARY(128), @PassAnterior);
 
         RETURN @@ROWCOUNT;  -- 1 si coincidió y actualizó, 0 si no
     END
 END
 GO
-
-/* =======================
-   PRUEBAS (SSMS) - OPCIONALES (Descomentar para usar)
-   Ejecutamos por bloques seleccionando y presionando F5
-   ======================= */
--- DECLARE @rc INT;
-
--- 1) Cambio normal (requiere Pass anterior correcto)
--- EXEC @rc = dbo.prModificarPasswordUsuarios
---     @CodigoUsuario = 1000,
---     @PassAnterior  = '123456',
---     @PassNuevo     = 'nueva123',
---     @Resetear      = 0;
--- SELECT Resultado = @rc;  -- 1 esperado si coincidía
-
--- 2) Reset administrativo (ignora Pass anterior)
--- EXEC @rc = dbo.prModificarPasswordUsuarios
---     @CodigoUsuario = 1000,
---     @PassAnterior  = NULL,
---     @PassNuevo     = 'reset123',
---     @Resetear      = 1;
--- SELECT Resultado = @rc;  -- 1 si existía
