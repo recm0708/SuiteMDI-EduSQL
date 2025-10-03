@@ -6,3 +6,6 @@ contact_links:
   - name: Guía de contribución (cómo reportar)
     url: https://github.com/recm0708/SuiteMDI-EduSQL/blob/main/CONTRIBUTING.md
     about: Revisa cómo crear Issues (bug/feature/task), labels y milestones.
+  - name: Soporte / Support
+    url: https://github.com/recm0708/SuiteMDI-EduSQL/blob/main/SUPPORT.md
+    about: Guía de soporte y canales para dudas de uso.
