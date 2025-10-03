@@ -1,0 +1,41 @@
+name: "🔐 Security question"
+description: Consulta de seguridad (no para reportar vulnerabilidades)
+labels: ["security", "question"]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        ⚠️ **No adjuntes secretos ni credenciales.**  
+        Para **reportar vulnerabilidades**, usa: https://github.com/recm0708/SuiteMDI-EduSQL/security/advisories/new  
+        Política: https://github.com/recm0708/SuiteMDI-EduSQL/security/policy
+  - type: input
+    id: title
+    attributes:
+      label: Título breve
+      placeholder: "¿Cómo rotar credenciales sin cortar el CI?"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto
+      description: ¿Qué intentas lograr? ¿Qué has probado?
+      placeholder: "Quiero rotar el password de 'sa' y mantener el pipeline funcionando…"
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Detalles (sin secretos)
+      description: Describe tu entorno y consideraciones (sin datos sensibles).
+      placeholder: |
+        - Entorno: DEV (Docker SQL 2022)
+        - Impacto esperado: CI y app local
+        - Alternativas consideradas: variables de entorno, secretos en Actions, etc.
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: No incluiré secretos/credenciales reales en este issue.
+          required: true
