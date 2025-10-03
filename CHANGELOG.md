@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - README: descripción ampliada, TOC simplificado y nota de ejecución (login real con SP 02).
 - LICENSE estandarizada (MIT EN + traducción ES no oficial; cabecera SPDX).
+- CONTRIBUTING.md convertido a español (alineado a la política de idioma).
 
 ### Changed / Cambiado
 - Normalización de `.editorconfig`, `.gitattributes` y `.gitignore`.
