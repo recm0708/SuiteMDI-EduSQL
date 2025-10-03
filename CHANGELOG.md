@@ -14,6 +14,9 @@ All notable changes to this project will be documented in this file.
 - Documentación: `README` ES/EN con TOC y badges; `SECURITY.md`; `CONTRIBUTING.md`.
 - **db_scripts/** colocados (01–11) con pruebas comentadas (SSMS).
 - Guía para **commits/tags verificados vía SSH** (Verified).
+### Changed
+- README: descripción ampliada, TOC simplificado y nota de ejecución (login real con SP 02).
+
 
 ### Changed / Cambiado
 - Normalización de `.editorconfig`, `.gitattributes` y `.gitignore`.
