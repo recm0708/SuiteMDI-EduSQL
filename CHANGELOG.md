@@ -14,12 +14,14 @@ Todas las modificaciones relevantes de este proyecto se documentan aquí.
 - Documentación: `README` (ES) con TOC y badges; `SECURITY.md` (ES); `CONTRIBUTING.md` (ES).
 - **db_scripts/** colocados (01–11) con pruebas comentadas (SSMS).
 - Guía para **commits/tags verificados por SSH** (*Verified*).
+- Carpeta `db_tests/` con plantilla de test y orquestador `RUN_ALL.sql`
 
 ### Cambiado
 - README: descripción ampliada, TOC y nota de ejecución (login real con SP 02).
 - `CONTRIBUTING.md` convertido a **español** (alineado a la política de idioma).
 - Normalización de `.editorconfig`, `.gitattributes` y `.gitignore`.
 - Comentarios y descripciones de la estructura más claras.
+- Pruebas SQL separadas de `db_scripts/` a `db_tests/` (smoke/unit/integration)
 
 ### Corregido
 - Badge de licencia apuntando a `LICENSE`.
