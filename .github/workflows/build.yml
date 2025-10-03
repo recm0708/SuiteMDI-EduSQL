@@ -28,35 +28,36 @@ jobs:
           $sln = Get-ChildItem -Path "src" -Filter *.sln -Recurse | Select-Object -First 1
           if (-not $sln) {
             Write-Warning "No se encontró ninguna .sln bajo 'src/'. Se omitirá el build."
-            "SKIP_BUILD=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+            "SHOULD_BUILD=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
           } else {
+            "SHOULD_BUILD=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
             "SLN_PATH=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
             Write-Host "Solución detectada: $($sln.FullName)"
           }
 
       - name: Setup MSBuild (VS 2022)
-        if: steps.find_sln.outputs.FOUND == 'true'
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
         uses: microsoft/setup-msbuild@v2
         with:
           msbuild-architecture: x64
 
       - name: Setup NuGet
-        if: steps.find_sln.outputs.FOUND == 'true'
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
         uses: NuGet/setup-nuget@v2
 
       - name: NuGet cache
-        if: steps.find_sln.outputs.FOUND == 'true'
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
         uses: actions/cache@v4
         with:
           path: |
             ~/.nuget/packages
             **/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.config') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.config', '**/*.csproj') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 
       - name: Create temporary App.config if missing
-        if: steps.find_sln.outputs.FOUND == 'true'
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
         shell: pwsh
         run: >
           $csprojs = Get-ChildItem -Path "src" -Filter *.csproj -Recurse;
@@ -87,11 +88,11 @@ jobs:
           }
 
       - name: Restore packages
-        if: steps.find_sln.outputs.SKIP_BUILD != 'true'
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
         shell: pwsh
         run: nuget restore "${{ steps.find_sln.outputs.SLN_PATH }}"
 
       - name: Build (Release)
-        if: steps.find_sln.outputs.SKIP_BUILD != 'true'
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
         shell: pwsh
         run: msbuild "${{ steps.find_sln.outputs.SLN_PATH }}" /t:Build /p:Configuration=Release /m /verbosity:minimal
