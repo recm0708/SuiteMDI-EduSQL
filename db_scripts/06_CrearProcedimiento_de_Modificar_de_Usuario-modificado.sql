@@ -1,8 +1,6 @@
-USE [Ejemplo_SIN_Encripcion];
-GO
 /* ============================================================================
    Script: 06_CrearProcedimiento_de_Modificar_de_Usuario-mejorado.sql
-   Proyecto: SuiteMDI-Educativa-SQLServer
+   Proyecto: SuiteMDI-EduSQL
    Objetivo:
      - Crear SP dbo.prModificarUsuarios que actualiza datos (sin cambiar Pass).
    Notas:
@@ -10,6 +8,9 @@ GO
      - Devuelve filas afectadas en el código de retorno (RETURN @@ROWCOUNT).
      - No falla si el código no existe (retorna 0).
    ============================================================================ */
+
+USE [Ejemplo_SIN_Encripcion];
+GO
 
 SET ANSI_NULLS ON;
 SET QUOTED_IDENTIFIER ON;
