@@ -13,7 +13,7 @@ Aplicación educativa en **C# WinForms (.NET Framework 4.8)** con interfaz **MDI
 - [✅ Requisitos](#requisitos)
 - [🛠️ Configuración](#configuracion)
 - [🧩 Base de Datos (SQL)](#bd)
-- [🧪 Pruebas SQL (db_tests)](#tests-sql)  <!-- NUEVO -->
+- [🧪 Pruebas SQL](#pruebas-sql)
 - [🔐 Seguridad](#seguridad)
 - [▶️ Ejecución y Pruebas](#ejecucion)
 - [🔄 Flujo de Trabajo](#flujo)
@@ -59,11 +59,11 @@ SuiteMDI-EduSQL/
 ├── .github/                              # Configuración de GitHub (CI, plantillas, revisiones)
 │   ├── ISSUE_TEMPLATE/                   # Plantillas para Issues (bug, feature, task)
 │   │   ├── bug_report.yml                # Reporte de errores
-│   │   ├── config.yml                    # 
+│   │   ├── config.yml                    # Config de issues (deshabilita blank issues, links de soporte)
 │   │   ├── feature_request.yml           # Solicitud de mejora/feature
-│   │   ├── security_question.yml         # 
-│   │   ├── sql_change.yml                # 
-│   │   ├── support.yml                   # 
+│   │   ├── security_question.yml         # Plantilla de duda/alerta de seguridad
+│   │   ├── sql_change.yml                # Plantilla para cambios que afectan SQL
+│   │   ├── support.yml                   # Solicitudes de ayuda/soporte
 │   │   └── task.yml                      # Tarea técnica/mantenimiento
 │   │
 │   ├── workflows/                        # GitHub Actions (CI y automatizaciones)
@@ -94,21 +94,23 @@ SuiteMDI-EduSQL/
 │   ├── 10_Mantenimiento_Reseed_Perfiles.sql
 │   └── 11_Clientes_CRUD-mejorado.sql
 │
-├── db_test/                              # 
+├── db_test/                              # Pruebas SQL (separadas de los scripts base)
 │   ├── 00_basicas/                       # Smoke tests: existencia de objetos, SELECT mínimos
+│   │   ├── T-01-smoke-objetos-principales.sql
 │   │   └── ... 
 │   ├── 10_datos_semilla/                 # Fixtures de datos para pruebas (opcional)
 │   │   └── ... 
 │   ├── 20_unitarias/                     # Pruebas por objeto (SP, tabla, índices)
+│   │   ├── T-02-identity-perfiles-inicia-1000.sql
 │   │   └── ... 
 │   ├── 30_integracion/                   # Flujos completos (login, CRUD, etc.)
 │   │   └── ... 
-│   └── RUN_ALL.sql                       #
+│   └── RUN_ALL.sql                       # Orquestador de tests en modo SQLCMD
 │
 ├── docs/                                 # Documentación, capturas y diagramas
-│   ├── capturas/
+│   ├── capturas/                         # Screenshots del aplicativo (para README/Releases)
 │   │   └── ...
-│   └── diagramas/
+│   └── diagramas/                        # Diagramas de arquitectura/flujo (opcional)
 │       └── ...
 │
 ├── src/                                  # Solución y proyecto de Visual Studio (WinForms .NET 4.8)
@@ -128,13 +130,14 @@ SuiteMDI-EduSQL/
 ├── .gitattributes                        # Normaliza fin de línea y tipos de archivo
 ├── .gitignore                            # Ignora src/**/App.config, bin/ obj/, etc.
 ├── CHANGELOG.md                          # Historial de cambios
-├── CODE_OF_CONDUCT.md                    # 
+├── CODE_OF_CONDUCT.md                    # Código de Conducta del proyecto
 ├── CONTRIBUTING.md                       # Guía para contribuir (issues, PRs, estilo)
 ├── LICENSE                               # MIT (bilingüe)
 ├── README.md                             # Este archivo
 ├── SECURITY.md                           # Política de seguridad y manejo de secretos
-└── SUPPORT.md                            # 
+└── SUPPORT.md                            # Cómo pedir ayuda/soporte y canales
 ```
+
 > 🔒 **No se versiona** ningún `App.config` real; solo `App.config.template.config` (con placeholders).
 
 ---
@@ -165,6 +168,7 @@ SuiteMDI-EduSQL/
 ## 🧩 Base de Datos (SQL)
 
 Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
+
 > Usa la base de datos **Ejemplo_SIN_Encripcion** (creada por el Script 01).
 
 **Orden recomendado:**
@@ -185,16 +189,24 @@ Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
 
 ---
 
-<a id="tests-sql"></a>
-## 🧪 Pruebas SQL (db_tests)
+<a id="pruebas-sql"></a>
+## 🧪 Pruebas SQL
 
-Las pruebas se ejecutan aparte de los scripts de producción. Estructura propuesta en **español**:
+Las pruebas se ejecutan aparte de los scripts de producción.
+
+**Carpetas**
+- `db_test/00_basicas/` → smoke tests (existencia de objetos, SELECT mínimos).
+- `db_test/10_datos_semilla/` → datos de prueba (opcional).
+- `db_test/20_unitarias/` → pruebas por objeto (SP, tabla, índices).
+- `db_test/30_integracion/` → flujos completos (login, CRUD, etc.).
+- `db_test/RUN_ALL.sql` → orquestador (SQLCMD).
 
 ### Cómo ejecutar
 1. Abrir **SSMS** sobre la BD `Ejemplo_SIN_Encripcion`.
 2. Activar **SQLCMD Mode**: `Query → SQLCMD Mode`.
 3. Abrir y ejecutar `db_tests/RUN_ALL.sql`.
 
+> Recomendado: que las pruebas hagan `BEGIN TRAN` + `ROLLBACK` para no dejar datos residuales.
 > Los scripts en `db_scripts/` permanecen **idempotentes y sin pruebas**.  
 > Cada test usa `BEGIN TRAN/ROLLBACK` para no dejar efectos (salvo que expresamente lo cambies a `COMMIT`).
 
