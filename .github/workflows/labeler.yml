@@ -20,7 +20,7 @@ jobs:
     if: github.event_name != 'pull_request_target' || github.event.pull_request.draft == false
     steps:
       - name: Apply labels based on paths
-        uses: actions/labeler@v5
+        uses: actions/labeler@v6
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml
