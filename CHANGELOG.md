@@ -14,7 +14,9 @@ Todas las modificaciones relevantes de este proyecto se documentan aquí.
 - Documentación: `README` (ES) con TOC y badges; `SECURITY.md` (ES); `CONTRIBUTING.md` (ES).
 - **db_scripts/** colocados (01–11) con pruebas comentadas (SSMS).
 - Guía para **commits/tags verificados por SSH** (*Verified*).
-- Carpeta `db_tests/` con plantilla de test y orquestador `RUN_ALL.sql`
+- Sección **“🧪 Pruebas SQL (db_test)”** en el README (ejecución con SQLCMD y runner de ejemplo).
+- Documentación en README de **nuevas ISSUE_TEMPLATE**: `security_question.yml`, `sql_change.yml`, `support.yml`, y `config.yml`.
+- Estructura inicial de **`db_test/`** y **`RUN_ALL.sql`** (orquestador SQLCMD).
 
 ### Cambiado
 - README: descripción ampliada, TOC y nota de ejecución (login real con SP 02).
@@ -22,10 +24,12 @@ Todas las modificaciones relevantes de este proyecto se documentan aquí.
 - Normalización de `.editorconfig`, `.gitattributes` y `.gitignore`.
 - Comentarios y descripciones de la estructura más claras.
 - Pruebas SQL separadas de `db_scripts/` a `db_tests/` (smoke/unit/integration)
+- Bloque de **Estructura** en README: comentarios completos y rutas actualizadas (incluye `db_test/` y nuevas plantillas de Issues).
 
 ### Corregido
 - Badge de licencia apuntando a `LICENSE`.
 - Anclas/IDs de secciones en README para navegación correcta.
+- Enlaces internos del README (TOC → nueva sección de Pruebas).
 
 ### Seguridad
 - Excluido `src/**/App.config` del repo (solo `App.config.template.config` con placeholders).
