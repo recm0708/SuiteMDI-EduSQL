@@ -1,5 +1,5 @@
 ﻿# ===========================
-# Visual Studio / .NET (ES/EN)
+# Visual Studio / .NET
 # ===========================
 .vs/
 *.suo
@@ -15,6 +15,8 @@ artifacts/
 publish/
 *.cache/
 *.log
+*.tlog
+*.lastcodeanalysissucceeded
 
 # NuGet
 packages/
@@ -22,9 +24,12 @@ packages/
 !packages/build/
 !packages/repositories.config
 
-# Rider / JetBrains
+# JetBrains Rider
 .idea/
 *.sln.iml
+
+# VS Code
+.vscode/
 
 # ===========================
 # App secrets & local config
@@ -35,6 +40,7 @@ src/**/appsettings*.json
 src/**/Properties/PublishProfiles/
 src/**/Settings.settings
 src/**/Settings.Designer.cs
+src/**/launchSettings.json
 
 # Solo-local (no compartir entre equipos)
 src/_gsdata_/
@@ -47,12 +53,14 @@ src/_gsdata_/
 # ===========================
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # ===========================
 # SQL Server local files
 # ===========================
 *.mdf
 *.ldf
+*.dbmdl
 
 # ===========================
 # Keys / certs (no públicas)
