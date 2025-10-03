@@ -185,7 +185,7 @@ Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
 11) `11_Clientes_CRUD-mejorado.sql`
 
 > ℹ️ **Pruebas SQL separadas**: los scripts de pruebas rápidas, unitarias e integradas ya **no** van dentro de `db_scripts/`.
-> Ahora viven en **`/db_tests/`**. Consulta la sección [🧪 Pruebas SQL (db_tests)](#tests-sql).
+> Ahora viven en **`/db_tests/`**. Consulta la sección [🧪 Pruebas SQL (db_tests)](#pruebas-sql).
 
 ---
 
