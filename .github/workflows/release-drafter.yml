@@ -12,10 +12,11 @@ on:
       - labeled
       - unlabeled
       - closed
+  workflow_dispatch: {}   # <-- opcional: disparo manual
 
 permissions:
-  contents: write       # necesario para crear/actualizar el draft de release
-  pull-requests: read   # leer PRs para generar notas
+  contents: write
+  pull-requests: read
 
 concurrency:
   group: release-drafter-${{ github.ref }}
@@ -28,6 +29,6 @@ jobs:
       - name: Update release draft
         uses: release-drafter/release-drafter@v6
         with:
-          config-name: .github/release-drafter.yml   # explícito (por claridad futura)
+          config-name: release-drafter.yml   # <-- solo el nombre del archivo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
