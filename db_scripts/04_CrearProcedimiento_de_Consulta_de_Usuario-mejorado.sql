@@ -1,22 +1,24 @@
-USE [Ejemplo_SIN_Encripcion];
-GO
 /* =============================================================================
    Script: 04_CrearProcedimiento_de_Consulta_de_Usuario-mejorado.sql
-   Proyecto: SuiteMDI-Educativa-SQLServer
+   Proyecto: SuiteMDI-EduSQL
    Objetivo:
      - Crear el SP dbo.prConsultarUsuarios para consultar usuarios:
-       @CodigoUsuario = 0   -> devuelve todos (sin columna Pass)
-       @CodigoUsuario > 0   -> devuelve solo ese usuario
+         @CodigoUsuario = 0   -> devuelve todos (sin columna Pass)
+         @CodigoUsuario > 0   -> devuelve solo ese usuario
    Notas:
      - Idempotente (DROP/CREATE).
      - Nunca devuelve la columna Pass.
-     - Se añade ORDER BY para resultados consistentes.
+     - Se añade ORDER BY en ambas ramas para resultados consistentes.
    ============================================================================= */
+
+USE [Ejemplo_SIN_Encripcion];
+GO
 
 SET ANSI_NULLS ON;
 SET QUOTED_IDENTIFIER ON;
 GO
 
+-- Idempotencia: borrar si existe
 IF OBJECT_ID(N'dbo.prConsultarUsuarios', N'P') IS NOT NULL
     DROP PROCEDURE dbo.prConsultarUsuarios;
 GO
@@ -54,19 +56,9 @@ BEGIN
             p.ApellidoCasada,
             p.Email
         FROM dbo.Perfiles AS p
-        WHERE p.CodigoUsuario = @CodigoUsuario;
+        WHERE p.CodigoUsuario = @CodigoUsuario
+        ORDER BY p.CodigoUsuario;
         RETURN 0;
     END
 END
 GO
-
-/* =======================
-   PRUEBAS (SSMS) - OPCIONALES (Descomentar para usar)
-   Ejecutamos por bloques seleccionando y presionando F5
-   ======================= */
-
--- 1) Traer todos
--- EXEC dbo.prConsultarUsuarios @CodigoUsuario = 0;
-
--- 2) Traer uno (ajusta un Código existente)
--- EXEC dbo.prConsultarUsuarios @CodigoUsuario = 1000;
