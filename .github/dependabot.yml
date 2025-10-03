@@ -22,11 +22,11 @@ updates:
           - "minor"
           - "patch"
 
-  # 2) NuGet (escanea recursivo debajo de /src)
-  - package-ecosystem: "nuget"
-    directory: "/src/App"
+  # 2) NuGet (escanea recursivo debajo de /src para futuros proyectos)
+  - package-ecosystem: nuget
+    directory: "/src"
     schedule:
-      interval: "monthly"
+      interval: monthly
       day: monday
       time: "04:30"
       timezone: "America/Panama"
@@ -35,7 +35,6 @@ updates:
     open-pull-requests-limit: 10
     rebase-strategy: auto
     versioning-strategy: increase
-    # Agrupa actualizaciones menores/patch para reducir ruido
     groups:
       nuget-minor:
         applies-to: version-updates
@@ -44,9 +43,3 @@ updates:
         update-types:
           - "minor"
           - "patch"
-    # Ejemplos de ignores (quítalos si no los necesitas)
-    ignore:
-      - dependency-name: "Microsoft.NET.Test.Sdk"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "Moq"
-        versions: [">=5.a"]  # ignora pre-releases o líneas mayores
