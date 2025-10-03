@@ -1,20 +1,15 @@
-# Guía de Contribución
+# Contribuir
 
-> Esta guía describe el flujo de trabajo, estándares y buenas prácticas para contribuir a **SuiteMDI-EduSQL**.
-
----
-
-## 🧭 Resumen
-
-Proyecto **WinForms .NET 4.8 sin diseñador** (UI 100% por código), SQL Server (Docker-first), **scripts idempotentes** y **CI en GitHub Actions**.
+> Este proyecto usa WinForms .NET 4.8 (UI por código), SQL Server (Docker-first), scripts SQL idempotentes y CI en GitHub Actions.  
+> Idioma de documentación: **español** (salvo LICENSE y YAML/keys).
 
 ---
 
 ## 1) Issues y planeación
 
-- Antes de empezar, **crea un Issue** con la plantilla adecuada: _bug_, _feature_ o _task_.
-- Asigna **labels** (p.ej., `sql`, `backend`, `ui`, `docs`, `infra`, `security`, `good first issue`) y una **milestone** (vX.Y.Z).
-- Agrega el Issue al **Project (Roadmap Kanban)** en la columna **To do**.
+- Antes de empezar, **crea un Issue** usando la plantilla correcta: _bug_, _feature_, _task_.
+- Asigna **labels** (`sql`, `backend`, `ui`, `docs`, `infra`, `security`, `good first issue`) y la **milestone** (vX.Y.Z).
+- Añádelo al **Project (Roadmap Kanban)** en “To do”.
 
 ---
 
@@ -22,21 +17,18 @@ Proyecto **WinForms .NET 4.8 sin diseñador** (UI 100% por código), SQL Server 
 
 - Rama base: `main`.
 - Crea ramas por Issue: `feat/<slug>`, `fix/<slug>`, `chore/<slug>`, `docs/<slug>`.
-  - Ejemplo: `feat/clientes-crud`, `fix/sql-identity-reseed`.
-- Commits/PRs deben referenciar el Issue: `Closes #N`.
+  - Ej.: `feat/clientes-crud`, `fix/sql-identity-reseed`.
 
 ---
 
-## 3) Estilo de commits
+## 3) Commits
 
-Usa **Conventional Commits**:
-`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `build:`, `ci:`
+- Estilo recomendado: **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `build:`, `ci:`).
+- Mensajes **claros y en español**.
+- (Recomendado) **Firmar con SSH** para obtener estado *Verified* en GitHub.
 
-- Mensajes **claros** y **en español**.
-- Firma tus commits con **SSH** (estado *Verified* en GitHub).
-
-**Ejemplos**
-- `feat(clientes): alta desde frmClienteNuevo`
+Ejemplos:
+- `feat(clientes): alta de cliente desde frmClienteNuevo`
 - `fix(sql): corregir comparación de Pass (VARBINARY) en prValidarUsuario`
 - `docs(readme): agregar tabla de contenidos`
 
@@ -44,88 +36,87 @@ Usa **Conventional Commits**:
 
 ## 4) Estándares de código
 
-### C# (WinForms .NET 4.8 – sin diseñador)
+### C# (WinForms – UI por código)
 - Formularios **por código** (sin diseñador).
-- `DataGridView` con **columnas manuales** y `DataPropertyName` exacto a los campos del SP.
-- Maneja excepciones y propaga a la UI **CodigoError/MensajeError** desde la capa de Negocio.
-- Evita lógica compleja en el form; muévela a **Negocio**.
-- Comenta reglas de negocio y decisiones no triviales.
+- `DataGridView` con **columnas manuales**; `DataPropertyName` debe coincidir con los campos devueltos por SP.
+- Manejar excepciones propagando `CodigoError`/`MensajeError` desde **Negocio** a la UI.
+- Mover la lógica no trivial a la capa de **Negocio**.
+- Comentar decisiones no triviales o reglas de negocio.
 
 ### SQL (idempotente)
-- Usa patrones idempotentes (`IF OBJECT_ID(...) ...`, `CREATE OR ALTER` cuando aplique).
-- Incluye **pruebas comentadas** al final del script.
-- Usa parámetros; evita concatenación de strings.
-- Devuelve `@@ROWCOUNT` cuando tenga sentido (CRUD).
-- Nomenclatura consistente (ej.: `prInsertarUsuario`, `prModificarUsuarios`).
+- Usar patrones idempotentes (`IF OBJECT_ID` / `CREATE OR ALTER`) cuando aplique.
+- **Parámetros** siempre; evitar concatenar strings.
+- Devolver `@@ROWCOUNT` en CRUD cuando tenga sentido.
+- **Pruebas comentadas** al final de cada script.
 
 ---
 
 ## 5) Pruebas y ejecución local
 
-- **SSMS**: ejecuta `/db_scripts` en orden (01 → 11).
-- Verifica Docker SQL (`127.0.0.1,2333`) y crea tu `App.config` local **desde la plantilla**.
-- Compila en VS 2022: `Compilar → Compilar solución`.
-- Ejecuta: `Depurar → Iniciar sin depuración (Ctrl+F5)`.
+- **SSMS**: ejecutar `/db_scripts` en orden (01 → 11).
+- Docker SQL en `127.0.0.1,2333`. Crear `App.config` local desde la plantilla.
+- VS 2022:
+  - Compilar: `Compilar → Compilar solución`
+  - Ejecutar: `Depurar → Iniciar sin depuración (Ctrl+F5)`
 
 ---
 
-## 6) Pull Requests (PRs)
+## 6) Pull Requests
 
-**Checklist**
-- [ ] Referencia a Issue: `Closes #N`.
-- [ ] Descripción del cambio y **pasos de prueba**.
-- [ ] Screenshots de UI (si aplica) → `/docs/capturas`.
-- [ ] Actualizados `README.md` / `CHANGELOG.md` si corresponde.
-- [ ] Sin secretos en diffs (`App.config` real **no** se versiona).
-- [ ] CI verde (Actions).
+- **Obligatorio** usar la **plantilla de PR** del repo y **completar el checklist**.
+- Referenciar el Issue: `Closes #N` (o `Related to #N`).
+- Adjuntar **evidencia** de UI si aplica (`/docs/capturas`).
+- Si hay cambios en SQL:
+  - Documentar el script en `db_scripts/`,
+  - Incluir **pruebas comentadas**,
+  - Actualizar **orden de ejecución** en README.
+- **Seguridad**: no incluir secretos (`App.config` real, contraseñas).
+- **CI** debe estar en **verde**.
 
-**Revisión**
-- Se aplican reglas de **CODEOWNERS**.
-- Atiende comentarios solicitados antes del merge.
+> **Breaking change ⚠️**  
+> - Añade nota explícita en `CHANGELOG.md` y label `breaking-change` o `major`.  
+> - Incluir instrucciones de migración si aplica.
 
 ---
 
 ## 7) CI / GitHub Actions
 
 - `build.yml` detecta la `.sln` bajo `src/`.
-- Si existe, genera **App.config temporal** en el runner y compila **Release**.
-- No expongas secretos en logs.
-- Mantén el pipeline **verde**.
+- Si existe, genera un **App.config temporal** en el runner y compila **Release**.
+- No imprimir secretos en logs; mantener pipeline en verde.
 
 ---
 
 ## 8) Documentación
 
-- Actualiza `README.md`, `CHANGELOG.md` y capturas en `/docs/capturas` cuando haya cambios de UX/flujo.
-- Añade comentarios en SQL y C# cuando haya decisiones importantes.
+- Actualizar `README.md`, `CHANGELOG.md` y capturas en `/docs/capturas` cuando cambie UX/flujo.
+- Añadir comentarios en SQL/C# cuando haya decisiones importantes.
 
 ---
 
 ## 9) Lanzamientos y tags
 
-- Prepara **draft** de Release y enlaza Issues cerrados.
-- Tag firmado con SSH: `git tag -s vX.Y.Z -m "vX.Y.Z"` → **Verified**.
-- Publica el Release y adjunta artefactos si aplica.
+- Preparar **draft** en Releases con notas (ES) y Issues cerrados.
+- Tag **firmado con SSH**: `git tag -s vX.Y.Z -m "vX.Y.Z"` → *Verified*.
+- Publicar el Release y adjuntar artefactos si aplica.
 
 ---
 
 ## 10) Seguridad
 
-- Nunca subas `App.config` reales; usa la plantilla con placeholders.
-- No compartas credenciales en Issues/PRs.
-- Revisa `SECURITY.md` para reporte de vulnerabilidades y hardening.
+- No subir `App.config` reales; usar la **plantilla** con placeholders.
+- No compartir credenciales en Issues/PRs.
+- Revisar `SECURITY.md` para reporte de vulnerabilidades y hardening.
 
 ---
 
 ## 11) Conducta (resumen)
 
-- Sé respetuoso, empático y claro. Feedback basado en hechos y pruebas.
+- Sé respetuoso, empático y claro. Feedback basado en evidencias y pruebas.
 
 ---
 
-## Vínculos rápidos
-- Roadmap (Project): https://github.com/recm0708/SuiteMDI-EduSQL/projects
+## Enlaces rápidos
+- Project (Roadmap): https://github.com/recm0708/SuiteMDI-EduSQL/projects
 - Milestones: https://github.com/recm0708/SuiteMDI-EduSQL/milestones
 - Labels: https://github.com/recm0708/SuiteMDI-EduSQL/labels
-
-Gracias por contribuir a **SuiteMDI-EduSQL** 🙌
