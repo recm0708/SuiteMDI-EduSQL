@@ -2,7 +2,7 @@
 [![Build](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml/badge.svg)](https://github.com/recm0708/SuiteMDI-EduSQL/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Aplicación educativa en **C# WinForms (.NET Framework 4.8)** con interfaz **MDI** y backend **SQL Server 2022** (prioridad **Docker**). El proyecto está construido **100% por código (sin diseñador)** con arquitectura por capas y prácticas profesionales: **scripts SQL idempotentes (01–11)**, **CI en GitHub Actions**, control de secretos (sin `App.config` real en el repo) y guía de trabajo con **Issues/PR/Releases**. Ideal para aprender a estructurar una solución WinForms con SPs, flujos de autenticación y **CRUD** reales, manteniendo calidad y mantenibilidad desde el día uno.
+Aplicación educativa en **C# WinForms (.NET Framework 4.8)** con interfaz **MDI** y backend **SQL Server 2022** (prioridad **Docker**). El proyecto está construido **100% por código (sin diseñador)** con arquitectura por capas y prácticas profesionales: **scripts SQL idempotentes (01–09)**, **CI en GitHub Actions**, control de secretos (sin `App.config` real en el repo) y guía de trabajo con **Issues/PR/Releases**. Ideal para aprender a estructurar una solución WinForms con SPs, flujos de autenticación y **CRUD** reales, manteniendo calidad y mantenibilidad desde el día uno.
 
 ---
 
@@ -40,7 +40,7 @@ SuiteMDI-EduSQL es una aplicación educativa en WinForms que demuestra un ciclo 
 - **Acceso/Login** validado con `dbo.prValidarUsuario` (Script 02).
 - **Usuarios**: insertar, consultar, modificar y eliminar (Scripts 03–06).
 - **Cambio de contraseña**: modo normal y *reset* (Script 07).
-- **Clientes**: esquema y SPs base (Scripts 08–11).
+- **Clientes**: esquema y SPs base (Scripts 08–09).
 - **Repositorio profesional**: plantillas de Issues/PR, labeler, Release Drafter, Dependabot, políticas básicas.
 
 **Qué no incluye (por ahora)**
@@ -56,32 +56,37 @@ SuiteMDI-EduSQL es una aplicación educativa en WinForms que demuestra un ciclo 
 ```
 SuiteMDI-EduSQL/
 │
-├── .github/                              # Configuración de GitHub (CI, plantillas, revisiones)
-│   ├── ISSUE_TEMPLATE/                   # Plantillas para Issues (bug, feature, task)
-│   │   ├── bug_report.yml                # Reporte de errores
-│   │   ├── config.yml                    # Config de issues (deshabilita blank issues, links de soporte)
-│   │   ├── feature_request.yml           # Solicitud de mejora/feature
-│   │   ├── security_question.yml         # Plantilla de duda/alerta de seguridad
-│   │   ├── sql_change.yml                # Plantilla para cambios que afectan SQL
-│   │   ├── support.yml                   # Solicitudes de ayuda/soporte
-│   │   └── task.yml                      # Tarea técnica/mantenimiento
+├── .github/                                         # Configuración de GitHub (CI, plantillas, revisiones)
 │   │
-│   ├── workflows/                        # GitHub Actions (CI y automatizaciones)
-│   │   ├── build.yml                     # CI: compila en Windows (detecta .sln y crea App.config temporal)
-│   │   ├── labeler.yml                   # Workflow que aplica labels en PRs
-│   │   └── release-drafter.yml           # Workflow que actualiza el borrador de Releases
+│   ├── ISSUE_TEMPLATE/                              # Plantillas para Issues (bug, feature, task, soporte, SQL, etc.)
+│   │   ├── bug_report.yml                           # Reporte de errores
+│   │   ├── config.yml                               # Config de issues (deshabilita blank issues, links de soporte)
+│   │   ├── feature_request.yml                      # Solicitud de mejora/feature
+│   │   ├── security_question.yml                    # Duda/alerta de seguridad (NO vulnerabilidades)
+│   │   ├── sql_change.yml                           # Cambios que afectan a la base de datos (scripts/objetos)
+│   │   ├── support.yml                              # Soporte/ayuda de uso y configuración
+│   │   └── task.yml                                 # Tarea técnica/mantenimiento
 │   │
-│   ├── CODEOWNERS                        # Responsables por defecto en PRs
-│   ├── dependabot.yml                    # Actualizaciones automáticas (Actions y NuGet)
-│   ├── labeler.yml                       # Mapeo de rutas → labels (usado por el workflow)
-│   ├── PULL_REQUEST_TEMPLATE.md          # Plantilla de Pull Requests
-│   └── release-drafter.yml               # Plantilla/categorías del Release Drafter
+│   ├── workflows/                                   # GitHub Actions (CI y automatizaciones)
+│   │   ├── build.yml                                # CI: compila en Windows (detecta .sln y crea App.config temporal)
+│   │   ├── labeler.yml                              # Workflow que aplica labels en PRs según rutas
+│   │   └── release-drafter.yml                      # Workflow que actualiza el borrador de Releases
+│   │
+│   ├── CODEOWNERS                                   # Responsables por defecto en PRs
+│   ├── dependabot.yml                               # Actualizaciones automáticas (Actions y NuGet)
+│   ├── labeler.yml                                  # Mapeo de rutas → labels (usado por el workflow)
+│   ├── PULL_REQUEST_TEMPLATE.md                     # Plantilla de Pull Requests
+│   └── release-drafter.yml                          # Plantilla/categorías del Release Drafter
 │
-├── assets/                               # Logos, íconos e imágenes (UI y README)
+├── assets/                                          # Logos, íconos e imágenes (UI y README)
 │   ├── logo.png
 │   └── icons/
 │
-├── db_scripts/                           # Scripts SQL (idempotentes, con pruebas comentadas)
+├── db_scripts/                                      # Scripts de producción (idempotentes, sin pruebas)
+│   ├── util/                                        # Utilidades para DEV/operaciones
+│   │   ├── Permisos_DEV_UsrProcesa.sql              # Asigna permisos mínimos en DEV (pendiente/creado según avance)
+│   │   └── Reseed_All.sql                           # Reseed de identidades según datos actuales (pendiente/creado)
+│   │
 │   ├── 01_CrearBD_y_Tablas-mejorado.sql
 │   ├── 02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
 │   ├── 03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql
@@ -90,52 +95,71 @@ SuiteMDI-EduSQL/
 │   ├── 06_CrearProcedimiento_de_Modificar_de_Usuario-mejorado.sql
 │   ├── 07_CrearProcedimiento_de_Modificar_PassWord_Sin_Encripcion-mejorado.sql
 │   ├── 08_TablasDelAplicativo-mejorado.sql
-│   ├── 09_ProcedimientosAplicativo-mejorado.sql
-│   ├── 10_Mantenimiento_Reseed_Perfiles.sql
-│   └── 11_Clientes_CRUD-mejorado.sql
+│   └── 09_ProcedimientosAplicativo-mejorado.sql
 │
-├── db_test/                              # Pruebas SQL (separadas de los scripts base)
-│   ├── 00_basicas/                       # Smoke tests: existencia de objetos, SELECT mínimos
-│   │   ├── T-01-smoke-objetos-principales.sql
-│   │   └── ... 
-│   ├── 10_datos_semilla/                 # Fixtures de datos para pruebas (opcional)
-│   │   └── ... 
-│   ├── 20_unitarias/                     # Pruebas por objeto (SP, tabla, índices)
-│   │   ├── T-02-identity-perfiles-inicia-1000.sql
-│   │   └── ... 
-│   ├── 30_integracion/                   # Flujos completos (login, CRUD, etc.)
-│   │   └── ... 
-│   └── RUN_ALL.sql                       # Orquestador de tests en modo SQLCMD
+├── db_templates/                                    # Plantillas base de scripts (encabezados y estructura)
+│   ├── Template_Base_Script.sql                     # Plantilla para scripts de producción
+│   └── Template_Test_Script.sql                     # Plantilla para scripts de pruebas (BEGIN/ROLLBACK)
 │
-├── docs/                                 # Documentación, capturas y diagramas
-│   ├── capturas/                         # Screenshots del aplicativo (para README/Releases)
+├── db_test/                                         # Pruebas SQL (separadas de producción)
+│   ├── 00_basicas/                                  # Smoke tests: existencia de objetos, selects mínimos, resets de entorno
+│   │   ├── 01_CrearBD_y_Tablas_Test.sql             # Validación post-creación de BD/tabla/login
+│   │   ├── FK_Consistencia.sql                      # Chequeos de claves externas y consistencia
+│   │   ├── Reset_Limpio_DEV.sql                     # Limpia datos de prueba y deja ambiente listo
+│   │   └── Smoke_Objetos.sql                        # Verifica objetos críticos creados
+│   │
+│   ├── 10_datos_semilla/                            # Datos de prueba/fixtures (para escenarios)
+│   │   └── Seed_Clientes_Basico.sql                 # Inserta clientes de ejemplo controlados
+│   │
+│   ├── 20_unitarias/                                # Pruebas por objeto (SPs/tablas/índices), aisladas
+│   │   ├── 02_prValidarUsuario_Test.sql
+│   │   ├── 03_prInsertarUsuario_Test.sql
+│   │   ├── 04_prConsultarUsuarios_Test.sql
+│   │   ├── 05_prEliminarUsuarios_Test.sql
+│   │   ├── 06_prModificarUsuarios_Test.sql
+│   │   ├── 07_prModificarPasswordUsuarios_Test.sql
+│   │   ├── 08_TablasDelAplicativo_Test.sql
+│   │   ├── Usuarios_CambiarPassword.sql             # Casos dirigidos de cambio/reset de contraseña
+│   │   ├── Usuarios_Eliminar.sql                    # Casos dirigidos de eliminación
+│   │   ├── Usuarios_Insertar_Validar.sql            # Inserción + validación de login
+│   │   └── Usuarios_Modificar.sql                   # Casos dirigidos de actualización
+│   │
+│   ├── 30_integracion/                              # Pruebas de flujo completo (end-to-end)
+│   │   ├── 09_ProcedimientosAplicativo_Test.sql     # Cobertura para procedimientos de la capa “aplicativo”
+│   │   ├── Flujo_Login_MDI_Smoke.sql                # Smoke del flujo de login para la app
+│   │   └── Flujo_Solicitud_Completa.sql             # Solicitud end-to-end (encabezado + detalle)
+│   │
+│   └── RUN_ALL.sql                                  # Orquestador de pruebas (SQLCMD: :r incluye por carpetas)
+│
+├── docs/                                            # Documentación, capturas y diagramas
+│   ├── capturas/                                    # Screenshots del aplicativo (para README/Releases)
 │   │   └── ...
-│   └── diagramas/                        # Diagramas de arquitectura/flujo (opcional)
+│   └── diagramas/                                   # Diagramas de arquitectura/flujo (opcional)
 │       └── ...
 │
-├── src/                                  # Solución y proyecto de Visual Studio (WinForms .NET 4.8)
-│   └── App/                              # Proyecto principal (todo por código, sin diseñador)
-│       ├── Assets/                       # Recursos internos del proyecto (íconos, imágenes)
-│       ├── Datos/                        # ClsConexion y acceso a datos (SqlClient, SPs)
-│       ├── Negocio/                      # Servicios/Procesos (CRUD, lógica)
-│       ├── Presentacion/                 # Formularios (MDI, Acceso, Usuarios, Clientes, etc.)
-│       ├── Properties/                   # AssemblyInfo, Recursos
-│       ├── Soporte/                      # Globales, ThemeHelper y utilidades
-│       ├── Program.cs                    # Punto de entrada (arranca MDI y Acceso)
-│       └── App.config.template.config    # Plantilla (NO versionar App.config real)
+├── src/                                             # Solución y proyecto de Visual Studio (WinForms .NET 4.8)
+│   └── App/                                         # Proyecto principal (todo por código, sin diseñador)
+│       ├── Assets/                                  # Recursos internos del proyecto (íconos, imágenes)
+│       ├── Datos/                                   # ClsConexion y acceso a datos (SqlClient, SPs)
+│       ├── Negocio/                                 # Servicios/Procesos (CRUD, lógica)
+│       ├── Presentacion/                            # Formularios (MDI, Acceso, Usuarios, Clientes, etc.)
+│       ├── Properties/                              # AssemblyInfo, Recursos
+│       ├── Soporte/                                 # Globales, ThemeHelper y utilidades
+│       ├── Program.cs                               # Punto de entrada (arranca MDI y Acceso)
+│       └── App.config.template.config               # Plantilla (NO versionar App.config real)
 │
-├── tools/                                # Utilidades (scripts auxiliares)
+├── tools/                                           # Utilidades (scripts auxiliares)
 │
-├── .editorconfig                         # Estilo y convenciones (C#, espacios, EOL)
-├── .gitattributes                        # Normaliza fin de línea y tipos de archivo
-├── .gitignore                            # Ignora src/**/App.config, bin/ obj/, etc.
-├── CHANGELOG.md                          # Historial de cambios
-├── CODE_OF_CONDUCT.md                    # Código de Conducta del proyecto
-├── CONTRIBUTING.md                       # Guía para contribuir (issues, PRs, estilo)
-├── LICENSE                               # MIT (bilingüe)
-├── README.md                             # Este archivo
-├── SECURITY.md                           # Política de seguridad y manejo de secretos
-└── SUPPORT.md                            # Cómo pedir ayuda/soporte y canales
+├── .editorconfig                                    # Estilo y convenciones (C#, espacios, EOL)
+├── .gitattributes                                   # Normaliza fin de línea y tipos de archivo
+├── .gitignore                                       # Ignora src/**/App.config, bin/ obj/, etc.
+├── CHANGELOG.md                                     # Historial de cambios
+├── CODE_OF_CONDUCT.md                               # Código de Conducta del proyecto
+├── CONTRIBUTING.md                                  # Guía para contribuir (issues, PRs, estilo)
+├── LICENSE                                          # MIT (bilingüe)
+├── README.md                                        # Este archivo
+├── SECURITY.md                                      # Política de seguridad y manejo de secretos
+└── SUPPORT.md                                       # Cómo pedir ayuda/soporte y canales
 ```
 
 > 🔒 **No se versiona** ningún `App.config` real; solo `App.config.template.config` (con placeholders).
@@ -180,12 +204,9 @@ Ejecuta en **SSMS** conectando a 127.0.0.1,2333 con tu sa (o usuario elegido).
 6) `06_CrearProcedimiento_de_Modificar_de_Usuario-modificado.sql`  
 7) `07_CrearProcedimiento_de_Modificar_PassWord_Sin_Encripcion-mejorado.sql`  
 8) `08_TablasDelAplicativo-mejorado.sql`  
-9) `09_ProcedimientosAplicativo-mejorado.sql`  
-10) `10_Mantenimiento_Reseed_Perfiles.sql` *(DEV opcional)*  
-11) `11_Clientes_CRUD-mejorado.sql`
+9) `09_ProcedimientosAplicativo-mejorado.sql`
 
-> ℹ️ **Pruebas SQL separadas**: los scripts de pruebas rápidas, unitarias e integradas ya **no** van dentro de `db_scripts/`.
-> Ahora viven en **`/db_tests/`**. Consulta la sección [🧪 Pruebas SQL](#pruebas-sql).
+> ℹ️ **Pruebas SQL separadas**: ... Ahora viven en **`/db_test/`**. Consulta la sección [🧪 Pruebas SQL](#pruebas-sql).
 
 ---
 
@@ -204,7 +225,7 @@ Las pruebas se ejecutan aparte de los scripts de producción.
 ### Cómo ejecutar
 1. Abrir **SSMS** sobre la BD `Ejemplo_SIN_Encripcion`.
 2. Activar **SQLCMD Mode**: `Query → SQLCMD Mode`.
-3. Abrir y ejecutar `db_tests/RUN_ALL.sql`.
+3. Abrir y ejecutar `db_test/RUN_ALL.sql`.
 
 > Recomendado: que las pruebas hagan `BEGIN TRAN` + `ROLLBACK` para no dejar datos residuales.
 > Los scripts en `db_scripts/` permanecen **idempotentes y sin pruebas**.  
