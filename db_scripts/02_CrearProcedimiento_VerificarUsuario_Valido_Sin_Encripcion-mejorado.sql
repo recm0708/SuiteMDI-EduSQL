@@ -1,26 +1,31 @@
 /* =============================================================================
-   Script:   02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
-   Proyecto: SuiteMDI-EduSQL
-   Objetivo:
-     - Crear/Actualizar el SP dbo.prValidarUsuario para validar (CodigoUsuario, Pass)
+   Script:         02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
+   Realizado por:  Prof. José Ortiz
+   Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
+   Proyecto:       SuiteMDI-EduSQL
+   Objetivos:
+     - Crear/Actualizar el SP dbo.prValidarUsuario (validación “sin encripción”)
+     - Devolver datos básicos del perfil si las credenciales son válidas
    Notas:
-     - La columna Perfiles.Pass es VARBINARY(128). Comparamos en binario
-       convirtiendo @Pass (VARCHAR) a VARBINARY(128) para evitar problemas de colación.
-     - Este SP devuelve:
-         * Resultset con NombreUsuario, ApellidoUsuario, Email cuando es válido.
-         * Resultset vacío (mismas columnas) cuando no es válido.
-       Adicionalmente retorna código:
-         * RETURN 1 si válido, RETURN 0 si inválido (opcional para consumidores).
+     - Este proyecto mantiene Pass en VARBINARY(128) (modo educativo “sin encripción”).
+       Aquí se compara CONVERT(VARCHAR(500), Pass) con el parámetro @Pass de texto.
+     - Script idempotente con CREATE OR ALTER (re-ejecutable).
+     - Las pruebas se mueven a /db_test (no se incluyen aquí).
+   Observación:
+     El procedimiento ha sido reorganizado para claridad, práctica idempotente y
+     manejo limpio de resultados. Mantiene la intención funcional del material
+     original del Prof. José Ortiz (validación simple “sin encripción”), pero
+     actualiza su estructura y documentación para uso académico-profesional
+     en SuiteMDI-EduSQL.
    ============================================================================= */
+
+SET NOCOUNT ON;
+SET XACT_ABORT ON;
 
 USE [Ejemplo_SIN_Encripcion];
 GO
 
-SET ANSI_NULLS ON;
-SET QUOTED_IDENTIFIER ON;
-GO
-
--- Idempotente (no requiere DROP)
+-- Crear o actualizar el SP de validación de usuario (SIN encripción)
 CREATE OR ALTER PROCEDURE dbo.prValidarUsuario
 (
     @CodigoUsuario INT,
@@ -30,34 +35,18 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Normalización mínima de entradas
-    SET @Pass = LTRIM(RTRIM(@Pass));
-
-    IF EXISTS
-    (
-        SELECT 1
-        FROM dbo.Perfiles
-        WHERE CodigoUsuario = @CodigoUsuario
-          AND Pass = CONVERT(VARBINARY(128), @Pass)
-    )
-    BEGIN
-        SELECT  NombreUsuario,
-                ApellidoUsuario,
-                Email
-        FROM dbo.Perfiles
-        WHERE CodigoUsuario = @CodigoUsuario;
-
-        RETURN 1;  -- válido
-    END
-    ELSE
-    BEGIN
-        -- Resultset vacío con mismas columnas
-        SELECT CAST('' AS VARCHAR(50))  AS NombreUsuario,
-               CAST('' AS VARCHAR(50))  AS ApellidoUsuario,
-               CAST('' AS VARCHAR(100)) AS Email
-        WHERE 1 = 0;
-
-        RETURN 0;  -- inválido
-    END
+    /*  Compara el texto de @Pass con el contenido de la columna Pass (VARBINARY),
+        “sin encripción” → CONVERT(VARCHAR(500), Pass).
+        Resultado:
+          - 1 fila con Nombre/Apellido/Email si válido
+          - 0 filas si inválido (forma más limpia que devolver fila vacía)
+    */
+    SELECT
+        p.NombreUsuario,
+        p.ApellidoUsuario,
+        p.Email
+    FROM dbo.Perfiles AS p
+    WHERE p.CodigoUsuario = @CodigoUsuario
+      AND TRY_CONVERT(VARCHAR(500), p.Pass) = @Pass;
 END
 GO
