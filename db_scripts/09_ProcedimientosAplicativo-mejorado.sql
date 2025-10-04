@@ -1,51 +1,58 @@
-/* =========================================================================================
-   09_ProcedimientosAplicativo-mejorado.sql
-   Proyecto: SuiteMDI-Educativa-SQLServer
-   Objetivo: Procedimientos para Solicitudes, SolicitudesDetalle, Consultas y Catálogos.
-   BD: Ejemplo_SIN_Encripcion
+/* =============================================================================
+   Script:         09_ProcedimientosAplicativo-mejorado.sql
+   Realizado por:  Prof. José Ortiz
+   Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
+   Proyecto:       SuiteMDI-EduSQL
+   Objetivos:
+     - Crear/actualizar SPs de Solicitudes (maestro/detalle) y consultas auxiliares
+     - Normalizar lógica de fechas y generación de NumeroSolicitud (SBSYY-N)
+     - Corregir referencias de Clientes.Direccion (antes: Dirrecion)
    Notas:
-     - Usa CREATE OR ALTER (SQL Server 2016 SP1+).
-     - Fechas tratadas como datetime2(0). Comparación por día cuando aplica.
-     - Todos los SPs tienen SET NOCOUNT ON y devuelven @@ROWCOUNT cuando corresponde.
-     - Generación de NumeroSolicitud: formato SBSNN-secuencial (por año).
-   ========================================================================================= */
+     - Idempotente: CREATE OR ALTER para todos los SPs.
+     - Fechas: se evita depender de SET DATEFORMAT; se usa CONVERT y rangos inclusivos.
+     - NumeroSolicitud: secuencial por año (YY) con búsqueda MAX segura.
+   Observación:
+     Se homologa el estilo de los procedimientos, se corrigen nombres heredados
+     (Direccion) y se robustece la generación de Número de Solicitud sin asumir
+     datos previos, manteniendo la intención funcional original.
+   ============================================================================= */
+
+SET NOCOUNT ON;
+SET XACT_ABORT ON;
 
 USE [Ejemplo_SIN_Encripcion];
 GO
-SET ANSI_NULLS ON;
-SET QUOTED_IDENTIFIER ON;
-GO
 
-/* =========================
-   SOLICITUDES (UPDATE)
-   ========================= */
+/* ============================================================================
+   ACTUALIZAR SOLICITUD (maestro)
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prActualizarSolicitud
 (
-    @IdSolicitud      INT,
-    @IdCliente        INT,
-    @NumeroSolicitud  VARCHAR(20),
-    @Fecha            DATETIME2(0),
-    @Observacion      VARCHAR(300)
+    @IdSolicitud     INT,
+    @IdCliente       INT,
+    @NumeroSolicitud VARCHAR(20),
+    @Fecha           DATETIME,
+    @Observacion     VARCHAR(300)
 )
 AS
 BEGIN
     SET NOCOUNT ON;
 
     UPDATE s
-      SET s.IdCliente       = @IdCliente,
-          s.NumeroSolicitud = @NumeroSolicitud,
-          s.Fecha           = @Fecha,
-          s.Observacion     = @Observacion
-    FROM dbo.Solicitudes s
-    WHERE s.IdSolicitud = @IdSolicitud;
+       SET s.IdCliente       = @IdCliente,
+           s.NumeroSolicitud = @NumeroSolicitud,
+           s.Fecha           = @Fecha,
+           s.Observacion     = @Observacion
+      FROM dbo.Solicitudes s
+     WHERE s.IdSolicitud = @IdSolicitud;
 
-    RETURN @@ROWCOUNT;  -- 1=actualizado, 0=no existía
+    RETURN @@ROWCOUNT;
 END
 GO
 
-/* =========================
-   SOLICITUDES DETALLE (UPDATE)
-   ========================= */
+/* ============================================================================
+   ACTUALIZAR SOLICITUD DETALLE
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prActualizarSolicitudDetalle
 (
     @IdSolicitudDetalle INT,
@@ -62,84 +69,64 @@ BEGIN
     SET NOCOUNT ON;
 
     UPDATE sd
-      SET sd.IdSolicitud   = @IdSolicitud,
-          sd.IdServicio    = @IdServicio,
-          sd.IdDepartamento= @IdDepartamento,
-          sd.Precio        = @Precio,
-          sd.Cantidad      = @Cantidad,
-          sd.OtrosImportes = @OtrosImportes,
-          sd.ITMBS         = @ITMBS
-    FROM dbo.SolicitudesDetalle sd
-    WHERE sd.IdSolicitudDetalle = @IdSolicitudDetalle;
+       SET sd.IdSolicitud   = @IdSolicitud,
+           sd.IdServicio    = @IdServicio,
+           sd.IdDepartamento= @IdDepartamento,
+           sd.Precio        = @Precio,
+           sd.Cantidad      = @Cantidad,
+           sd.OtrosImportes = @OtrosImportes,
+           sd.ITMBS         = @ITMBS
+      FROM dbo.SolicitudesDetalle sd
+     WHERE sd.IdSolicitudDetalle = @IdSolicitudDetalle;
 
     RETURN @@ROWCOUNT;
 END
 GO
 
-/* =========================
-   CONSULTA AVANZADA DE SOLICITUDES
-   - Si @NumeroSolicitud no es NULL/'' -> busqueda exacta por número.
-   - Si no, filtra por rango de fechas (por día) y opcional @IdCliente (0=todos).
-   ========================= */
+/* ============================================================================
+   CONSULTA AVANZADA DE SOLICITUD
+   - Si @NumeroSolicitud no es NULL/'' => busca exacto por número
+   - Si no, filtra por fecha (rango inclusive) y opcional @IdCliente (0 = todos)
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prConsultaAvanzadaSolicitud
 (
     @NumeroSolicitud VARCHAR(20) = NULL,
     @IdCliente       INT         = 0,
-    @FechaIni        DATETIME2(0) = NULL,
-    @FechaFin        DATETIME2(0) = NULL
+    @FechaIni        DATETIME    = NULL,
+    @FechaFin        DATETIME    = NULL
 )
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Normaliza parámetros
-    SET @NumeroSolicitud = NULLIF(LTRIM(RTRIM(@NumeroSolicitud)), '');
-    IF @FechaIni IS NULL SET @FechaIni = CONVERT(date, SYSUTCDATETIME());
-    IF @FechaFin IS NULL SET @FechaFin = @FechaIni;
-
-    -- Comparación por "día" (ignora hora)
-    DECLARE @dIni date = CONVERT(date, @FechaIni);
-    DECLARE @dFin date = CONVERT(date, @FechaFin);
-
-    IF @NumeroSolicitud IS NOT NULL
+    IF (NULLIF(LTRIM(RTRIM(ISNULL(@NumeroSolicitud, ''))), '') IS NOT NULL)
     BEGIN
-        SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion,
-               c.NombreCliente
-        FROM dbo.Solicitudes s
-        INNER JOIN dbo.Clientes c ON c.IdCliente = s.IdCliente
-        WHERE s.NumeroSolicitud = @NumeroSolicitud
-        ORDER BY s.IdSolicitud;
+        SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion, c.NombreCliente
+          FROM dbo.Solicitudes s
+          JOIN dbo.Clientes    c ON c.IdCliente = s.IdCliente
+         WHERE s.NumeroSolicitud = @NumeroSolicitud;
         RETURN;
     END
 
-    -- Por rango de fechas y, opcionalmente, cliente
-    IF @IdCliente = 0
-    BEGIN
-        SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion,
-               c.NombreCliente
-        FROM dbo.Solicitudes s
-        INNER JOIN dbo.Clientes c ON c.IdCliente = s.IdCliente
-        WHERE CONVERT(date, s.Fecha) BETWEEN @dIni AND @dFin
-        ORDER BY s.Fecha, s.IdSolicitud;
-        RETURN;
-    END
-    ELSE
-    BEGIN
-        SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion,
-               c.NombreCliente
-        FROM dbo.Solicitudes s
-        INNER JOIN dbo.Clientes c ON c.IdCliente = s.IdCliente
-        WHERE CONVERT(date, s.Fecha) BETWEEN @dIni AND @dFin
-          AND s.IdCliente = @IdCliente
-        ORDER BY s.Fecha, s.IdSolicitud;
-        RETURN;
-    END
+    -- Normalizar fechas: si vienen NULL, usar hoy; si vienen con hora, se arma rango inclusivo
+    DECLARE @dIni DATE = ISNULL(CONVERT(DATE, @FechaIni), CONVERT(DATE, GETDATE()));
+    DECLARE @dFin DATE = ISNULL(CONVERT(DATE, @FechaFin), CONVERT(DATE, GETDATE()));
+
+    SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion, c.NombreCliente
+      FROM dbo.Solicitudes s
+      JOIN dbo.Clientes    c ON c.IdCliente = s.IdCliente
+     WHERE s.Fecha >= @dIni
+       AND s.Fecha < DATEADD(DAY, 1, @dFin)
+       AND (@IdCliente = 0 OR s.IdCliente = @IdCliente);
 END
 GO
 
-/* =========================
+/* ============================================================================
    CONSULTAR CLIENTE(S)
-   ========================= */
+   - @IdCliente > 0: uno
+   - @IdCliente <=0 / NULL: todos
+   - Corrige columna Direccion
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prConsultarCliente
 (
     @IdCliente INT
@@ -148,27 +135,26 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF @IdCliente > 0
+    IF ISNULL(@IdCliente, 0) > 0
     BEGIN
         SELECT c.IdCliente, c.NombreCliente, c.Cedula, c.Direccion, c.Telefono, c.Celular, c.Correo
-        FROM dbo.Clientes c
-        WHERE c.IdCliente = @IdCliente
-        ORDER BY c.IdCliente;
+          FROM dbo.Clientes c
+         WHERE c.IdCliente = @IdCliente
+         ORDER BY c.IdCliente;
+        RETURN;
     END
-    ELSE
-    BEGIN
-        SELECT c.IdCliente, c.NombreCliente, c.Cedula, c.Direccion, c.Telefono, c.Celular, c.Correo
-        FROM dbo.Clientes c
-        ORDER BY c.IdCliente;
-    END
+
+    SELECT c.IdCliente, c.NombreCliente, c.Cedula, c.Direccion, c.Telefono, c.Celular, c.Correo
+      FROM dbo.Clientes c
+     ORDER BY c.IdCliente;
 END
 GO
 
-/* =========================
-   CONSULTAR DEPARTAMENTOS
-   @Opcion = 0 (default): solo con servicios asociados + fila (0,'(NINGUNO)')
-   @Opcion = 1: todos los departamentos (o uno, si @IdDepartamento > 0)
-   ========================= */
+/* ============================================================================
+   CONSULTAR DEPARTAMENTO(S)
+   - @Opcion = 0: solo con servicios asociados + (NINGUNO) = 0
+   - @Opcion = 1: todos (si @IdDepartamento>0, uno)
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prConsultarDepartamento
 (
     @IdDepartamento INT,
@@ -177,39 +163,40 @@ CREATE OR ALTER PROCEDURE dbo.prConsultarDepartamento
 AS
 BEGIN
     SET NOCOUNT ON;
-    IF @Opcion IS NULL SET @Opcion = 0;
+    SET @Opcion = ISNULL(@Opcion, 0);
 
     IF @Opcion = 0
     BEGIN
         SELECT 0 AS IdDepartamento, '(NINGUNO)' AS NombreDepartamento, 0 AS IdDepartamentoSuperior
         UNION
         SELECT DISTINCT d.IdDepartamento, d.NombreDepartamento, d.IdDepartamentoSuperior
-        FROM dbo.Departamentos d
-        INNER JOIN dbo.DepartamentosServicios ds ON d.IdDepartamento = ds.IdDepartamento
-        ORDER BY IdDepartamento;
+          FROM dbo.Departamentos d
+          JOIN dbo.DepartamentosServicios ds ON ds.IdDepartamento = d.IdDepartamento
+         ORDER BY IdDepartamento;
         RETURN;
     END
 
-    -- @Opcion = 1
-    IF @IdDepartamento > 0
+    IF ISNULL(@IdDepartamento, 0) > 0
     BEGIN
         SELECT d.IdDepartamento, d.NombreDepartamento, d.IdDepartamentoSuperior
-        FROM dbo.Departamentos d
-        WHERE d.IdDepartamento = @IdDepartamento
-        ORDER BY IdDepartamento;
+          FROM dbo.Departamentos d
+         WHERE d.IdDepartamento = @IdDepartamento
+         ORDER BY IdDepartamento;
+        RETURN;
     END
-    ELSE
-    BEGIN
-        SELECT d.IdDepartamento, d.NombreDepartamento, d.IdDepartamentoSuperior
-        FROM dbo.Departamentos d
-        ORDER BY IdDepartamento;
-    END
+
+    SELECT d.IdDepartamento, d.NombreDepartamento, d.IdDepartamentoSuperior
+      FROM dbo.Departamentos d
+     ORDER BY IdDepartamento;
 END
 GO
 
-/* =========================
-   CONSULTAR PRODUCTOS/SERVICIOS (opcional por departamento)
-   ========================= */
+/* ============================================================================
+   CONSULTAR PRODUCTOS/SERVICIOS
+   - @IdServicio > 0: uno
+   - @IdServicio = 0 y @IdDepartamento = 0: todos
+   - @IdServicio = 0 y @IdDepartamento > 0: por departamento
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prConsultarProductosServicios
 (
     @IdServicio     INT,
@@ -219,81 +206,82 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF @IdServicio > 0
+    IF ISNULL(@IdServicio, 0) > 0
     BEGIN
-        SELECT s.IdServicio,
-               NombreServicio = s.NombreServicio + '(' + CONVERT(VARCHAR(20), s.Precio) + ')',
-               s.Precio
-        FROM dbo.Servicios s
-        WHERE s.IdServicio = @IdServicio
-        ORDER BY s.IdServicio;
+        SELECT  s.IdServicio,
+                NombreServicio = s.NombreServicio + '(' + CONVERT(VARCHAR(20), s.Precio) + ')',
+                s.Precio
+          FROM dbo.Servicios s
+         WHERE s.IdServicio = @IdServicio
+         ORDER BY s.IdServicio;
         RETURN;
     END
 
-    IF @IdDepartamento = 0
+    IF ISNULL(@IdDepartamento, 0) = 0
     BEGIN
-        SELECT s.IdServicio,
-               NombreServicio = s.NombreServicio + '(' + CONVERT(VARCHAR(20), s.Precio) + ')',
-               s.Precio
-        FROM dbo.Servicios s
-        ORDER BY s.IdServicio;
+        SELECT  s.IdServicio,
+                NombreServicio = s.NombreServicio + '(' + CONVERT(VARCHAR(20), s.Precio) + ')',
+                s.Precio
+          FROM dbo.Servicios s
+         ORDER BY s.IdServicio;
+        RETURN;
     END
-    ELSE
-    BEGIN
-        SELECT s.IdServicio,
-               NombreServicio = s.NombreServicio + '(' + CONVERT(VARCHAR(20), s.Precio) + ')',
-               s.Precio
-        FROM dbo.Servicios s
-        INNER JOIN dbo.DepartamentosServicios ds ON s.IdServicio = ds.IdServicio
-        WHERE ds.IdDepartamento = @IdDepartamento
-        ORDER BY s.IdServicio;
-    END
+
+    SELECT  s.IdServicio,
+            NombreServicio = s.NombreServicio + '(' + CONVERT(VARCHAR(20), s.Precio) + ')',
+            s.Precio
+      FROM dbo.Servicios s
+      JOIN dbo.DepartamentosServicios ds ON ds.IdServicio = s.IdServicio
+     WHERE ds.IdDepartamento = @IdDepartamento
+     ORDER BY s.IdServicio;
 END
 GO
 
-/* =========================
-   CONSULTAR SOLICITUD (por Id, por Número, o todas)
-   ========================= */
+/* ============================================================================
+   CONSULTAR SOLICITUD(ES)
+   - @IdSolicitud > 0: una
+   - @IdSolicitud <=0 y @NumeroSolicitud <> '' : por número
+   - ambos vacíos: todas
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prConsultarSolicitud
 (
-    @IdSolicitud      INT,
-    @NumeroSolicitud  VARCHAR(20) = NULL
+    @IdSolicitud     INT,
+    @NumeroSolicitud VARCHAR(20)
 )
 AS
 BEGIN
     SET NOCOUNT ON;
-    SET @NumeroSolicitud = NULLIF(LTRIM(RTRIM(@NumeroSolicitud)), '');
 
-    IF @IdSolicitud > 0
+    IF ISNULL(@IdSolicitud, 0) > 0
     BEGIN
         SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion
-        FROM dbo.Solicitudes s
-        INNER JOIN dbo.Clientes c ON c.IdCliente = s.IdCliente
-        WHERE s.IdSolicitud = @IdSolicitud;
+          FROM dbo.Solicitudes s
+          JOIN dbo.Clientes   c ON c.IdCliente = s.IdCliente
+         WHERE s.IdSolicitud = @IdSolicitud;
         RETURN;
     END
-    ELSE IF @NumeroSolicitud IS NOT NULL
+
+    IF NULLIF(LTRIM(RTRIM(ISNULL(@NumeroSolicitud, ''))), '') IS NOT NULL
     BEGIN
         SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion
-        FROM dbo.Solicitudes s
-        INNER JOIN dbo.Clientes c ON c.IdCliente = s.IdCliente
-        WHERE s.NumeroSolicitud = @NumeroSolicitud;
+          FROM dbo.Solicitudes s
+          JOIN dbo.Clientes   c ON c.IdCliente = s.IdCliente
+         WHERE s.NumeroSolicitud = @NumeroSolicitud;
         RETURN;
     END
 
     SELECT s.IdSolicitud, s.IdCliente, s.NumeroSolicitud, s.Fecha, s.Observacion
-    FROM dbo.Solicitudes s
-    INNER JOIN dbo.Clientes c ON c.IdCliente = s.IdCliente
-    ORDER BY s.IdSolicitud;
+      FROM dbo.Solicitudes s
+      JOIN dbo.Clientes   c ON c.IdCliente = s.IdCliente;
 END
 GO
 
-/* =========================
-   CONSULTAR SOLICITUD DETALLE
-   - Por @IdSolicitud (todos sus detalles)
-   - O por @IdSolicitudDetalle (uno)
-   - O todos (uso de pruebas)
-   ========================= */
+/* ============================================================================
+   CONSULTAR SOLICITUD DETALLE(S)
+   - @IdSolicitud > 0: por solicitud
+   - @IdSolicitud = 0 y @IdSolicitudDetalle > 0: por detalle
+   - ambos vacíos: todos (uso de pruebas)
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prConsultarSolicitudDetalle
 (
     @IdSolicitudDetalle INT,
@@ -303,56 +291,52 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    IF @IdSolicitud > 0
+    IF ISNULL(@IdSolicitud, 0) > 0
     BEGIN
         SELECT sd.IdSolicitudDetalle, sd.IdSolicitud, sd.IdServicio, sd.IdDepartamento,
                ps.NombreServicio, d.NombreDepartamento,
                sd.Precio, sd.Cantidad, sd.OtrosImportes, sd.ITMBS,
-               Total = (ISNULL(sd.Cantidad,0) * ISNULL(sd.Precio,0))
-                     + ISNULL(sd.ITMBS,0) + ISNULL(sd.OtrosImportes,0),
+               Total = (sd.Cantidad * sd.Precio) + ISNULL(sd.ITMBS,0) + ISNULL(sd.OtrosImportes,0),
                s.NumeroSolicitud
-        FROM dbo.SolicitudesDetalle sd
-        INNER JOIN dbo.Solicitudes   s  ON sd.IdSolicitud   = s.IdSolicitud
-        INNER JOIN dbo.Departamentos d  ON sd.IdDepartamento= d.IdDepartamento
-        INNER JOIN dbo.Servicios     ps ON sd.IdServicio    = ps.IdServicio
-        WHERE sd.IdSolicitud = @IdSolicitud
-        ORDER BY sd.IdSolicitudDetalle;
-        RETURN;
-    END
-    ELSE IF @IdSolicitudDetalle > 0
-    BEGIN
-        SELECT sd.IdSolicitudDetalle, sd.IdSolicitud, sd.IdServicio, sd.IdDepartamento,
-               ps.NombreServicio, d.NombreDepartamento,
-               sd.Precio, sd.Cantidad, sd.OtrosImportes, sd.ITMBS,
-               Total = (ISNULL(sd.Cantidad,0) * ISNULL(sd.Precio,0))
-                     + ISNULL(sd.ITMBS,0) + ISNULL(sd.OtrosImportes,0),
-               s.NumeroSolicitud
-        FROM dbo.SolicitudesDetalle sd
-        INNER JOIN dbo.Solicitudes   s  ON sd.IdSolicitud   = s.IdSolicitud
-        INNER JOIN dbo.Departamentos d  ON sd.IdDepartamento= d.IdDepartamento
-        INNER JOIN dbo.Servicios     ps ON sd.IdServicio    = ps.IdServicio
-        WHERE sd.IdSolicitudDetalle = @IdSolicitudDetalle;
+          FROM dbo.SolicitudesDetalle sd
+          JOIN dbo.Solicitudes       s  ON s.IdSolicitud   = sd.IdSolicitud
+          JOIN dbo.Departamentos     d  ON d.IdDepartamento= sd.IdDepartamento
+          JOIN dbo.Servicios         ps ON ps.IdServicio   = sd.IdServicio
+         WHERE sd.IdSolicitud = @IdSolicitud;
         RETURN;
     END
 
-    -- Todos (para pruebas/control)
+    IF ISNULL(@IdSolicitudDetalle, 0) > 0
+    BEGIN
+        SELECT sd.IdSolicitudDetalle, sd.IdSolicitud, sd.IdServicio, sd.IdDepartamento,
+               ps.NombreServicio, d.NombreDepartamento,
+               sd.Precio, sd.Cantidad, sd.OtrosImportes, sd.ITMBS,
+               Total = (sd.Cantidad * sd.Precio) + ISNULL(sd.ITMBS,0) + ISNULL(sd.OtrosImportes,0),
+               s.NumeroSolicitud
+          FROM dbo.SolicitudesDetalle sd
+          JOIN dbo.Solicitudes       s  ON s.IdSolicitud   = sd.IdSolicitud
+          JOIN dbo.Departamentos     d  ON d.IdDepartamento= sd.IdDepartamento
+          JOIN dbo.Servicios         ps ON ps.IdServicio   = sd.IdServicio
+         WHERE sd.IdSolicitudDetalle = @IdSolicitudDetalle;
+        RETURN;
+    END
+
+    -- Solo para inspección (tests)
     SELECT sd.IdSolicitudDetalle, sd.IdSolicitud, sd.IdServicio, sd.IdDepartamento,
            ps.NombreServicio, d.NombreDepartamento,
            sd.Precio, sd.Cantidad, sd.OtrosImportes, sd.ITMBS,
-           Total = (ISNULL(sd.Cantidad,0) * ISNULL(sd.Precio,0))
-                 + ISNULL(sd.ITMBS,0) + ISNULL(sd.OtrosImportes,0),
+           Total = (sd.Cantidad * sd.Precio) + ISNULL(sd.ITMBS,0) + ISNULL(sd.OtrosImportes,0),
            s.NumeroSolicitud
-    FROM dbo.SolicitudesDetalle sd
-    INNER JOIN dbo.Solicitudes   s  ON sd.IdSolicitud   = s.IdSolicitud
-    INNER JOIN dbo.Departamentos d  ON sd.IdDepartamento= d.IdDepartamento
-    INNER JOIN dbo.Servicios     ps ON sd.IdServicio    = ps.IdServicio
-    ORDER BY sd.IdSolicitudDetalle;
+      FROM dbo.SolicitudesDetalle sd
+      JOIN dbo.Solicitudes       s  ON s.IdSolicitud   = sd.IdSolicitud
+      JOIN dbo.Departamentos     d  ON d.IdDepartamento= sd.IdDepartamento
+      JOIN dbo.Servicios         ps ON ps.IdServicio   = sd.IdServicio;
 END
 GO
 
-/* =========================
-   ELIMINAR SOLICITUD DETALLE (por Id)
-   ========================= */
+/* ============================================================================
+   ELIMINAR DETALLE DE SOLICITUD
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prEliminarSolicitudesDetalle
 (
     @IdSolicitudDetalle INT
@@ -362,41 +346,40 @@ BEGIN
     SET NOCOUNT ON;
 
     DELETE sd
-    FROM dbo.SolicitudesDetalle sd
-    WHERE sd.IdSolicitudDetalle = @IdSolicitudDetalle;
+      FROM dbo.SolicitudesDetalle sd
+     WHERE sd.IdSolicitudDetalle = @IdSolicitudDetalle;
 
-    RETURN @@ROWCOUNT; -- 1=eliminado, 0=no existía
+    RETURN @@ROWCOUNT;
 END
 GO
 
-/* =========================
-   INSERTAR SOLICITUD (cabecera)
-   - Genera @NumeroSolicitud: SBSNN-<secuencial anual>
-   ========================= */
+/* ============================================================================
+   INSERTAR SOLICITUD (genera @IdSolicitud y @NumeroSolicitud)
+   - NumeroSolicitud = SBS + (YY) + '-' + secuencial por año (1..N)
+   - Busca MAX(seg) para el año YY; si no hay, arranca en 1
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prInsertarSolicitud
 (
-    @IdSolicitud      INT          OUTPUT,  -- identity generado
-    @IdCliente        INT,
-    @NumeroSolicitud  VARCHAR(20)  OUTPUT,  -- se genera aquí
-    @Fecha            DATETIME2(0),
-    @Observacion      VARCHAR(300)
+    @IdSolicitud     INT         OUTPUT,
+    @IdCliente       INT,
+    @NumeroSolicitud VARCHAR(20) OUTPUT,
+    @Fecha           DATETIME,
+    @Observacion     VARCHAR(300)
 )
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Prefijo por año: SBS + 2 dígitos del año + '-'
-    DECLARE @yy CHAR(2)  = RIGHT(CONVERT(VARCHAR(4), YEAR(@Fecha)), 2);
-    DECLARE @prefijo VARCHAR(6) = 'SBS' + @yy + '-';
+    DECLARE @yy CHAR(2) = RIGHT(CONVERT(CHAR(4), YEAR(@Fecha)), 2);
+    DECLARE @next INT;
 
-    -- Secuencial = MAX(substring numérico del año actual) + 1
-    DECLARE @Secuencial INT = (
-        SELECT ISNULL(MAX(CAST(SUBSTRING(NumeroSolicitud, 7, 10) AS INT)), 0)
-        FROM dbo.Solicitudes
-        WHERE NumeroSolicitud LIKE @prefijo + '%'
-    ) + 1;
+    SELECT @next =
+        ISNULL(MAX(TRY_CONVERT(INT, SUBSTRING(s.NumeroSolicitud, 7, 20))), 0) + 1
+      FROM dbo.Solicitudes s
+     WHERE SUBSTRING(s.NumeroSolicitud, 4, 2) = @yy
+       AND LEFT(s.NumeroSolicitud, 3) = 'SBS';
 
-    SET @NumeroSolicitud = @prefijo + CONVERT(VARCHAR(10), @Secuencial);
+    SET @NumeroSolicitud = 'SBS' + @yy + '-' + CONVERT(VARCHAR(17), @next);
 
     INSERT INTO dbo.Solicitudes (IdCliente, NumeroSolicitud, Fecha, Observacion)
     VALUES (@IdCliente, @NumeroSolicitud, @Fecha, @Observacion);
@@ -406,12 +389,12 @@ BEGIN
 END
 GO
 
-/* =========================
-   INSERTAR SOLICITUD DETALLE
-   ========================= */
+/* ============================================================================
+   INSERTAR DETALLE DE SOLICITUD
+   ============================================================================ */
 CREATE OR ALTER PROCEDURE dbo.prInsertarSolicitudDetalle
 (
-    @IdSolicitudDetalle INT          OUTPUT,     -- identity generado
+    @IdSolicitudDetalle INT         OUTPUT,
     @IdSolicitud        INT,
     @IdServicio         INT,
     @IdDepartamento     INT,
@@ -425,38 +408,11 @@ BEGIN
     SET NOCOUNT ON;
 
     INSERT INTO dbo.SolicitudesDetalle
-    (IdSolicitud, IdServicio, IdDepartamento, Precio, Cantidad, OtrosImportes, ITMBS)
+        (IdSolicitud, IdServicio, IdDepartamento, Precio, Cantidad, OtrosImportes, ITMBS)
     VALUES
-    (@IdSolicitud, @IdServicio, @IdDepartamento, @Precio, @Cantidad, @OtrosImportes, @ITMBS);
+        (@IdSolicitud, @IdServicio, @IdDepartamento, @Precio, @Cantidad, @OtrosImportes, @ITMBS);
 
     SET @IdSolicitudDetalle = SCOPE_IDENTITY();
     RETURN 1;
 END
 GO
-
-/* =========================
-   PRUEBAS (SSMS) - OPCIONALES (Descomentar para usar)
-   Ejecutamos por bloques seleccionando y presionando F5
-   ========================= */
--- /*
--- DECLARE @idSol INT, @num VARCHAR(20);
--- EXEC dbo.prInsertarSolicitud
---      @IdSolicitud=@idSol OUTPUT,
---      @IdCliente=1000,                     -- ajusta a un IdCliente existente
---      @NumeroSolicitud=@num OUTPUT,
---      @Fecha=SYSUTCDATETIME(),
---      @Observacion='Solicitud demo';
--- SELECT @idSol IdSolicitud, @num Numero;
-
--- DECLARE @idDet INT;
--- EXEC dbo.prInsertarSolicitudDetalle
---      @IdSolicitudDetalle=@idDet OUTPUT,
---      @IdSolicitud=@idSol, @IdServicio=1, @IdDepartamento=1,
---      @Precio=10.00, @Cantidad=2, @OtrosImportes=0, @ITMBS=0.00;
--- SELECT @idDet IdSolicitudDetalle;
-
--- EXEC dbo.prConsultarSolicitud @IdSolicitud=@idSol, @NumeroSolicitud=NULL;
--- EXEC dbo.prConsultarSolicitudDetalle @IdSolicitudDetalle=0, @IdSolicitud=@idSol;
-
--- EXEC dbo.prConsultaAvanzadaSolicitud @NumeroSolicitud=@num, @IdCliente=0, @FechaIni=NULL, @FechaFin=NULL;
--- */
