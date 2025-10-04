@@ -17,7 +17,7 @@ Aplicamos actualizaciones de seguridad a la **última versión menor** dentro de
 **No abras issues públicos para temas de seguridad.**
 
 - Usa **GitHub → Security advisories** (o contacto privado si aplica).
-- En última instancia, crea un Issue con la plantilla **Security** sin incluir datos sensibles y solicita un canal privado.
+- Como último recurso, crea un Issue con la plantilla **Security question**, **sin** datos sensibles, y solicita un canal privado.
 
 **Incluye (si es posible):**
 - Versión(es) afectada(s) y alcance.
