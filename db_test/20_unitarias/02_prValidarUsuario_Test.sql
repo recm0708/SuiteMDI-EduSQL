@@ -1,11 +1,11 @@
 /* =============================================================================
    Script de PRUEBAS: 02_prValidarUsuario_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Verificar dbo.prValidarUsuario en modo “sin encripción”
-       * Caso válido → devuelve 1 fila con datos
-       * Caso inválido → devuelve 0 filas
+     - Verificar dbo.prValidarUsuario en modo “sin encripción”.
+       * Caso válido → devuelve 1 fila con datos.
+       * Caso inválido → devuelve 0 filas.
    Notas:
      - Inserta datos de prueba y hace ROLLBACK para no persistir.
    ============================================================================= */
