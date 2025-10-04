@@ -17,12 +17,17 @@ publish/
 *.log
 *.tlog
 *.lastcodeanalysissucceeded
+*.obj
+*.pch
+*.rsp
+*.tmp_proj
 
 # NuGet
 packages/
 *.nupkg
 !packages/build/
 !packages/repositories.config
+.nuget/packages/
 
 # JetBrains Rider
 .idea/
@@ -30,6 +35,7 @@ packages/
 
 # VS Code
 .vscode/
+.history/
 
 # ===========================
 # App secrets & local config
@@ -41,6 +47,8 @@ src/**/Properties/PublishProfiles/
 src/**/Settings.settings
 src/**/Settings.Designer.cs
 src/**/launchSettings.json
+src/**/secrets.json
+src/**/UserSecrets/
 
 # Solo-local (no compartir entre equipos)
 src/_gsdata_/
@@ -61,6 +69,18 @@ desktop.ini
 *.mdf
 *.ldf
 *.dbmdl
+*.bak
+*.trn
+
+# ===========================
+# Test / Coverage / Analysis
+# ===========================
+*.trx
+*.coverage
+*.coveragexml
+*.sarif
+*.CodeAnalysisLog.xml
+*.ruleset.user
 
 # ===========================
 # Keys / certs (no públicas)
@@ -75,3 +95,12 @@ desktop.ini
 *.rej
 *.swp
 *.tmp
+
+# ===========================
+# Herramientas varias
+# ===========================
+_ReSharper*/
+*.DotSettings.user
+*.sln.DotSettings.user
+.sonarqube/
+.scannerwork/
