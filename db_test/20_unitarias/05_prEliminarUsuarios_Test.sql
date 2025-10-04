@@ -1,12 +1,12 @@
 /* =============================================================================
    Script de PRUEBAS: 05_prEliminarUsuarios_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Validar dbo.prEliminarUsuarios con casos de éxito y nulos
-     - No dejar datos de prueba: se usa TRAN + ROLLBACK
+     - Validar dbo.prEliminarUsuarios con casos de éxito y nulos.
+     - No dejar datos de prueba: se usa TRAN + ROLLBACK.
    Notas:
-     - Se inserta un registro temporal, se elimina con el SP y se revierte
+     - Se inserta un registro temporal, se elimina con el SP y se revierte.
    ============================================================================= */
 
 SET NOCOUNT ON;

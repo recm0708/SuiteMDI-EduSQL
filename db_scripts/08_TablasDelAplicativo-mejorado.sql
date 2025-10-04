@@ -5,9 +5,9 @@
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
      - Crear tablas del aplicativo (Clientes, Departamentos, Servicios, puente, Solicitudes,
-       SolicitudesDetalle, Facturas, FacturasDetalle, Recibos, RecibosDetalle)
-     - Definir PKs, FKs y un índice único compuesto (IdDepartamento, IdServicio)
-     - Normalizar nombre de columna: Dirrecion → Direccion
+       SolicitudesDetalle, Facturas, FacturasDetalle, Recibos, RecibosDetalle).
+     - Definir PKs, FKs y un índice único compuesto (IdDepartamento, IdServicio).
+     - Normalizar nombre de columna: Dirrecion → Direccion.
    Notas:
      - Idempotente: crea objetos solo si no existen; agrega FKs/índices si faltan.
      - Tipos originales conservados (VARCHAR/MONEY/DATETIME).

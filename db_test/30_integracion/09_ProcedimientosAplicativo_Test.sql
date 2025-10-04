@@ -1,11 +1,11 @@
 /* =============================================================================
    Script de PRUEBAS (Integración): 09_ProcedimientosAplicativo_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Validar inserción maestro/detalle de Solicitudes (genera NumeroSolicitud)
-     - Probar consultas avanzadas y por número
-     - Confirmar corrección de Clientes.Direccion en prConsultarCliente
+     - Validar inserción maestro/detalle de Solicitudes (genera NumeroSolicitud).
+     - Probar consultas avanzadas y por número.
+     - Confirmar corrección de Clientes.Direccion en prConsultarCliente.
    ============================================================================= */
 
 SET NOCOUNT ON;

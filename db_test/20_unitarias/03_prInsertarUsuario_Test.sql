@@ -1,11 +1,11 @@
 /* =============================================================================
    Script de PRUEBAS: 03_prInsertarUsuario_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Verificar dbo.prInsertarUsuario (modo “sin encripción”)
-       * Debe insertar y devolver @CodigoUsuario (IDENTITY)
-       * La columna Pass debe quedar en VARBINARY y ser convertible a la clave original
+     - Verificar dbo.prInsertarUsuario (modo “sin encripción”).
+       * Debe insertar y devolver @CodigoUsuario (IDENTITY).
+       * La columna Pass debe quedar en VARBINARY y ser convertible a la clave original.
    Notas:
      - Usa TRAN + ROLLBACK para no persistir datos de prueba.
    ============================================================================= */

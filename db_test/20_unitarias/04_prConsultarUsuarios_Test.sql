@@ -1,11 +1,11 @@
 /* =============================================================================
    Script de PRUEBAS: 04_prConsultarUsuarios_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Validar dbo.prConsultarUsuarios sin exponer Pass
-     - Caso A: listar todos (NULL o 0)
-     - Caso B: consultar un código específico (si existe)
+     - Validar dbo.prConsultarUsuarios sin exponer Pass.
+     - Caso A: listar todos (NULL o 0).
+     - Caso B: consultar un código específico (si existe).
    Notas:
      - Solo lectura; no requiere TRAN.
    ============================================================================= */

@@ -4,10 +4,10 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear (si no existe) la base de datos [Ejemplo_SIN_Encripcion]
-     - Crear la tabla dbo.Perfiles con IDENTITY desde 1000 y PK
-     - Crear LOGIN/USER [UsrProcesa] (DEV) y asignar db_owner en la BD
-     - Dejar el IDENTITY en Perfiles correctamente reseedeado
+     - Crear (si no existe) la base de datos [Ejemplo_SIN_Encripcion].
+     - Crear la tabla dbo.Perfiles con IDENTITY desde 1000 y PK.
+     - Crear LOGIN/USER [UsrProcesa] (DEV) y asignar db_owner en la BD.
+     - Dejar el IDENTITY en Perfiles correctamente reseedeado.
    Notas:
      - Script idempotente (re-ejecutable sin fallar).
      - Sin uso de :setvar; parámetros definidos con DECLARE.

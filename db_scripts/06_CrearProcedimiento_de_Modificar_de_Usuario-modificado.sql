@@ -4,9 +4,9 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear/Actualizar el SP dbo.prModificarUsuarios
-     - Actualizar datos de un usuario (Perfiles) sin tocar Pass ni el ID
-     - Devolver @@ROWCOUNT (0 si no encontró, 1 si actualizó)
+     - Crear/Actualizar el SP dbo.prModificarUsuarios.
+     - Actualizar datos de un usuario (Perfiles) sin tocar Pass ni el ID.
+     - Devolver @@ROWCOUNT (0 si no encontró, 1 si actualizó).
    Notas:
      - Idempotente (CREATE OR ALTER), seguro para re-ejecución.
      - Valida @CodigoUsuario (NULL/<=0) y normaliza entradas (NULL → '').

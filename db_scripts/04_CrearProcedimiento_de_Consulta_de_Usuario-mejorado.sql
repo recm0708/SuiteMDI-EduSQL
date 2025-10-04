@@ -4,9 +4,9 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear/Actualizar el SP dbo.prConsultarUsuarios
-     - Consultar perfiles SIN exponer la columna Pass (solo datos públicos)
-     - Permitir consulta de 1 usuario por código o de todos (código <= 0 / NULL)
+     - Crear/Actualizar el SP dbo.prConsultarUsuarios.
+     - Consultar perfiles SIN exponer la columna Pass (solo datos públicos).
+     - Permitir consulta de 1 usuario por código o de todos (código <= 0 / NULL).
    Notas:
      - Idempotente (CREATE OR ALTER), seguro para re-ejecución.
      - Ordena por CodigoUsuario para resultados consistentes.

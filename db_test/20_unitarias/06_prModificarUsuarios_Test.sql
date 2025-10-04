@@ -1,10 +1,10 @@
 /* =============================================================================
    Script de PRUEBAS: 06_prModificarUsuarios_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Validar dbo.prModificarUsuarios en casos típicos y nulos
-     - No dejar datos persistentes (TRAN + ROLLBACK)
+     - Validar dbo.prModificarUsuarios en casos típicos y nulos.
+     - No dejar datos persistentes (TRAN + ROLLBACK).
    Notas:
      - Se inserta un registro temporal, se modifica y se valida el cambio.
    ============================================================================= */

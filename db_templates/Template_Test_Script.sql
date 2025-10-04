@@ -1,6 +1,6 @@
 /* =============================================================================
    Script de PRUEBAS: <Carpeta>/<NN_Nombre-logico>_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
      - <Qué valida el test>

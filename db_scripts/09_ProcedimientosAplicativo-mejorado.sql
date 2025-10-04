@@ -4,9 +4,9 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear/actualizar SPs de Solicitudes (maestro/detalle) y consultas auxiliares
-     - Normalizar lógica de fechas y generación de NumeroSolicitud (SBSYY-N)
-     - Corregir referencias de Clientes.Direccion (antes: Dirrecion)
+     - Crear/actualizar SPs de Solicitudes (maestro/detalle) y consultas auxiliares.
+     - Normalizar lógica de fechas y generación de NumeroSolicitud (SBSYY-N).
+     - Corregir referencias de Clientes.Direccion (antes: Dirrecion).
    Notas:
      - Idempotente: CREATE OR ALTER para todos los SPs.
      - Fechas: se evita depender de SET DATEFORMAT; se usa CONVERT y rangos inclusivos.

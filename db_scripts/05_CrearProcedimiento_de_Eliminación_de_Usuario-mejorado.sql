@@ -4,9 +4,9 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear/Actualizar el SP dbo.prEliminarUsuarios
-     - Eliminar un perfil por su CodigoUsuario
-     - Devolver @@ROWCOUNT como resultado de la operación (0 o 1 típico)
+     - Crear/Actualizar el SP dbo.prEliminarUsuarios.
+     - Eliminar un perfil por su CodigoUsuario.
+     - Devolver @@ROWCOUNT como resultado de la operación (0 o 1 típico).
    Notas:
      - Idempotente (CREATE OR ALTER), seguro para re-ejecución.
      - Valida parámetros (NULL/<=0) para evitar operaciones accidentales.

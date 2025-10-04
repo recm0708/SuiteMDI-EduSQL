@@ -1,10 +1,10 @@
 /* =============================================================================
    Script de PRUEBAS: 08_TablasDelAplicativo_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Verificar existencia de tablas, PK/UK/FK, y nombre de columna Direccion
-     - Probar integridad mínima (inserts maestro-detalle) con ROLLBACK
+     - Verificar existencia de tablas, PK/UK/FK, y nombre de columna Direccion.
+     - Probar integridad mínima (inserts maestro-detalle) con ROLLBACK.
    ============================================================================= */
 
 SET NOCOUNT ON;

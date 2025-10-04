@@ -4,15 +4,15 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear/Actualizar el SP dbo.prModificarPasswordUsuarios
+     - Crear/Actualizar el SP dbo.prModificarPasswordUsuarios.
      - Cambiar contraseña:
-         * Modo normal: requiere PassAnterior correcto
-         * Modo reset: ignora PassAnterior y fuerza nuevo password
+         * Modo normal: requiere PassAnterior correcto.
+         * Modo reset: ignora PassAnterior y fuerza nuevo password.
      - Devolver código de resultado vía RETURN
-         1  = actualizado OK
-         0  = usuario no encontrado (no se actualiza)
-        -2  = PassAnterior inválido
-        -3  = parámetros inválidos (@CodigoUsuario NULL/<=0 o @PassNuevo NULL)
+         1  = actualizado OK.
+         0  = usuario no encontrado (no se actualiza).
+        -2  = PassAnterior inválido.
+        -3  = parámetros inválidos (@CodigoUsuario NULL/<=0 o @PassNuevo NULL).
    Notas:
      - Idempotente (CREATE OR ALTER).
      - Se mantiene el esquema "sin encripción": almacenamiento en VARBINARY(128)

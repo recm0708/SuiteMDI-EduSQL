@@ -4,8 +4,8 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear/Actualizar el SP dbo.prValidarUsuario (validación “sin encripción”)
-     - Devolver datos básicos del perfil si las credenciales son válidas
+     - Crear/Actualizar el SP dbo.prValidarUsuario (validación “sin encripción”).
+     - Devolver datos básicos del perfil si las credenciales son válidas.
    Notas:
      - Este proyecto mantiene Pass en VARBINARY(128) (modo educativo “sin encripción”).
        Aquí se compara CONVERT(VARCHAR(500), Pass) con el parámetro @Pass de texto.

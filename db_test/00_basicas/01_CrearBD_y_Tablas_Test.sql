@@ -1,11 +1,11 @@
 /* =============================================================================
    Script de PRUEBAS: 01_CrearBD_y_Tablas_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
-     - Verificar existencia de la BD, tabla Perfiles y PK
-     - Verificar existencia de LOGIN/USER [UsrProcesa]
-     - Verificar reseed correcto del IDENTITY de Perfiles
+     - Verificar existencia de la BD, tabla Perfiles y PK.
+     - Verificar existencia de LOGIN/USER [UsrProcesa].
+     - Verificar reseed correcto del IDENTITY de Perfiles.
    Notas:
      - Sin :setvar. Usa TRY...CATCH y ROLLBACK por defecto.
    ============================================================================= */

@@ -1,14 +1,14 @@
 /* =============================================================================
    Script de PRUEBAS: 07_prModificarPasswordUsuarios_Test.sql
-   Autor:          Ruben E. Cañizares M.
+   Autor:          Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Propósito:
      - Validar dbo.prModificarPasswordUsuarios en escenarios típicos
-       * Usuario inexistente
-       * Parámetros inválidos
-       * Reset de contraseña (ignora PassAnterior)
-       * Cambio normal con PassAnterior correcto
-       * Cambio normal con PassAnterior incorrecto
+       * Usuario inexistente.
+       * Parámetros inválidos.
+       * Reset de contraseña (ignora PassAnterior).
+       * Cambio normal con PassAnterior correcto.
+       * Cambio normal con PassAnterior incorrecto.
      - Evitar persistencia (usa TRAN + ROLLBACK)
    Notas:
      - Se usa el mismo esquema "sin encripción" (CONVERT a VARBINARY/VARCHAR).

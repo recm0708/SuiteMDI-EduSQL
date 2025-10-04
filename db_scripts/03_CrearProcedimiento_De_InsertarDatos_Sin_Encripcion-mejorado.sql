@@ -4,8 +4,8 @@
    Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
    Proyecto:       SuiteMDI-EduSQL
    Objetivos:
-     - Crear/Actualizar el SP dbo.prInsertarUsuario (modo “sin encripción”)
-     - Insertar en dbo.Perfiles y devolver el CodigoUsuario generado (OUTPUT)
+     - Crear/Actualizar el SP dbo.prInsertarUsuario (modo “sin encripción”).
+     - Insertar en dbo.Perfiles y devolver el CodigoUsuario generado (OUTPUT).
    Notas:
      - La columna Pass se almacena en VARBINARY(128); aquí se hace CONVERT desde VARCHAR.
      - Script idempotente con CREATE OR ALTER, seguro para re-ejecución.
