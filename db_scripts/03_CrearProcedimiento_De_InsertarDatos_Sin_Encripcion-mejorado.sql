@@ -1,80 +1,86 @@
 /* =============================================================================
-   Script: 03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql
-   Proyecto: SuiteMDI-EduSQL
-   Objetivo:
-     - Crear/actualizar el SP dbo.prInsertarUsuario para insertar en dbo.Perfiles
-       y devolver el CodigoUsuario (IDENTITY) vía parámetro OUTPUT.
+   Script:         03_CrearProcedimiento_De_InsertarDatos_Sin_Encripcion-mejorado.sql
+   Realizado por:  Prof. José Ortiz
+   Modificado por: Ruben E. Cañizares M. en colaboración de ChatGPT
+   Proyecto:       SuiteMDI-EduSQL
+   Objetivos:
+     - Crear/Actualizar el SP dbo.prInsertarUsuario (modo “sin encripción”)
+     - Insertar en dbo.Perfiles y devolver el CodigoUsuario generado (OUTPUT)
    Notas:
-     - “Sin encripción”: se almacena Pass como VARBINARY(128) convirtiendo desde VARCHAR.
-     - Idempotente con CREATE OR ALTER. Manejo de errores con TRY/CATCH + THROW.
-     - Normaliza entradas (TRIM) y convierte cadenas vacías a NULL donde aplica.
+     - La columna Pass se almacena en VARBINARY(128); aquí se hace CONVERT desde VARCHAR.
+     - Script idempotente con CREATE OR ALTER, seguro para re-ejecución.
+     - Validación ligera: TRIM de entradas; blanks → NULL (para campos opcionales).
+     - Las pruebas se mueven a /db_test (no se incluyen aquí).
+   Observación:
+     El procedimiento conserva la intención del material original (insertar usuario
+     con Pass “sin encripción”) pero reorganiza el código, agrega normalización
+     de entradas y documentación para uso académico-profesional en SuiteMDI-EduSQL.
    ============================================================================= */
+
+SET NOCOUNT ON;
+SET XACT_ABORT ON;
 
 USE [Ejemplo_SIN_Encripcion];
 GO
 
-SET ANSI_NULLS ON;
-SET QUOTED_IDENTIFIER ON;
-GO
-
+-- Crear o actualizar el SP de inserción de usuarios (SIN encripción)
 CREATE OR ALTER PROCEDURE dbo.prInsertarUsuario
 (
-    @CodigoUsuario    INT            OUTPUT,   -- se devolverá aquí el IDENTITY generado
-    @NombreUsuario    VARCHAR(50),
-    @SegundoNombre    VARCHAR(50)    = NULL,
-    @ApellidoUsuario  VARCHAR(50),
-    @SegundoApellido  VARCHAR(50)    = NULL,
-    @ApellidoCasada   VARCHAR(50)    = NULL,
-    @Email            VARCHAR(100)   = NULL,
-    @Pass             VARCHAR(500)             -- llega como texto; se convertirá a VARBINARY(128)
+    @CodigoUsuario     INT           OUTPUT,   -- Identity devuelto al finalizar
+    @NombreUsuario     VARCHAR(50),
+    @SegundoNombre     VARCHAR(50),
+    @ApellidoUsuario   VARCHAR(50),
+    @SegundoApellido   VARCHAR(50),
+    @ApellidoCasada    VARCHAR(50),
+    @Email             VARCHAR(100),
+    @Pass              VARCHAR(500)
 )
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    BEGIN TRY
-        /* Normalización básica (TRIM + NULLIF para vacíos) */
-        SET @NombreUsuario   = NULLIF(LTRIM(RTRIM(@NombreUsuario)),   '');
-        SET @SegundoNombre   = NULLIF(LTRIM(RTRIM(@SegundoNombre)),   '');
-        SET @ApellidoUsuario = NULLIF(LTRIM(RTRIM(@ApellidoUsuario)), '');
-        SET @SegundoApellido = NULLIF(LTRIM(RTRIM(@SegundoApellido)), '');
-        SET @ApellidoCasada  = NULLIF(LTRIM(RTRIM(@ApellidoCasada)),  '');
-        SET @Email           = NULLIF(LTRIM(RTRIM(@Email)),           '');
-        SET @Pass            = LTRIM(RTRIM(@Pass));
+    /* Normalización ligera:
+       - TRIM (LTRIM/RTRIM) a entradas de texto
+       - Convertir cadenas vacías ('') a NULL para columnas opcionales
+       Nota: La tabla permite NULLs; no se fuerza NOT NULL aquí.
+    */
+    DECLARE
+        @vNombreUsuario   VARCHAR(50)  = NULLIF(LTRIM(RTRIM(@NombreUsuario)), ''),
+        @vSegundoNombre   VARCHAR(50)  = NULLIF(LTRIM(RTRIM(@SegundoNombre)), ''),
+        @vApellidoUsuario VARCHAR(50)  = NULLIF(LTRIM(RTRIM(@ApellidoUsuario)), ''),
+        @vSegundoApellido VARCHAR(50)  = NULLIF(LTRIM(RTRIM(@SegundoApellido)), ''),
+        @vApellidoCasada  VARCHAR(50)  = NULLIF(LTRIM(RTRIM(@ApellidoCasada)), ''),
+        @vEmail           VARCHAR(100) = NULLIF(LTRIM(RTRIM(@Email)), ''),
+        @vPass            VARCHAR(500) = ISNULL(@Pass, '');
 
-        /* Validaciones mínimas (ajusta según las reglas del negocio) */
-        IF (@NombreUsuario IS NULL)
-            THROW 50000, 'El NombreUsuario es obligatorio.', 1;
+    /* Inserción. Convertimos @vPass a VARBINARY(128).
+       Observación: En un escenario real, aquí se aplicaría hashing/salto.
+    */
+    INSERT INTO dbo.Perfiles
+    (
+        NombreUsuario,
+        SegundoNombre,
+        ApellidoUsuario,
+        SegundoApellido,
+        ApellidoCasada,
+        Email,
+        Pass
+    )
+    VALUES
+    (
+        @vNombreUsuario,
+        @vSegundoNombre,
+        @vApellidoUsuario,
+        @vSegundoApellido,
+        @vApellidoCasada,
+        @vEmail,
+        CONVERT(VARBINARY(128), @vPass)
+    );
 
-        IF (@ApellidoUsuario IS NULL)
-            THROW 50001, 'El ApellidoUsuario es obligatorio.', 1;
+    -- Identity generado (CodigoUsuario)
+    SET @CodigoUsuario = SCOPE_IDENTITY();
 
-        IF (@Pass IS NULL OR @Pass = '')
-            THROW 50002, 'La contraseña (Pass) es obligatoria.', 1;
-
-        /* (Opcional) Validación de unicidad por Email si lo manejas como único
-           IF (@Email IS NOT NULL AND EXISTS(SELECT 1 FROM dbo.Perfiles WHERE Email = @Email))
-               THROW 50003, 'El Email ya existe en Perfiles.', 1;
-        */
-
-        INSERT INTO dbo.Perfiles
-        (
-            NombreUsuario, SegundoNombre, ApellidoUsuario, SegundoApellido,
-            ApellidoCasada, Email, Pass
-        )
-        VALUES
-        (
-            @NombreUsuario, @SegundoNombre, @ApellidoUsuario, @SegundoApellido,
-            @ApellidoCasada, @Email,
-            CONVERT(VARBINARY(128), @Pass)  -- SIN encripción: cast directo a binario
-        );
-
-        SET @CodigoUsuario = CONVERT(INT, SCOPE_IDENTITY());  -- IDENTITY (inicia en 1000)
-        RETURN 0;  -- éxito
-    END TRY
-    BEGIN CATCH
-        /* Re-lanzar el error original manteniendo número/línea */
-        THROW;
-    END CATCH
+    -- Señalización básica para consumidores que la usen
+    RETURN @@ROWCOUNT;  -- 1 si insertó, 0 si no
 END
 GO
