@@ -19,22 +19,39 @@ version-resolver:
       - docs
       - infra
       - task
+      - chore
+      - ci
+      - security
+      - dependencies
+      - sql
 
 # Exclude PRs with these labels from the notes
 exclude-labels:
   - skip-changelog
   - wip
 
-# Group PRs by category
+# Group PRs by category (order matters)
 categories:
+  - title: "⚠️ Breaking changes"
+    labels: ["breaking-change"]
   - title: "🚀 Features"
     labels: ["enhancement", "feature"]
   - title: "🐞 Fixes"
     labels: ["bug"]
+  - title: "🔐 Security"
+    labels: ["security"]
+  - title: "🧩 SQL"
+    labels: ["sql"]
+  - title: "🧪 Tests"
+    labels: ["test", "tests"]
+  - title: "🔧 CI / CD"
+    labels: ["ci"]
+  - title: "⬆️ Dependencies"
+    labels: ["dependencies"]
   - title: "📚 Docs"
     labels: ["docs"]
   - title: "🧰 Chores / Infra"
-    labels: ["infra", "task"]
+    labels: ["infra", "task", "chore", "config"]
 
 # How each PR entry is rendered
 change-template: "- $TITLE (#$NUMBER) by @$AUTHOR"
