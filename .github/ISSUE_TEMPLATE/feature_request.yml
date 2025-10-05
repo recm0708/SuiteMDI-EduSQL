@@ -29,7 +29,7 @@ body:
     id: value
     attributes:
       label: Valor de la mejora
-      description: ¿Qué aporta? ¿A quién beneficia?
+      description: ¿Qué aporta? ¿A quién beneficia? Beneficios medibles si es posible.
       placeholder: "Reduce tiempo de alta ~60%, estandariza datos y evita errores manuales…"
     validations:
       required: true
@@ -95,6 +95,13 @@ body:
       default: 0
 
   - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibilidad hacia atrás / migración
+      description: Explica cómo impacta datos existentes, contratos de SPs, configuración, etc.
+      placeholder: "Requiere script de migración de esquema X→Y; SP prConsultarUsuarios añade parámetro opcional…"
+
+  - type: textarea
     id: dependencies
     attributes:
       label: Dependencias / bloqueadores
@@ -120,3 +127,14 @@ body:
     attributes:
       label: Métricas de éxito (opcional)
       placeholder: "Tiempo de alta < 30s, 0 errores por formato, N usuarios activos…"
+
+  - type: checkboxes
+    id: dod
+    attributes:
+      label: Definition of Done (DoD)
+      options:
+        - label: Pruebas SQL en `db_test/` (unitarias/integración) creadas o actualizadas
+        - label: Orden de ejecución en README revisado si afecta scripts
+        - label: `CHANGELOG.md` actualizado si corresponde
+        - label: Screenshots en `/docs/capturas` si hay cambios de UI
+        - label: Etiquetas (labels) y milestone asignados
