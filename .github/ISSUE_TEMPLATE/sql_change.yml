@@ -1,6 +1,8 @@
 name: "🧮 SQL change"
-description: Cambios que afectan a la base de datos (scripts, SPs, tablas)
+description: Cambios que afectan a la base de datos (scripts, SPs, tablas, índices)
 labels: ["sql"]
+assignees:
+  - recm0708
 body:
   - type: input
     id: title
@@ -9,39 +11,114 @@ body:
       placeholder: "Modificar prValidarUsuario para devolver @@ROWCOUNT"
     validations:
       required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Resumen del cambio
+      description: ¿Qué se modifica y por qué?
+      placeholder: "Alinear salida de prValidarUsuario con capa de Negocio; garantizar contrato de retorno."
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected
+    attributes:
+      label: Archivos / objetos afectados
+      description: Lista de scripts y objetos SQL (tablas, SPs, índices, usuarios/roles).
+      placeholder: |
+        db_scripts/02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql
+        Objetos:
+        - dbo.prValidarUsuario (ALTER)
+        - dbo.Perfiles (NO CAMBIA)
+    validations:
+      required: true
+
   - type: textarea
     id: scope
     attributes:
       label: Alcance (Incluye / No incluye)
       placeholder: |
         Incluye:
-        - Ajuste en script 02
+        - Ajuste del SP para devolver @@ROWCOUNT
         - Comentarios de pruebas unitarias
         No incluye:
         - Cambios en UI
     validations:
       required: true
+
+  - type: dropdown
+    id: compatibility
+    attributes:
+      label: Compatibilidad
+      options:
+        - Backward compatible
+        - Cambia contrato (breaking)
+        - Desconocido
+      description: Indica si rompe a consumidores existentes (capa Negocio/UI).
+    validations:
+      required: true
+
   - type: textarea
     id: migration
     attributes:
-      label: Migración / impacto
-      description: ¿Rompe compatibilidad? ¿Requiere reseed, backup o downtime?
-      placeholder: "No rompe. Requiere ejecutar script 02 y volver a correr pruebas 20_unitarias/*"
+      label: Migración / impacto en datos
+      description: ¿Requiere reseed, data-fix, backup o downtime?
+      placeholder: |
+        - No rompe. No hay cambios de esquema.
+        - Requiere ejecutar script 02 y re-correr db_test/20_unitarias/*
+        - Sin downtime en DEV; PROD no aplica.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: transaction
+    attributes:
+      label: Estrategia de ejecución
+      options:
+        - label: Ejecutar dentro de TRAN con ROLLBACK en caso de error
+        - label: Crear script de rollback (undo) paralelo en db_test/99_rollback/
+        - label: Plan de roll-forward documentado
+
   - type: checkboxes
     id: impact
     attributes:
-      label: Impacto
+      label: Impacto adicional
       options:
         - label: Afecta a datos existentes
-        - label: Requiere rollback plan
-        - label: Requiere actualización de README/CHANGELOG
+        - label: Requiere actualizar orden en README (sección Base de Datos)
+        - label: Requiere actualizar CHANGELOG
+        - label: Requiere actualizar pruebas (db_test/**/*)
+        - label: Requiere permisos/roles nuevos (db_scripts/util/*)
+
+  - type: textarea
+    id: performance
+    attributes:
+      label: Performance / índices
+      description: ¿Cambia cardinalidad? ¿Se requieren índices o hints?
+      placeholder: "No aplica. Consulta por PK. Sin cambios en planes."
+
+  - type: textarea
+    id: security
+    attributes:
+      label: Seguridad
+      description: ¿Afecta secretos, roles, superficie de ataque?
+      placeholder: "Sin cambios en permisos. SP no expone datos sensibles."
+
   - type: textarea
     id: tests
     attributes:
       label: Pruebas
-      placeholder: "Añadir tests en db_test/20_unitarias/ y referenciarlos en RUN_ALL.sql"
+      description: Ubicación y cómo correrlas (RUN_ALL.sql).
+      placeholder: |
+        - Unit: db_test/20_unitarias/02_prValidarUsuario_Test.sql
+        - Integración: db_test/30_integracion/Flujo_Login_MDI_Smoke.sql
+        - Orquestador: db_test/RUN_ALL.sql (SQLCMD Mode)
+    validations:
+      required: true
+
   - type: textarea
     id: notes
     attributes:
       label: Notas técnicas
-      placeholder: "Justificación del cambio, índices considerados, riesgos, etc."
+      placeholder: "Justificación del cambio, riesgos conocidos, consideraciones para futuras migraciones."
