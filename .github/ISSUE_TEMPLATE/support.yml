@@ -1,7 +1,15 @@
 name: "💬 Soporte / Consulta"
 description: Duda de uso o soporte (no es bug ni feature)
 labels: ["question"]
+assignees:
+  - recm0708
 body:
+  - type: markdown
+    attributes:
+      value: >
+        ⚠️ **No adjuntes secretos ni credenciales reales.**  
+        Revisa primero [`SUPPORT.md`](../../SUPPORT.md) y [`SECURITY.md`](../../SECURITY.md).
+
   - type: input
     id: title
     attributes:
@@ -9,19 +17,50 @@ body:
       placeholder: "¿Cómo configuro ActiveDb en App.config?"
     validations:
       required: true
+
   - type: textarea
     id: context
     attributes:
       label: Contexto
-      description: ¿Qué intentas hacer? ¿Qué has probado?
-      placeholder: "Quiero apuntar a SQL local; probé cambiar ActiveDb=Local…"
+      description: ¿Qué intentas hacer? ¿Qué esperabas que pasara?
+      placeholder: "Quiero apuntar a SQL local (127.0.0.1,2333) y que el login funcione…"
     validations:
       required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Qué probaste
+      description: Pasos o configuraciones que ya intentaste.
+      placeholder: |
+        1) Copié App.config.template.config → App.config
+        2) ActiveDb=Local
+        3) Corrí 01–09 en SSMS sin errores
+        4) Ejecuté la app; error de conexión…
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Entorno
+      description: Versiones y contexto donde ocurre.
+      placeholder: |
+        Windows 11 · VS 2022 (17.xx) ES
+        Docker SQL Server 2022 (puerto 2333)
+        App: commit abc1234 · Versión v0.x
+        SQLCMD Mode: activado/desactivado (para tests)
+    validations:
+      required: true
+
   - type: textarea
     id: details
     attributes:
       label: Detalles / Capturas (si aplica)
-      placeholder: "Logs, screenshots, mensajes de error…"
+      description: Logs, mensajes de error (sin secretos), screenshots.
+      placeholder: |
+        System.Data.SqlClient.SqlException (0x80131904): Login failed for user 'sa' (18456)…
+
   - type: checkboxes
     id: scope
     attributes:
@@ -29,3 +68,11 @@ body:
       options:
         - label: Solo documentación
         - label: Requiere cambios en código/SQL
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmaciones
+      options:
+        - label: Leí SUPPORT.md y SECURITY.md y no incluiré secretos/credenciales reales.
+          required: true
