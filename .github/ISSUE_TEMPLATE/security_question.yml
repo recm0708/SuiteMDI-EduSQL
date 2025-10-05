@@ -1,18 +1,45 @@
 name: "🔐 Security question"
 description: Consulta de seguridad (no para reportar vulnerabilidades)
 labels: ["security", "question"]
+assignees:
+  - recm0708
 body:
   - type: markdown
     attributes:
       value: >
         ⚠️ **No adjuntes secretos ni credenciales.**  
         Para **reportar vulnerabilidades**, usa: https://github.com/recm0708/SuiteMDI-EduSQL/security/advisories/new  
-        Política: https://github.com/recm0708/SuiteMDI-EduSQL/security/policy
+        Política de seguridad: ./../../SECURITY.md
   - type: input
     id: title
     attributes:
       label: Título breve
       placeholder: "¿Cómo rotar credenciales sin cortar el CI?"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - CI/CD (GitHub Actions)
+        - SQL Server / Docker
+        - App.config / secretos
+        - Código C# / WinForms
+        - Documentación / procesos
+        - Otro
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Entorno
+      options:
+        - DEV
+        - QA
+        - PROD
+        - Local
+        - Desconocido / No aplica
     validations:
       required: true
   - type: textarea
