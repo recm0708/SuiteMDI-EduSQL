@@ -1,11 +1,17 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Seguridad / Security reports
+  - name: 🔐 Reportar vulnerabilidad (privado)
+    url: https://github.com/recm0708/SuiteMDI-EduSQL/security/advisories/new
+    about: Envío privado para vulnerabilidades. No publiques secretos.
+  - name: Seguridad / Security policy
     url: https://github.com/recm0708/SuiteMDI-EduSQL/security/policy
     about: No publiques secretos ni credenciales. Revisa la política de seguridad.
   - name: Guía de contribución (cómo reportar)
     url: https://github.com/recm0708/SuiteMDI-EduSQL/blob/main/CONTRIBUTING.md
-    about: Revisa cómo crear Issues (bug/feature/task), labels y milestones.
+    about: Cómo crear Issues (bug/feature/task), labels y milestones.
   - name: Soporte / Support
     url: https://github.com/recm0708/SuiteMDI-EduSQL/blob/main/SUPPORT.md
     about: Guía de soporte y canales para dudas de uso.
+  # - name: 💬 Discussions (Q&A/ideas)  # <- opcional si habilitas Discussions
+  #   url: https://github.com/recm0708/SuiteMDI-EduSQL/discussions
+  #   about: Preguntas y debates de uso/ideas (no bugs ni vulnerabilidades).
