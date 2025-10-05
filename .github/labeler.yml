@@ -3,15 +3,21 @@
 
 - label: sql
   changed-files:
-    - any-glob-to-any-file: ['db_scripts/**/*.sql']
+    - any-glob-to-any-file:
+        - 'db_scripts/**/*.sql'
+        - 'db_test/**/*.sql'
+        - 'db_templates/**/*.sql'
 
 - label: backend
   changed-files:
-    - any-glob-to-any-file: ['src/**']
+    - any-glob-to-any-file:
+        - 'src/**'
 
 - label: ui
   changed-files:
-    - any-glob-to-any-file: ['src/**/Presentacion/**', 'assets/**']
+    - any-glob-to-any-file:
+        - 'src/**/Presentacion/**'
+        - 'assets/**'
 
 - label: docs
   changed-files:
@@ -20,27 +26,34 @@
         - 'README.md'
         - 'CHANGELOG.md'
         - 'CONTRIBUTING.md'
+        - 'SUPPORT.md'
+        - 'CODE_OF_CONDUCT.md'
 
 - label: security
   changed-files:
-    - any-glob-to-any-file: ['SECURITY.md']
+    - any-glob-to-any-file:
+        - 'SECURITY.md'
+        - '.github/ISSUE_TEMPLATE/security_question.yml'
 
 - label: infra
   changed-files:
-    - any-glob-to-any-file: ['.github/**', 'tools/**']
+    - any-glob-to-any-file:
+        - '.github/**'
+        - 'tools/**'
 
 - label: config
   changed-files:
-    - any-glob-to-any-file: ['.editorconfig', '.gitattributes', '.gitignore']
+    - any-glob-to-any-file:
+        - '.editorconfig'
+        - '.gitattributes'
+        - '.gitignore'
 
 - label: license
   changed-files:
-    - any-glob-to-any-file: ['LICENSE']
+    - any-glob-to-any-file:
+        - 'LICENSE'
 
 - label: ci
   changed-files:
-    - any-glob-to-any-file: ['.github/workflows/**']
-
-- label: sql
-  changed-files:
-    - any-glob-to-any-file: ['db_scripts/**', 'db_test/**']
+    - any-glob-to-any-file:
+        - '.github/workflows/**'
