@@ -25,6 +25,27 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: related
+    attributes:
+      label: Issues/PR relacionados (opcional)
+      placeholder: "#12, #25"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: effort
+    attributes:
+      label: Esfuerzo estimado (rough)
+      options:
+        - XS (≤1h)
+        - S (≤4h)
+        - M (≤1d)
+        - L (≤3d)
+        - XL (>3d)
+    validations:
+      required: false
+
   - type: textarea
     id: scope
     attributes:
@@ -76,8 +97,16 @@ body:
   - type: input
     id: due
     attributes:
-      label: Fecha objetivo
+      label: Fecha objetivo (opcional)
       placeholder: "YYYY-MM-DD"
+
+  - type: checkboxes
+    id: status
+    attributes:
+      label: Estado
+      options:
+        - label: Bloqueado (depende de otro Issue/PR)
+        - label: Requiere aprobación de diseño/seguridad
 
   - type: textarea
     id: tech-notes
