@@ -1,6 +1,3 @@
-# Usa formato v5 (github/labeler) con changed-files
-# Ref: https://github.com/actions/labeler
-
 - label: "sql"
   changed-files:
     - any-glob-to-any-file:
