@@ -11,22 +11,25 @@ Todas las modificaciones relevantes de este proyecto se documentan aquí.
 - Workflows: `workflows/build.yml` (Windows; detecta `.sln` y crea `App.config` temporal),
   `workflows/labeler.yml` (autoetiquetado de PRs), `workflows/release-drafter.yml`.
 - Configuración: `dependabot.yml` (actualizaciones programadas).
-- Documentación: `README` (ES) con TOC y badges; `SECURITY.md` (ES); `CONTRIBUTING.md` (ES).
-- Guía para **commits/tags verificados por SSH** (*Verified*).
-- **db_scripts/** (01–11) colocados con pruebas comentadas (SSMS).
-- **db_test/** estructurado: `00_basicas/`, `10_datos_semilla/`, `20_unitarias/`, `30_integracion/` y **`RUN_ALL.sql`** (orquestador SQLCMD).
-- **db_test/10_datos_semilla/11_seed_usuario_1000.sql** (usuario 1000 para pruebas de login).
-- **db_test/20_unitarias/02_prValidarUsuario.sql** (casos válido/inválido sin `:setvar`).
-- Nuevas plantillas en **.github/ISSUE_TEMPLATE/**: `security_question.yml`, `sql_change.yml`, `support.yml`, `config.yml`.
-- Añadidos **CODE_OF_CONDUCT.md** y **SUPPORT.md**.
+- Documentación: `README` (ES) con TOC y badges; `SECURITY.md` (ES); `CONTRIBUTING.md` (ES);
+  `CODE_OF_CONDUCT.md` (ES) y `SUPPORT.md` (ES).
+- **db_scripts/** (01–09) colocados, con pruebas movidas a `db_test/`.
+- **db_test/** estructurado: `00_basicas/`, `10_datos_semilla/`, `20_unitarias/`, `30_integracion/` y `RUN_ALL.sql` (orquestador en modo SQLCMD).
+- Semillas y pruebas iniciales:
+  - `db_test/10_datos_semilla/Seed_Clientes_Basico.sql`
+  - `db_test/00_basicas/Smoke_Objetos.sql`
+  - `db_test/20_unitarias/Usuarios_Insertar_Validar.sql` (y casos afines)
+
+- Nuevas plantillas en **.github/ISSUE_TEMPLATE/**:
+  `security_question.yml`, `sql_change.yml`, `support.yml`, `config.yml`.
 
 ### Cambiado
-- `README.md`: descripción ampliada, TOC y nota de ejecución (login real con SP 02); nueva sección **🧪 Pruebas SQL (db_test)** con ejecución vía SQLCMD.
+- `README.md`: descripción ampliada, TOC y nota de ejecución (login real con SP 02); se agrega sección **🧪 Pruebas SQL (db_test)** y guía de ejecución con SQLCMD.
 - `.github/workflows/build.yml`: omite build si no hay `.sln`, añade caché de NuGet, `App.config` temporal con DB por defecto, permisos mínimos y `concurrency`.
-- `.github/workflows/labeler.yml`: permisos mínimos, `pull_request_target` y `configuration-path` explícito.
+- `.github/workflows/labeler.yml`: permisos mínimos, `pull_request_target`, `sync-labels` y `configuration-path` explícito.
 - `.github/workflows/release-drafter.yml`: permisos mínimos, `concurrency` y `config-name` explícito.
 - `.gitattributes` / `.editorconfig`: políticas CRLF/LF y estilo C# afinadas (coherentes con Windows/CI).
-- `02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql`: comparación **VARBINARY=VARBINARY** y resultset vacío coherente.
+- `02_CrearProcedimiento_VerificarUsuario_Valido_Sin_Encripcion-mejorado.sql`: comparación **VARBINARY = VARBINARY** y resultset vacío coherente cuando no hay coincidencia.
 - Bloque **Estructura** del README actualizado (incluye `db_test/` y nuevas plantillas de Issues).
 
 ### Corregido
