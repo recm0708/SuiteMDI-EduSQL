@@ -14,10 +14,14 @@
 *.targets        text eol=crlf
 *.resx           text eol=crlf linguist-generated=true
 *.config         text eol=crlf
+*.nuspec         text eol=crlf
 *.ps1            text eol=crlf
+*.psm1           text eol=crlf
+*.psd1           text eol=crlf
 *.bat            text eol=crlf
 *.cmd            text eol=crlf
-*.nuspec         text eol=crlf
+*.tt             text eol=crlf
+*.ttinclude      text eol=crlf
 
 # ===========================
 # Cross-platform text (LF)
