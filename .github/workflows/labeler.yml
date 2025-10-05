@@ -17,7 +17,7 @@ jobs:
   triage:
     runs-on: ubuntu-latest
     # Evita correr en borradores (salvo cuando pasan a ready_for_review)
-    if: github.event_name != 'pull_request_target' || github.event.pull_request.draft == false
+    if: github.event_name != 'pull_request_target' || (github.event.pull_request != null && github.event.pull_request.draft == false)
     steps:
       - name: Apply labels based on paths
         uses: actions/labeler@v5
