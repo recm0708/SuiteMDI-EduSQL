@@ -1,13 +1,13 @@
 name: Pull Request Labeler
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
-  workflow_dispatch: {}   # opcional: ejecutar manualmente
+  workflow_dispatch: {}
 
 permissions:
   contents: read
-  pull-requests: write   # requerido para aplicar labels
+  pull-requests: write
 
 concurrency:
   group: pr-labeler-${{ github.event.pull_request.number || github.ref }}
@@ -16,12 +16,11 @@ concurrency:
 jobs:
   triage:
     runs-on: ubuntu-latest
-    # Evita correr en borradores (salvo cuando pasan a ready_for_review)
-    if: github.event_name != 'pull_request_target' || (github.event.pull_request != null && github.event.pull_request.draft == false)
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     steps:
       - name: Apply labels based on paths
         uses: actions/labeler@v5
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml
-          sync-labels: true   # quita labels que ya no aplican
+          sync-labels: true
