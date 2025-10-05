@@ -18,13 +18,17 @@ indent_size = 4
 end_of_line = lf
 
 # Archivos típicos de Windows/VS con CRLF
-[*.{sln,csproj,vcxproj,props,targets,config,resx,ps1,bat,cmd,nuspec}]
+[*.{sln,csproj,vcxproj,props,targets,config,resx,ps1,psm1,psd1,bat,cmd,nuspec,tt,ttinclude}]
 end_of_line = crlf
 
 # Cross-platform (LF, indent 2)
 [*.{yml,yaml,json,md,sh,sql,editorconfig,svg}]
 end_of_line = lf
 indent_size = 2
+
+# Markdown: preservar espacios finales (tablas, saltos)
+[*.md]
+trim_trailing_whitespace = false
 
 # ===========================
 # Visual Studio solution
@@ -76,6 +80,9 @@ dotnet_style_prefer_conditional_expression_over_return = true:suggestion
 # PowerShell
 # ===========================
 [*.ps1]
+indent_size = 2
+
+[*.psm1]
 indent_size = 2
 
 # ===========================
