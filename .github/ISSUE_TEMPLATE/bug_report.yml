@@ -39,6 +39,13 @@ body:
     validations:
       required: true
 
+  - type: textarea
+    id: minimal-repro
+    attributes:
+      label: Repro mínimo (opcional pero recomendado)
+      description: Adjunta el menor conjunto de acciones/datos o script de prueba para reproducir el fallo.
+      placeholder: "Script SQL de test, datos semilla mínimos, o pasos exactos…"
+
   - type: dropdown
     id: severity
     attributes:
@@ -49,6 +56,8 @@ body:
         - S3 - Menor (impacto bajo)
         - S4 - Cosmético
       default: 1
+    validations:
+      required: true
 
   - type: checkboxes
     id: regression
@@ -67,6 +76,15 @@ body:
         - label: Ocurre a veces
         - label: Ocurrió una vez
 
+  - type: input
+    id: version
+    attributes:
+      label: Versión/commit
+      description: Tag o commit donde ocurre.
+      placeholder: "v0.3.1 o abc1234"
+    validations:
+      required: true
+
   - type: textarea
     id: env
     attributes:
@@ -75,9 +93,19 @@ body:
       placeholder: |
         Windows 11 / VS 2022 (17.xx) ES
         Docker SQL Server 2022 (puerto 2333)
+        SQLCMD Mode: Desactivado/Activado
         Branch: main  ·  Commit: abc1234  ·  Versión app: v0.3.1
     validations:
       required: true
+
+  - type: checkboxes
+    id: sanity
+    attributes:
+      label: Verificaciones rápidas
+      options:
+        - label: Probado en la rama main (último commit disponible)
+        - label: Comprobé que `App.config` local viene de la plantilla y no está versionado
+        - label: Volví a ejecutar `db_scripts` en orden (01→09/11) sin errores
 
   - type: textarea
     id: affected
@@ -90,9 +118,10 @@ body:
     id: logs
     attributes:
       label: Logs / Mensajes de error
-      description: Pega stack traces, códigos SQL, etc.
+      description: Pega stack traces, códigos SQL, etc. (sin secretos).
       placeholder: |
         System.Data.SqlClient.SqlException (0x80131904): Login failed for user 'sa'. (18456)…
+      render: shell
 
   - type: textarea
     id: screenshots
