@@ -1,4 +1,5 @@
-# Formato v5 (changed-files). Ref: https://github.com/actions/labeler
+# Usa formato v5 (github/labeler) con changed-files
+# Ref: https://github.com/actions/labeler
 
 - label: sql
   changed-files:
@@ -24,15 +25,12 @@
         - 'README.md'
         - 'CHANGELOG.md'
         - 'CONTRIBUTING.md'
-        - 'SUPPORT.md'
-        - 'CODE_OF_CONDUCT.md'
         - 'SECURITY.md'
 
 - label: security
   changed-files:
     - any-glob-to-any-file:
         - 'SECURITY.md'
-        - '.github/ISSUE_TEMPLATE/security_question.yml'
 
 - label: infra
   changed-files:
