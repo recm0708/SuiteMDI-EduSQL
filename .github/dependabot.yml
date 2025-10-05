@@ -6,7 +6,6 @@ updates:
     directory: "/"
     schedule:
       interval: monthly
-      day: monday
       time: "04:00"
       timezone: "America/Panama"
     target-branch: "main"
@@ -22,16 +21,15 @@ updates:
           - "minor"
           - "patch"
 
-  # 2) NuGet (escanea recursivo debajo de /src para futuros proyectos)
+  # 2) NuGet (escaneo recursivo bajo /src para futuros proyectos)
   - package-ecosystem: nuget
     directory: "/src"
     schedule:
       interval: monthly
-      day: monday
       time: "04:30"
       timezone: "America/Panama"
     target-branch: "main"
-    labels: ["backend", "dependencies"]
+    labels: ["backend", "infra", "dependencies"]
     open-pull-requests-limit: 10
     rebase-strategy: auto
     versioning-strategy: increase
@@ -43,3 +41,9 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    # Ejemplos de ignores (opcional):
+    # ignore:
+    #   - dependency-name: "Microsoft.NET.Test.Sdk"
+    #     update-types: ["version-update:semver-major"]
+    #   - dependency-name: "Moq"
+    #     versions: [">=5.a"]  # ignora pre-releases o líneas mayores
