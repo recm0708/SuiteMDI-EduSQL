@@ -96,3 +96,20 @@ jobs:
         if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
         shell: pwsh
         run: msbuild "${{ steps.find_sln.outputs.SLN_PATH }}" /t:Build /p:Configuration=Release /m /verbosity:minimal
+
+      - name: List build outputs (optional)
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path "src" -Recurse -Include *.exe,*.dll | ForEach-Object {
+            "{0}`t{1}" -f $_.FullName, $_.Length
+          }
+
+      - name: Upload build artifacts
+        if: steps.find_sln.outputs.SHOULD_BUILD == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-windows-release
+          path: |
+            src/**/bin/Release/**/*
+          if-no-files-found: warn
