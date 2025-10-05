@@ -12,7 +12,7 @@ on:
       - labeled
       - unlabeled
       - closed
-  workflow_dispatch: {}   # <-- opcional: disparo manual
+  workflow_dispatch: {}   # permite disparo manual desde la UI
 
 permissions:
   contents: write
@@ -29,6 +29,6 @@ jobs:
       - name: Update release draft
         uses: release-drafter/release-drafter@v6
         with:
-          config-name: release-drafter.yml   # <-- solo el nombre del archivo
+          config-name: .github/release-drafter.yml   # ruta explícita
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
