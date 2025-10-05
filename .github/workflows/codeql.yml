@@ -1,0 +1,72 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 6 * * 1"  # Lunes 06:00 UTC (ajusta si quieres)
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (C#)
+    runs-on: windows-2022
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild (VS 2022)
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Detect solution under src/
+        id: sln
+        shell: pwsh
+        run: |
+          $sln = Get-ChildItem -Path "src" -Filter *.sln -Recurse | Select-Object -First 1
+          if (-not $sln) {
+            Write-Error "No .sln found under 'src/'. CodeQL requiere compilar para C# .NET Framework."
+            exit 1
+          }
+          "SLN=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Solución detectada: $($sln.FullName)"
+
+      - name: NuGet restore
+        if: steps.sln.outputs.SLN != ''
+        shell: pwsh
+        run: nuget restore "${{ steps.sln.outputs.SLN }}"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+
+      # Construcción manual (más confiable para .NET Framework 4.8)
+      - name: Build (Release)
+        if: steps.sln.outputs.SLN != ''
+        shell: pwsh
+        run: msbuild "${{ steps.sln.outputs.SLN }}" /t:Build /p:Configuration=Release /m /verbosity:minimal
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:csharp"
