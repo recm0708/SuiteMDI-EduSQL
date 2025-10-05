@@ -1,31 +1,39 @@
 # CODEOWNERS — Default reviewers / Revisores por defecto
 # Edit to match your org / Ajusta según tu organización
 
-# 1) Fallback (whole repo) / Todo el repositorio
-*                       @recm0708
+# 0) Fallback (whole repo) / Todo el repositorio
+*                         @recm0708
 
-# 2) GitHub infra (workflows, templates, configs)
+# 1) GitHub infra (workflows, templates, configs)
 # .github/ ya cubre subcarpetas como workflows/ e ISSUE_TEMPLATE/
-.github/                 @recm0708
+.github/                   @recm0708
 
-# 3) App code / Código de aplicación
-# /src/ ya cubre /src/App/, no hace falta repetir
-/src/                    @recm0708
+# 2) App code / Código de aplicación
+# /src/ ya cubre /src/App/
+src/                       @recm0708
 
-# 4) SQL scripts
-/db_scripts/             @recm0708
+# 3) SQL scripts (producción) / Scripts SQL base
+db_scripts/                @recm0708
 
-# 5) Docs & assets
-/docs/                   @recm0708
-/assets/                 @recm0708
-/tools/                  @recm0708
+# 4) SQL test suites / Scripts de pruebas SQL
+db_test/                   @recm0708
 
-# 6) Root key files / Archivos raíz clave
-/README.md               @recm0708
-/CHANGELOG.md            @recm0708
-/CONTRIBUTING.md         @recm0708
-/SECURITY.md             @recm0708
-/LICENSE                 @recm0708
-/.editorconfig           @recm0708
-/.gitattributes          @recm0708
-/.gitignore              @recm0708
+# 5) SQL script templates / Plantillas de scripts SQL
+db_templates/              @recm0708
+
+# 6) Docs & assets
+docs/                      @recm0708
+assets/                    @recm0708
+tools/                     @recm0708
+
+# 7) Root key files / Archivos raíz clave
+README.md                  @recm0708
+CHANGELOG.md               @recm0708
+CONTRIBUTING.md            @recm0708
+SECURITY.md                @recm0708
+CODE_OF_CONDUCT.md         @recm0708
+SUPPORT.md                 @recm0708
+LICENSE                    @recm0708
+.editorconfig              @recm0708
+.gitattributes             @recm0708
+.gitignore                 @recm0708
