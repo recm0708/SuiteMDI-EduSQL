@@ -3,16 +3,7 @@ name: Release Drafter
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - edited
-      - labeled
-      - unlabeled
-      - closed
-  workflow_dispatch: {}   # permite disparo manual desde la UI
+  workflow_dispatch: {}   # ejecución manual opcional
 
 permissions:
   contents: write
