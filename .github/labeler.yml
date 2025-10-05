@@ -1,55 +1,58 @@
-- label: "sql"
-  changed-files:
-    - any-glob-to-any-file:
-        - "db_scripts/**/*.sql"
-        - "db_test/**/*.sql"
+# Formato v5 (changed-files). Ref: https://github.com/actions/labeler
 
-- label: "backend"
+- label: sql
   changed-files:
     - any-glob-to-any-file:
-        - "src/**"
+        - 'db_scripts/**/*.sql'
+        - 'db_test/**/*.sql'
 
-- label: "ui"
+- label: backend
   changed-files:
     - any-glob-to-any-file:
-        - "src/**/Presentacion/**"
-        - "assets/**"
+        - 'src/**'
 
-- label: "docs"
+- label: ui
   changed-files:
     - any-glob-to-any-file:
-        - "docs/**"
-        - "README.md"
-        - "CHANGELOG.md"
-        - "CONTRIBUTING.md"
-        - "SUPPORT.md"
-        - "CODE_OF_CONDUCT.md"
-        - "SECURITY.md"
+        - 'src/**/Presentacion/**'
+        - 'assets/**'
 
-- label: "security"
+- label: docs
   changed-files:
     - any-glob-to-any-file:
-        - "SECURITY.md"
+        - 'docs/**'
+        - 'README.md'
+        - 'CHANGELOG.md'
+        - 'CONTRIBUTING.md'
+        - 'SUPPORT.md'
+        - 'CODE_OF_CONDUCT.md'
+        - 'SECURITY.md'
 
-- label: "infra"
+- label: security
   changed-files:
     - any-glob-to-any-file:
-        - ".github/**"
-        - "tools/**"
+        - 'SECURITY.md'
+        - '.github/ISSUE_TEMPLATE/security_question.yml'
 
-- label: "config"
+- label: infra
   changed-files:
     - any-glob-to-any-file:
-        - ".editorconfig"
-        - ".gitattributes"
-        - ".gitignore"
+        - '.github/**'
+        - 'tools/**'
 
-- label: "license"
+- label: config
   changed-files:
     - any-glob-to-any-file:
-        - "LICENSE"
+        - '.editorconfig'
+        - '.gitattributes'
+        - '.gitignore'
 
-- label: "ci"
+- label: license
   changed-files:
     - any-glob-to-any-file:
-        - ".github/workflows/**"
+        - 'LICENSE'
+
+- label: ci
+  changed-files:
+    - any-glob-to-any-file:
+        - '.github/workflows/**'
